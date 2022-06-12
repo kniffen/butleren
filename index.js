@@ -8,6 +8,7 @@
 
 import discordClient from './discord/client.js'
 import database from './database/index.js'
+import './routes/index.js'
 
 (async function init() {
   const db = await database
