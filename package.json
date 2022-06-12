@@ -1,0 +1,55 @@
+{
+  "name": "butleren",
+  "version": "1.0.0-alpha",
+  "private": true,
+  "type": "module",
+  "description": "Yet another Discord bot",
+  "main": "index.js",
+  "engines": {
+    "node": ">=16.10.0"
+  },
+  "volta": {
+    "node": "16.10.0"
+  },
+  "jest": {
+    "coverageProvider": "v8",
+    "setupFiles": [
+      "<rootDir>/tests/setupTests.js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "scripts": {
+    "start": "node -r dotenv/config ./index.js",
+    "test": "jest ./tests",
+    "test:watch": "jest ./tests --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kniffen/butleren.git"
+  },
+  "keywords": [],
+  "author": "Kniffen <kniffen@knifftech.org> (https://knifftech.org/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kniffen/butleren/issues"
+  },
+  "homepage": "https://github.com/kniffen/butleren#readme",
+  "dependencies": {
+    "discord.js": "^13.8.0",
+    "dotenv-flow": "^3.2.0",
+    "sqlite": "^4.1.1",
+    "sqlite3": "^5.0.8"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "babel-jest": "^28.1.1",
+    "jest": "^28.1.1",
+    "regenerator-runtime": "^0.13.9",
+    "win-node-env": "^0.6.1"
+  }
+}
