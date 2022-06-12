@@ -8,6 +8,14 @@ CREATE TABLE IF NOT EXISTS guilds (
   PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS modules (
+  id TEXT NOT NULL,
+  guildId TEXT NOT NULL,
+  isEnabled INTEGER DEFAULT 1,
+  PRIMARY KEY(id, guildId)
+);
+
 -- Down
 
 DROP TABLE guilds;
+DROP TABLE modules;

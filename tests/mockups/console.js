@@ -1,2 +1,2 @@
-jest.spyOn(console, 'log').mockImplementation()
+jest.spyOn(console, 'log')
 jest.spyOn(console, 'error').mockImplementation()
