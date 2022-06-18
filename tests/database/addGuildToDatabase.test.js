@@ -36,7 +36,8 @@ describe('database.addGuildToDatabase()', function() {
     entries.sort((a, b) => a.id.localeCompare(b.id))
     
     expect(entries).toEqual([
-      {id: 'cleverbot', guildId: 'guild001', isEnabled: 1}
+      {id: 'cleverbot', guildId: 'guild001', isEnabled: 1},
+      {id: 'fun',       guildId: 'guild001', isEnabled: 1},
     ])
   })
 
@@ -44,7 +45,7 @@ describe('database.addGuildToDatabase()', function() {
     jest.spyOn(db, 'run').mockRejectedValue('SQL error')
     await addGuildToDatabase(guild)
 
-    expect(console.error).toHaveBeenCalledTimes(2)
+    expect(console.error).toHaveBeenCalledTimes(3)
     expect(console.error).toHaveBeenCalledWith('SQL error')
 
     db.run.mockRestore()

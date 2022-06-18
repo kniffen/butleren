@@ -1,0 +1,5 @@
+export * as cat     from './cat.js'
+export * as dadjoke from './dadjoke.js'
+export * as dog     from './dog.js'
+export * as throw   from './throw.js'
+export * as xkcd    from './xkcd.js'
