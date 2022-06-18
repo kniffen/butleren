@@ -35,7 +35,9 @@ describe('database.addGuildToDatabase()', function() {
     const entries = await db.all('SELECT * from modules')
     entries.sort((a, b) => a.id.localeCompare(b.id))
     
-    expect(entries).toEqual([])
+    expect(entries).toEqual([
+      {id: 'cleverbot', guildId: 'guild001', isEnabled: 1}
+    ])
   })
 
   it('should handle updating the database being rejected', async function() {
