@@ -1,6 +1,6 @@
 import onMessage from '../../../modules/cleverbot/onMessage.js'
 
-describe('cleverbot: onMessage()', function() {
+describe('modules.cleverbot.onMessage()', function() {
   const messages = [
     {
       content: '<@user001> foo bar',
