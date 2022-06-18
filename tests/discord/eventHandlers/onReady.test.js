@@ -1,5 +1,6 @@
 import { Collection } from 'discord.js'
 
+import addGuildToDatabaseMock from '../../../database/addGuildToDatabase'
 import onReady from '../../../discord/eventHandlers/onReady.js'
 
 jest.mock('../../../modules/index.js', () => {
@@ -27,6 +28,11 @@ jest.mock('../../../modules/index.js', () => {
     module001,
   }
 })
+
+jest.mock('../../../database/addGuildToDatabase.js', () => ({
+  __esModule: true,
+  default: jest.fn().mockResolvedValue()
+}))
 
 describe('discord.eventHandlers.onReady()', function() {
   const client = {
@@ -81,6 +87,11 @@ describe('discord.eventHandlers.onReady()', function() {
 
   it('should set the activity status of the bot', function() {
     expect(client.user.setActivity).toHaveBeenCalledWith(process.env.npm_package_version)
+  })
+
+  it('should add guilds to the database', function() {
+    expect(addGuildToDatabaseMock).toHaveBeenCalledWith(guilds.get('guild001'))
+    expect(addGuildToDatabaseMock).toHaveBeenCalledWith(guilds.get('guild002'))
   })
 
   it('should edit commands in case they were updated', function() {

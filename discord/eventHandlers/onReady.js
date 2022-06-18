@@ -1,3 +1,4 @@
+import addGuildToDatabase from '../../database/addGuildToDatabase.js'
 import * as modules from '../../modules/index.js'
 
 const commands = Object.values(modules).reduce((commands, mod) => 
@@ -20,6 +21,8 @@ const commands = Object.values(modules).reduce((commands, mod) =>
   guilds.forEach(async ({ id }) => {
     const guild         = await client.guilds.fetch(id).catch(console.error)
     const guildCommands = await guild.commands.fetch().catch(console.error)
+
+    await addGuildToDatabase(guild)
 
     commands.forEach(command => {
       const guildCommand = guildCommands.find(guildCommand => command.data.name == guildCommand.name)

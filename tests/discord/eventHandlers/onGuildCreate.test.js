@@ -1,4 +1,4 @@
-import database from '../../../database/index.js'
+import addGuildToDatabaseMock from '../../../database/addGuildToDatabase.js'
 import onGuildCreate from '../../../discord/eventHandlers/onGuildCreate.js'
 
 jest.mock('../../../modules/index.js', () => {
@@ -27,9 +27,12 @@ jest.mock('../../../modules/index.js', () => {
   }
 })
 
-describe('discord.eventHandlers.onGuildCreate()', function() {
-  let db = null
+jest.mock('../../../database/addGuildToDatabase.js', () => ({
+  __esModule: true,
+  default: jest.fn().mockResolvedValue()
+}))
 
+describe('discord.eventHandlers.onGuildCreate()', function() {
   const guild = {
     id: 'guild001',
     commands: {create: jest.fn()}
@@ -38,53 +41,28 @@ describe('discord.eventHandlers.onGuildCreate()', function() {
   beforeAll(async function() {
     jest.clearAllMocks()
 
-    db = await database
-
-    await db.migrate()
-
-    // Running twice to ensure the guild only gets added once
-    await onGuildCreate(guild)
     await onGuildCreate(guild)
   })
 
   afterAll(function() {
     jest.unmock('../../../modules/index.js')
-    db.close()
   })
 
-  it('should add guild settings to the database', async function() {
-    expect(await db.all('SELECT * from guilds')).toEqual([{
-      id: 'guild001',
-      nickname: null,
-      color: '#19D8B4',
-      timezone: 'UTC',
-    }])
+  it('should add guilds to the database', function() {
+    expect(addGuildToDatabaseMock).toHaveBeenCalledWith(guild)
   })
 
-  it('should add modules to the database', async function() {
-    const entries = await db.all('SELECT * from modules')
-    entries.sort((a, b) => a.id.localeCompare(b.id))
-    
-    expect(entries).toEqual([])
-  })
-
-  it('should create guild commands', async function() {
-    expect(guild.commands.create).toHaveBeenCalledTimes(4)
+  it('should create guild commands', function() {
+    expect(guild.commands.create).toHaveBeenCalledTimes(2)
     expect(guild.commands.create).toHaveBeenNthCalledWith(1, 'command001data')
     expect(guild.commands.create).toHaveBeenNthCalledWith(2, 'command002data')
   })
 
-  it('should handle updating the database being rejected', async function() {
-    jest.spyOn(db, 'run').mockRejectedValue('SQL error')
+  it('should handle command creation being rejected', async function() {
+    guild.commands.create.mockRejectedValue('Error message')
+    
     await onGuildCreate(guild)
 
-    expect(console.error).toHaveBeenCalledTimes(3)
-    expect(console.error).toHaveBeenNthCalledWith(1, 'SQL error')
-    expect(console.error).toHaveBeenNthCalledWith(2, 'SQL error')
-    expect(console.error).toHaveBeenNthCalledWith(3, 'SQL error')
-
-    db.run.mockRestore()
+    expect(console.error).toHaveBeenCalledWith('Error message')
   })
-
-  it.todo('should handle command creation being rejected')
 })
