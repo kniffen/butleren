@@ -7,6 +7,9 @@ import './guilds/guild.js'
 import './guilds/channels.js'
 import './guilds/roles.js'
 
+import './modules/index.js'
+import './modules/module.js'
+
 const port = process.env.APP_PORT || 5000
 
 // Proxy other request in order to use the webpack dev server for the client.
