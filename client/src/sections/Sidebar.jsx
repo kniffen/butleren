@@ -24,6 +24,10 @@ export default function Sidebar() {
           <span>Home</span>
         </StyledSidebarLink>
 
+        <StyledSidebarLink to={`/guild/${guild.id}`}>
+          <FontAwesomeIcon className="icon" icon={faShieldAlt} />
+          <span>Guild</span>
+        </StyledSidebarLink>
       </StyledSidebarNav>
     </StyledSidebar>
   )
