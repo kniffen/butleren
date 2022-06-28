@@ -216,7 +216,6 @@ describe(path, function() {
     it('should update module properties', async function() {
       await cb(req, res)
 
-      // expect(console.error).toHaveBeenCalledWith(55)
       expect(res.sendStatus).toHaveBeenCalledWith(200)
       expect(await db.all('SELECT * FROM modules')).toEqual([
         {id: 'module001', guildId: 'guild001', isEnabled: 1},
