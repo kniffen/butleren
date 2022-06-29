@@ -15,7 +15,7 @@ const BackgroundAnimation = keyframes`
 const StyledDiv = styled.div`
   width: ${props => props.width || '100%'};
   height: ${props => props.height || '100%'};
-  border-radius: 1rem;
+  border-radius: .5rem;
   background-color: var(--color-gray--600);
   background: linear-gradient(90deg, var(--color-gray--700), var(--color-gray--600));
   background-size: 400% 400%;
