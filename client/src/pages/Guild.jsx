@@ -6,9 +6,16 @@ import DashboardLayout from '../layouts/Dashboard'
 import { Context } from '../Store'
 
 import Box from '../components/Box'
+import LoadingBox from '../components/LoadingBox'
 
 export default function Guild() {
   const { guild } = useContext(Context)
+
+  if (!guild) return (
+    <DashboardLayout>
+      <StyledLoadingGuildStats height="15rem" />
+    </DashboardLayout>
+  )
 
   return (
     <DashboardLayout>
@@ -23,6 +30,14 @@ export default function Guild() {
     </DashboardLayout>
   )
 }
+
+const StyledLoadingGuildStats = styled(LoadingBox)`
+  grid-column: span 12;
+
+  @media (min-width: 48em) {
+    grid-column: span 6;
+  }
+`
 
 const StyledGuildStatsList = styled.ul`
   margin-block-start: 1em;
