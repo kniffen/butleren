@@ -4,8 +4,7 @@ import styled from 'styled-components'
 import { Context } from '../Store'
 
 import Sidebar from '../sections/Sidebar'
-
-import placeholderImage from '../assets/images/placeholder.png'
+import PageHeader from '../components/PageHeader'
 
 export default function Dashboard({ children }) {
   const { guild } = useContext(Context)
@@ -14,10 +13,7 @@ export default function Dashboard({ children }) {
     <>
       <Sidebar />
       <StyledDashboard>
-        <StyledPageHeader>
-          <StyledPageHeaderLogo src={guild.iconURL || placeholderImage} alt={`${guild.name || ''} logo`}/>
-          <StyledPageHeaderTitle>{guild.name || ''}</StyledPageHeaderTitle>
-        </StyledPageHeader>
+        <PageHeader guild={guild} />
         {children}
       </StyledDashboard>
     </>
@@ -37,27 +33,4 @@ const StyledDashboard = styled.div`
   @media (min-width: 64em) {
     margin-inline: 21rem 1rem;
   }
-`
-
-const StyledPageHeader = styled.header`
-  grid-column: span 12;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  color: var(--color-gray--100);
-  margin-block-end: 2em;
-
-  @media (min-width: 48em) {
-    flex-direction: row;
-  }
-`
-
-const StyledPageHeaderLogo = styled.img`
-  width: 7rem;
-  border-radius: 1rem;
-`
-
-const StyledPageHeaderTitle = styled.h1`
-
 `
