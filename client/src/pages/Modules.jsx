@@ -21,7 +21,7 @@ export default function Modules() {
       .catch(console.error)
   }, [guild])
 
-  if (modules.length < 0) return (
+  if (modules.length <= 0) return (
     <DashboardLayout>
       {[...Array(10)].map((value, i) => <StyledLoadingModuleBox key={i} height="15rem" />)}
     </DashboardLayout>
