@@ -17,6 +17,16 @@
   --font-family: 'Montserrat', sans-serif;
 }
 
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: var(--font-family);
