@@ -29,7 +29,7 @@ export default function Modules() {
 
   return (
     <DashboardLayout>
-      {modules.map(mod => <ModuleBox key={mod.id} {...mod} />)}
+      {modules.map(mod => <ModuleBox key={mod.id} guild={guild} {...mod} />)}
     </DashboardLayout>
   )
 }
