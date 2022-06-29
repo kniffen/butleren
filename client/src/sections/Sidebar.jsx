@@ -11,6 +11,16 @@ import logo from '../assets/images/logo.png'
 export default function Sidebar() {
   const { guild } = useContext(Context)
 
+  if (!guild) return (
+    <StyledSidebar>
+      <StyledSidebarHeader>
+        <StyledLogo src={logo} alt="bot logo"/>
+        <StyledTitle>Butleren</StyledTitle>
+      </StyledSidebarHeader>
+
+    </StyledSidebar>
+  )
+
   return (
     <StyledSidebar>
       <StyledSidebarHeader>

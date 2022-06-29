@@ -5,7 +5,7 @@ import LoadingBox  from './LoadingBox'
 import placeholderImg from '../assets/images/placeholder.png'
 
 export default function PageHeader({ guild }) {
-  if (!guild.id)
+  if (!guild)
     return (
       <StyledPageHeader>  
         <LoadingBox width="7rem" height="7rem" />

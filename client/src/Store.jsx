@@ -5,7 +5,7 @@ export const Context = createContext()
 
 export default function Store({ children }) {
   const params = useParams()
-  const [ guild, setGuild ] = useState({})
+  const [ guild, setGuild ] = useState(null)
   const [ discordChannels, setDiscordChannels ] = useState([])
   const [ discordRoles, setDiscordRoles ] = useState([])
 
