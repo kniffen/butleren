@@ -1,8 +1,8 @@
 import styled, { keyframes } from 'styled-components'
 
-export default function LoadingBox({ width, height }) {
+export default function LoadingBox({ className, width, height }) {
   return (
-    <StyledDiv {...{width, height}} />
+    <StyledDiv {...{className, width, height}} />
   )
 }
 
