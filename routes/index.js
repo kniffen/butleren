@@ -10,6 +10,9 @@ import './guilds/roles.js'
 import './modules/index.js'
 import './modules/module.js'
 
+import './commands/index.js'
+import './commands/command.js'
+
 const port = process.env.APP_PORT || 5000
 
 // Proxy other request in order to use the webpack dev server for the client.
