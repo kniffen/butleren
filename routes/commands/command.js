@@ -6,10 +6,10 @@ import router        from '../router.js'
 const path = '/api/commands/:guild/:module/:command'
 
 router.put(path, async function(req, res) {
+  const handleError = (err) => console.error(req.method, req.originalUrl, err)
+
   try {
     if (!req.body.hasOwnProperty('isEnabled')) return res.sendStatus(400)
-
-    const handleError = (err) => console.error(req.method, req.originalUrl, err)
     
     const guild = await discordClient.guilds.fetch(req.params.guild).catch(handleError)
     const commands = Object.values(modules).reduce((commands, mod) => {
@@ -27,10 +27,7 @@ router.put(path, async function(req, res) {
       
       guild.commands
         .delete(guildCommand)
-        .then(() => {
-          console.log('command disabled')
-          res.sendStatus(200)
-        })
+        .then(() => res.sendStatus(200))
 
     } else {
       const db = await database
@@ -55,7 +52,7 @@ router.put(path, async function(req, res) {
     }
 
   } catch(err) {
-    console.error(err)
+    handleError(err)
     res.sendStatus(500)
   }
 })
