@@ -3,9 +3,9 @@ import * as modules from '../../modules/index.js'
 import router from '../router.js'
 
 router.get('/api/commands/:guild', async function(req, res) {
-  try {
-    const handleError = (err) => console.error(req.method, req.originalUrl, err)
+  const handleError = (err) => console.error(req.method, req.originalUrl, err)
 
+  try {
     const guild = await discordClient.guilds.fetch(req.params.guild).catch(handleError)
     if (!guild) return res.sendStatus(404)
 
@@ -35,7 +35,7 @@ router.get('/api/commands/:guild', async function(req, res) {
     res.send(commands)
   
   } catch(err) {
-    console.error(err)
+    handleError(err)
     res.sendStatus(500)
   }
 })
