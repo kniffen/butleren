@@ -1,15 +1,15 @@
 import styled, { css } from 'styled-components'
 
-export default function Button({ type, value, onClick, isLoading }) {
+export default function Button({ className, type, value, onClick, isLoading }) {
   switch (type) {
     case 'submit':
       return (
-        <StyledSubmitButton onClick={onClick} value={value} isLoading={isLoading} />
+        <StyledSubmitButton className={className} onClick={onClick} value={value} isLoading={isLoading} />
       )
 
     default:
       return (
-        <StyledButton onClick={onClick} isLoading={isLoading}>{value}</StyledButton>
+        <StyledButton className={className} onClick={onClick} isLoading={isLoading}>{value}</StyledButton>
       )
   }
 }
