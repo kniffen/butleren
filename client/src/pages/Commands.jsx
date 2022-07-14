@@ -11,29 +11,36 @@ import Button from '../components/Button'
 
 export default function Commands() {
   const { guild } = useContext(Context)
+  const [ isLoading, setIsLoading ] = useState(true)
   const [ selectedModule, setSelectedModule ] = useState(null)
-  const [ modules, setModules ] = useState([])
-  const [ commands, setCommands ] = useState([])
+  const [ modules, setModules ] = useState(null)
+  const [ commands, setCommands ] = useState(null)
 
   useEffect(function() {
     if (!guild) return
 
-    fetch(`/api/commands/${guild.id}`)
-      .then(res => res.json())
-      .then((commands) => {
-        setModules(commands.reduce((modules, command) => 
+    async function fetchAndSetModulesAndCommands() {
+      setIsLoading(true)
+
+      try {
+        const commands = await fetch(`/api/commands/${guild.id}`).then(res => res.json())
+        const modules = commands.reduce((modules, command) => 
           (modules.find(mod => mod.id === command.module.id) ? modules : [...modules, command.module]),
-        []))
+        [])
+        
+        setModules(modules)
+        setCommands(commands)
+        if (modules.length > 0 && !selectedModule) setSelectedModule(modules[0])
 
-        if (!selectedModule)
-          setSelectedModule(modules[0])
+        setIsLoading(false)
+        
+      } catch(err) { console.error(err) }
+    }
 
-        setCommands(commands)        
-      })
-      .catch(console.error)
+    fetchAndSetModulesAndCommands()
   }, [guild])
 
-  if (commands.length <= 0) return (
+  if (isLoading) return (
     <DashboardLayout>
       <StyledModuleButtonsContainer>
         {[...Array(6)].map((value, i) => <StyledLoadingCommandBox key={i} width="4rem" height="2rem" />)}
@@ -45,7 +52,12 @@ export default function Commands() {
   return (
     <DashboardLayout>
       <StyledModuleButtonsContainer>
-        {modules.map(mod => <StyledModuleButton key={mod.id} value={mod.name}/>)}
+        {modules.map(mod => <StyledModuleButton
+          key={mod.id}
+          value={mod.name}
+          isActive={selectedModule.id === mod.id}
+          onClick={() => setSelectedModule(mod)}
+        />)}
       </StyledModuleButtonsContainer>
       {commands
         .filter(command => selectedModule && command.module.id === selectedModule.id)
@@ -75,5 +87,5 @@ const StyledModuleButtonsContainer = styled.div`
 `
 
 const StyledModuleButton = styled(Button)`
-
+  background-color: ${props => props.isActive ? 'var(--color-turquoise--400)' : 'var(--color-gray--400)'};
 `
