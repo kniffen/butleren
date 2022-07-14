@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faShieldAlt, faListAlt } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faShieldAlt, faListAlt, faCommentAlt } from '@fortawesome/free-solid-svg-icons'
 
 import { Context } from '../Store.jsx'
 
@@ -42,6 +42,11 @@ export default function Sidebar() {
         <StyledSidebarLink to={`/modules/${guild.id}`}>
           <FontAwesomeIcon className="icon" icon={faListAlt} />
           <span>Modules</span>
+        </StyledSidebarLink>
+
+        <StyledSidebarLink to={`/commands/${guild.id}`}>
+          <FontAwesomeIcon className="icon" icon={faCommentAlt} />
+          <span>Commands</span>
         </StyledSidebarLink>
       </StyledSidebarNav>
     </StyledSidebar>
