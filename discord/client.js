@@ -27,6 +27,6 @@ client.on('error',             (err)         => onError(err))
 client.on('ready',             (client)      => onReady(client))
 client.on('guildCreate',       (guild)       => onGuildCreate(guild))
 client.on('interactionCreate', (interaction) => onInteractionCreate(interaction))
-client.on('message',           (message)     => onMessage(message))
+client.on('messageCreate',     (message)     => onMessage(message))
 
 export default client
