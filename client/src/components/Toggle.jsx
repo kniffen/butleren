@@ -3,13 +3,13 @@ import styled from 'styled-components'
 
 export default function Toggle({ className, isDefaultChecked, isLocked, onChange }) {
   const [ isChecking, setIsChecking ] = useState(false)
-  const [ isChecked, setChecked ] = useState(isDefaultChecked)
+  const [ isChecked, setIsChecked ] = useState(isDefaultChecked)
 
   function handleCheckboxClick(e) {
     setIsChecking(true)
-
+    
     onChange(!isChecked)
-      .then(setChecked)
+      .then(setIsChecked)
       .finally(() => setIsChecking(false))
   }
 
