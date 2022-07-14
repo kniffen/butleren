@@ -1,6 +1,6 @@
 import fetchMock from 'node-fetch'
 
-import * as command from '../../../modules/fun/commands/cat.js'
+import * as command from '../../../../modules/fun/commands/cat.js'
 
 describe('fun: commands: cat', function() {
   const interaction = {

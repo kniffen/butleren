@@ -1,4 +1,4 @@
-import * as command from '../../../modules/fun/commands/throw.js'
+import * as command from '../../../../modules/fun/commands/throw.js'
 
 describe('fun: commands: throw', function() {
   const interaction = {
