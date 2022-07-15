@@ -15,7 +15,14 @@ CREATE TABLE IF NOT EXISTS modules (
   PRIMARY KEY(id, guildId)
 );
 
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT NOT NULL,
+  location TEXT,
+  PRIMARY KEY(id)
+);
+
 -- Down
 
 DROP TABLE guilds;
 DROP TABLE modules;
+DROP TABLE users;
