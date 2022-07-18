@@ -1,3 +1,5 @@
+import fetchMock from 'node-fetch'
+
 import database from '../../../../database/index.js'
 import * as command from '../../../../modules/users/commands/setlocation.js'
 
@@ -13,6 +15,8 @@ describe('modules.users.commands.setlocation', function() {
 
   beforeEach(async function() {
     jest.clearAllMocks()
+
+    fetchMock.mockResolvedValue({status: 200})
 
     interaction = {
       user: {
@@ -77,6 +81,21 @@ describe('modules.users.commands.setlocation', function() {
 
     expect(interaction.reply).toHaveBeenCalledWith({
       content: 'Your location is now set to `location002`\nType `/profile` to view your updated profile.',
+      ephemeral: true
+    })
+  })
+
+  it('should not set the location if it cannot be verified', async function() {
+    fetchMock.mockResolvedValue({status: 404})
+
+    await command.execute(interaction)
+
+    expect(await db.all('SELECT * FROM users')).toEqual([
+      {id: 'user001', location: 'location002'}
+    ])
+
+    expect(interaction.reply).toHaveBeenCalledWith({
+      content: 'Sorry, I was unable to verify that location.',
       ephemeral: true
     })
   })
