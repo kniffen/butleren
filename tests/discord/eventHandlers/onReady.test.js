@@ -73,11 +73,13 @@ describe('discord.eventHandlers.onReady()', function() {
   guildCommands002.set('guildcmd002', {name: 'command002'})
 
   beforeAll(async function() {
+    console.log.mockImplementation(() => {/* Be quiet */})
+
     await onReady(client)
   })
 
   afterAll(function() {
-    jest.unmock('../../../modules/index.js')
+    jest.restoreAllMocks()
   })
 
   it('should log successful connections', function() {
