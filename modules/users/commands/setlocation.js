@@ -37,19 +37,20 @@ export async function execute(interaction) {
     const db = await database
     const userData = await db.get('SELECT location FROM users WHERE id = ?', [interaction.user.id])
     const location = interaction.options.get('location')?.value
-
-    if (!userData) {
-      await db.run('INSERT INTO users (location, id) VALUES (?,?)', location, interaction.user.id)
-    } else {
-      await db.run('UPDATE users SET location = ? WHERE id = ?', location, interaction.user.id)
     
     if (!(await testLocation(location))) {
       content = 'Sorry, I was unable to verify that location.'
       return
     }
 
-    content = `Your location is now set to \`${location}\`\nType \`/profile\` to view your updated profile.`
+    await db.run(
+      !userData
+        ? 'INSERT INTO users (location, id) VALUES (?,?)'
+        : 'UPDATE users SET location = ? WHERE id = ?',
+      [location, interaction.user.id]
+    )
 
+    content = `Your location is now set to \`${location}\`\nType \`/profile\` to view your updated profile.`
 
   } catch (err) {
     console.error(err)
