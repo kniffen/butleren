@@ -1,18 +1,9 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-
-import database from '../../../database/index.js'
-
-export const isLocked = true
-
-export const data =
-  new SlashCommandBuilder()
-    .setName('deleteprofile')
-    .setDescription('Remove all your data from the Bot\'s database')
+import database from '../../../../database/index.js'
 
 /**
  * @param {Object} interaction - Discord interaction object.
  */
-export async function execute(interaction) {
+export default async function deleteProfile(interaction) {
   let content = 'Sorry, I was unable to delete your data from the bot\'s database.'
   
   try {

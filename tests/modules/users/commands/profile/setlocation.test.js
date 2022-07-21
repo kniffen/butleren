@@ -1,9 +1,9 @@
 import fetchMock from 'node-fetch'
 
-import database from '../../../../database/index.js'
-import * as command from '../../../../modules/users/commands/setlocation.js'
+import database from '../../../../../database/index.js'
+import subCommandExecutor from '../../../../../modules/users/commands/profile/setlocation.js'
 
-describe('modules.users.commands.setlocation', function() {
+describe('modules.users.commands.profile.setlocation', function() {
   let db = null
   let interaction = null
 
@@ -33,32 +33,8 @@ describe('modules.users.commands.setlocation', function() {
     jest.restoreAllMocks()
   })
 
-  it('should contain certain properties', function() {
-    expect(command).toEqual({
-      data: {
-        name: 'setlocation',
-        name_localizations: undefined,
-        description: 'Set your location',
-        description_localizations: undefined,
-        default_permission: undefined,
-        options: [{
-          autocomplete: undefined,
-          choices: undefined,
-          description: 'Your location name or zip code',
-          description_localizations: undefined,
-          name: 'location',
-          name_localizations: undefined,
-          required: true,
-          type: 3,  
-        }],
-      },
-      isLocked: true,
-      execute: expect.anything()
-    })
-  })
-
   it('should set a user\'s location', async function() {
-    await command.execute(interaction)
+    await subCommandExecutor(interaction)
 
     expect(await db.all('SELECT * FROM users')).toEqual([
       {id: 'user001', location: 'location001'}
@@ -73,7 +49,7 @@ describe('modules.users.commands.setlocation', function() {
   it('should update a user\'s location', async function() {
     interaction.options.get = () => ({value: 'location002'})
     
-    await command.execute(interaction)
+    await subCommandExecutor(interaction)
 
     expect(await db.all('SELECT * FROM users')).toEqual([
       {id: 'user001', location: 'location002'}
@@ -88,7 +64,7 @@ describe('modules.users.commands.setlocation', function() {
   it('should not set the location if it cannot be verified', async function() {
     fetchMock.mockResolvedValue({status: 404})
 
-    await command.execute(interaction)
+    await subCommandExecutor(interaction)
 
     expect(await db.all('SELECT * FROM users')).toEqual([
       {id: 'user001', location: 'location002'}
@@ -104,7 +80,7 @@ describe('modules.users.commands.setlocation', function() {
     jest.spyOn(db, 'get').mockRejectedValue('Error message')
     interaction.options.get = () => ({value: 'location999'})
 
-    await command.execute(interaction)
+    await subCommandExecutor(interaction)
 
     expect(await db.all('SELECT * FROM users')).toEqual([
       {id: 'user001', location: 'location002'}
@@ -122,7 +98,7 @@ describe('modules.users.commands.setlocation', function() {
     jest.spyOn(db, 'run').mockRejectedValue('Error message')
     interaction.options.get = () => ({value: 'location999'})
 
-    await command.execute(interaction)
+    await subCommandExecutor(interaction)
 
     expect(await db.all('SELECT * FROM users')).toEqual([
       {id: 'user001', location: 'location002'}

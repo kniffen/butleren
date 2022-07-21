@@ -1,20 +1,6 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
 import fetch from 'node-fetch'
 
-import database from '../../../database/index.js'
-
-export const isLocked = true
-
-export const data =
-  new SlashCommandBuilder()
-    .setName('setlocation')
-    .setDescription('Set your location')
-    .addStringOption(option =>
-      option
-        .setName('location')
-        .setDescription('Your location name or zip code')
-        .setRequired(true)
-    )
+import database from '../../../../database/index.js'
 
 async function testLocation(location) {
   const zip = parseInt(location) || null
@@ -30,7 +16,7 @@ async function testLocation(location) {
 /**
  * @param {Object} interaction - Discord interaction object.
  */
-export async function execute(interaction) {
+export default async function setLocation(interaction) {
   let content = 'Sorry, I was unable to set your location.'
 
   try {
