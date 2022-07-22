@@ -33,7 +33,7 @@ const StyledCommandBox = styled(Box)`
   position: relative;
 
   @media (min-width: 48em) {
-    grid-column: span 3;
+    grid-column: span 4;
   }
 `
 
