@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-export default function Box({ title, description, children }) {
+export default function Box({ className, title, description, children }) {
   return (
-    <StyledBox>
+    <StyledBox className={className}>
       {title && <StyledH5>{title}</StyledH5>}
       {description && <StyledParagraph>{description}</StyledParagraph>}
       {children}
