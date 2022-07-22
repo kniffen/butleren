@@ -28,7 +28,6 @@ const StyledDashboard = styled.div`
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 100%));
   gap: 1rem;
-  align-items: start;
 
   @media (min-width: 64em) {
     margin-inline: 21rem 1rem;
