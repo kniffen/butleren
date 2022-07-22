@@ -2,8 +2,9 @@ import styled from 'styled-components'
 
 import Box from './Box'
 import Toggle from './Toggle'
+import Button from './Button'
 
-export default function ModuleBox({ guild, id, name, description, commands, isEnabled, isLocked }) {
+export default function ModuleBox({ guild, id, name, description, commands, isEnabled, isLocked, hasSettings }) {
   function handleModuleToggle(shouldBeEnabled) {
     const init = {
       method: 'PUT',
@@ -25,6 +26,7 @@ export default function ModuleBox({ guild, id, name, description, commands, isEn
     <StyledModuleBox title={name}>
       <StyledModuleDescription>{description}</StyledModuleDescription>
       <StyledToggle isDefaultChecked={isEnabled} isLocked={isLocked} onChange={handleModuleToggle}/>
+      {hasSettings && <StyledButton type="link" to={`/modules/${guild.id}/${id}`} value="Settings" />}
     </StyledModuleBox>
   )
 }
@@ -37,6 +39,12 @@ const StyledToggle = styled(Toggle)`
   position: absolute;
   inset-block-start: 1em;
   inset-inline-end: 1em;
+`
+
+const  StyledButton = styled(Button)`
+  font-size: .85rem;
+  font-weight: 600;
+  padding: .5em 1em;
 `
 
 const StyledModuleDescription = styled.p`
