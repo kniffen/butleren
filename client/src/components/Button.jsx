@@ -1,10 +1,22 @@
+import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
-export default function Button({ className, type, value, onClick, isLoading }) {
+export default function Button({
+  className,
+  type,
+  value,
+  onClick,
+  isLoading,
+  to = '/'
+}) {
   switch (type) {
     case 'submit':
       return (
         <StyledSubmitButton className={className} onClick={onClick} value={value} isLoading={isLoading} />
+      )
+    case 'link':
+      return (
+        <StyledLink className={className} to={to} isLoading={isLoading}>{value}</StyledLink>  
       )
 
     default:
@@ -32,6 +44,14 @@ const buttonStyles = css`
 
 const StyledButton = styled.button`
   ${buttonStyles}
+`
+
+const StyledLink = styled(Link)`
+  ${buttonStyles}
+
+  &:hover {
+    text-decoration: none;
+  }
 `
 
 const StyledSubmitButton = styled.input.attrs({ type: 'submit' })`
