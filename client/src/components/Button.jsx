@@ -31,6 +31,7 @@ const buttonStyles = css`
   color: var(--color-gray--900);
   padding: .5em 1em;
   border: none;
+  font-family: var(--font-family);
   font-weight: 500;
   border-radius: .25em;
   font-size: 1rem;
