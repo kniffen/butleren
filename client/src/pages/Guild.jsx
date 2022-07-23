@@ -79,39 +79,6 @@ const StyledForm = styled.form`
   flex-direction: column;
   gap: 1em;
   align-items: flex-start;
-
-  label {
-    width: 100%;
-    font-size: .85rem;
-
-    > * {
-      margin-block-start: .25em;
-    }
-  }
-
-  input[type="text"],
-  input[type="color"],
-  select {
-    width: 100%;
-    padding: .5em;
-    border: none;
-    background-color: var(--color-gray--500);
-    color: var(--color-gray--100);
-    font-size: 1rem;
-    border-radius: .25em;
-  }
-
-  input[type="color"] {
-    width: 2rem;
-    height: 2rem;
-    padding: .25em;
-    border-color: transparent;
-    cursor: pointer;
-  }
-
-  input[type="submit"] {
-    margin-block-start: 1rem;
-  }
 `
 
 const StyledLoadingGuildStats = styled(LoadingBox)`

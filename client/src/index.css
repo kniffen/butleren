@@ -74,3 +74,60 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Form elements */
+label {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .25em;
+  font-size: .85rem;
+}
+
+input,
+select,
+textarea {
+  background-color: var(--color-gray--600);
+  color: var(--color-gray--100);
+  padding: .5em;
+  border: none;
+  border-radius: .25em;
+  font-size: 1rem;
+}
+
+input[type="text"],
+select,
+textarea {
+  width: 100%;
+}
+
+input[type="color"] {
+  width: 3rem;
+  height: 3rem;
+  border-color: transparent;
+}
+
+input[type="submit"],
+input[type="button"],
+input[type="color"],
+button {
+  cursor: pointer;
+}
+
+input[type="submit"],
+input[type="button"],
+button {
+  font-family: var(--font-family);
+  font-weight: 500;
+}
+
+input[type="button"],
+button {
+  background-color: var(--color-gray--500);
+  color: var(--color-gray--200);
+}
+
+input[type="submit"] {
+  background-color: var(--color-turquoise--400);
+  color: var(--color-gray--900);
+}
