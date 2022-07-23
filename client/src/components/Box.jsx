@@ -13,13 +13,13 @@ export default function Box({ className, title, description, children }) {
 const StyledBox = styled.div`
   position: relative;
   background-color: var(--color-gray--800);
-  padding: 1em;
+  padding: 1.5em;
   grid-column: span 12;
   border-radius: .5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1em;
+  gap: 2em;
 
   @media (min-width: 48em) {
     grid-column: span 6;
