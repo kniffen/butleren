@@ -21,8 +21,18 @@ CREATE TABLE IF NOT EXISTS users (
   PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS spotifyShows (
+  id TEXT NOT NULL,
+  guildId TEXT NOT NULL,
+  latestEpisodeId TEXT,
+  notificationChannelId TEXT NOT NULL,
+  notificationRoleId TEXT,
+  PRIMARY KEY(id, guildId)
+);
+
 -- Down
 
 DROP TABLE guilds;
 DROP TABLE modules;
 DROP TABLE users;
+DROP TABLE spotifyShows;
