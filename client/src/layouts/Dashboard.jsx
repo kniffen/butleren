@@ -22,7 +22,7 @@ export default function Dashboard({ children }) {
 
 const StyledDashboard = styled.div`
   margin-block: 2rem;
-  margin-inline: calc(5rem + .75rem * 2) 1rem;
+  margin-inline: 5rem 1rem;
   padding-inline: calc((100% - 75rem) / 2);
   max-width: 100%;
   display: grid;
@@ -30,6 +30,6 @@ const StyledDashboard = styled.div`
   gap: 1rem;
 
   @media (min-width: 64em) {
-    margin-inline: 21rem 1rem;
+    margin-inline: 18rem 2rem;
   }
 `
