@@ -29,7 +29,12 @@ export default function Modules() {
 
   return (
     <DashboardLayout>
-      {modules.map(mod => <ModuleBox key={mod.id} guild={guild} {...mod} />)}
+      {modules.map(mod => <ModuleBox
+        key={mod.id}
+        guild={guild}
+        {...mod}
+        hasSettings={['spotify'].includes(mod.id)}
+      />)}
     </DashboardLayout>
   )
 }
