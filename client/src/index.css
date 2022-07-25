@@ -131,3 +131,9 @@ input[type="submit"] {
   background-color: var(--color-turquoise--400);
   color: var(--color-gray--900);
 }
+
+input[readonly],
+input[readonly="readonly"] {
+  color: var(--color-gray--300);
+  cursor: not-allowed;
+}
