@@ -1,5 +1,8 @@
-import { createContext, useState, useEffect } from 'react' 
+import { createContext, useState, useReducer, useEffect } from 'react' 
 import { useParams } from 'react-router-dom'
+import { v4 } from 'uuid'
+
+import Notifications from './sections/Notifications'
 
 export const Context = createContext()
 
@@ -8,6 +11,20 @@ export default function Store({ children }) {
   const [ guild, setGuild ] = useState(null)
   const [ discordChannels, setDiscordChannels ] = useState([])
   const [ discordRoles, setDiscordRoles ] = useState([])
+
+  const [ notifications, notificationsDispatch ] = useReducer(function(state, action) {
+    switch (action.type) {
+      case 'ADD_NOTIFICATION':
+        const id = v4()
+        return [...state, {id, ...action.payload}]
+      
+      case 'REMOVE_NOTIFICATION':
+        return state.filter(notification => notification.id !== action.id);
+      
+      default:
+        return state
+    }
+  }, [])
 
   useEffect(function() {
     if (params.guild == guild?.id) return
@@ -29,8 +46,9 @@ export default function Store({ children }) {
   }, [params])
   
   return (
-    <Context.Provider value={{guild, discordChannels, discordRoles}}>
+    <Context.Provider value={{guild, discordChannels, discordRoles, notifications, notificationsDispatch}}>
       {children}
+      <Notifications />
     </Context.Provider>
   )
 }

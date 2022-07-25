@@ -137,3 +137,8 @@ input[readonly="readonly"] {
   color: var(--color-gray--300);
   cursor: not-allowed;
 }
+
+@keyframes slideIn {
+  from { transform: translate(200%); }
+  to { transform: translate(0); }
+}

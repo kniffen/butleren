@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import styled from 'styled-components'
+
+import { Context } from '../Store'
 
 import Overlay from './Overlay'
 import Box from './Box'
@@ -8,6 +10,7 @@ import EntryEditForm from './EntryEditForm'
 import Button from './Button'
 
 export default function Entries({ className, title, uri, entries, fields, onUpdate }) {
+  const { notificationsDispatch } = useContext(Context)
   const [ isAddingEntry, setIsAddingEntry ] = useState(false)
   const [ entryBeingEdited, setEntryBeingEdited ] = useState(null)
 
@@ -19,9 +22,18 @@ export default function Entries({ className, title, uri, entries, fields, onUpda
         body: JSON.stringify({id})
       }
       
-      await fetch(uri, init)
+      const res = await fetch(uri, init)
 
-      onUpdate()
+      notificationsDispatch({
+        type: 'ADD_NOTIFICATION',
+        payload: {
+          title:       res.ok ? 'Success!' : 'Error!',
+          description: res.ok ? 'Entry deleted' : `${res.status} ${res.statusText}`,
+          type:        res.ok ? 'SUCCESS' : 'ERROR'
+        }
+      })
+
+      if (res.ok) onUpdate()
 
     } catch (err) {
       console.error(err)
@@ -53,10 +65,23 @@ export default function Entries({ className, title, uri, entries, fields, onUpda
           onSuccess={(res) => {
             setIsAddingEntry(false)
             onUpdate()
-            alert('New entry added')
+            notificationsDispatch({
+              type: 'ADD_NOTIFICATION',
+              payload: {title: 'Success!', description: 'New entry added', type: 'SUCCESS'}
+            })
           }}
-          onFailure={(res) => alert(`${res.status}: ${res.statusText}`)}
-          onError={(err) => alert(`Error: ${err.message}`)}
+          onFailure={(res) => {
+            notificationsDispatch({
+              type: 'ADD_NOTIFICATION',
+              payload: {title: 'Failure!', description: `${res.status} ${res.statusText}`, type: 'ERROR'}
+            })
+          }}
+          onError={(err) => {
+            notificationsDispatch({
+              type: 'ADD_NOTIFICATION',
+              payload: {title: 'Error!', description: err.message || '', type: 'ERROR'}
+            })
+          }}
         />}
 
         {entryBeingEdited && <EntryEditForm
@@ -67,10 +92,23 @@ export default function Entries({ className, title, uri, entries, fields, onUpda
           onSuccess={(res) => {
             setEntryBeingEdited(null)
             onUpdate()
-            alert('Entry updated')
+            notificationsDispatch({
+              type: 'ADD_NOTIFICATION',
+              payload: {title: 'Success!', description: 'Entry updated', type: 'SUCCESS'}
+            })
           }}
-          onFailure={(res) => alert(`${res.status}: ${res.statusText}`)}
-          onError={(err) => alert(`Error: ${err.message}`)}
+          onFailure={(res) => {
+            notificationsDispatch({
+              type: 'ADD_NOTIFICATION',
+              payload: {title: 'Failure!', description: `${res.status} ${res.statusText}`, type: 'ERROR'}
+            })
+          }}
+          onError={(err) => {
+            notificationsDispatch({
+              type: 'ADD_NOTIFICATION',
+              payload: {title: 'Error!', description: err.message || '', type: 'ERROR'}
+            })
+          }}
         />}
       </Overlay>}
     </StyledEntriesBox>
