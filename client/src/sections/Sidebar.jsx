@@ -75,7 +75,7 @@ const StyledSidebarHeader = styled.header`
   
   @media (min-width: 64em) {
     display: flex;
-    gap: 1em;
+    flex-direction: column;
     align-items: center;
   }
 `
