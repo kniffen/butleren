@@ -32,8 +32,8 @@ describe('discord.eventHandlers.onMessage()', function() {
 
     await Promise.all([
       db.run('INSERT INTO guilds (id) VALUES (?)', ['guild001']),
-      db.run('INSERT INTO modules (id, guildId, isEnabled) VALUES (?,?,?)', ['disabled_module', 'guild001', 0]),
-      db.run('INSERT INTO modules (id, guildId) VALUES (?,?)', ['enabled_module', 'guild001']),
+      db.run('INSERT INTO modules (id, guildId) VALUES (?,?)', ['disabled_module', 'guild001']),
+      db.run('INSERT INTO modules (id, guildId, isEnabled) VALUES (?,?,?)', ['enabled_module', 'guild001', 1]),
     ])
   })
 

@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS guilds (
 CREATE TABLE IF NOT EXISTS modules (
   id TEXT NOT NULL,
   guildId TEXT NOT NULL,
-  isEnabled INTEGER DEFAULT 1,
+  isEnabled INTEGER DEFAULT 0,
   PRIMARY KEY(id, guildId)
 );
 
@@ -35,4 +35,4 @@ CREATE TABLE IF NOT EXISTS spotifyShows (
 DROP TABLE guilds;
 DROP TABLE modules;
 DROP TABLE users;
-DROP TABLE spotifyShows;
+DROP TABLE spotifyShows;DROP TABLE spotifyShows;

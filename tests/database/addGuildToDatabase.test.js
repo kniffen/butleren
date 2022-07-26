@@ -36,10 +36,10 @@ describe('database.addGuildToDatabase()', function() {
     entries.sort((a, b) => a.id.localeCompare(b.id))
     
     expect(entries).toEqual([
-      {id: 'cleverbot', guildId: 'guild001', isEnabled: 1},
-      {id: 'fun',       guildId: 'guild001', isEnabled: 1},
-      {id: 'spotify',   guildId: 'guild001', isEnabled: 1},
-      {id: 'weather',   guildId: 'guild001', isEnabled: 1},
+      {id: 'cleverbot', guildId: 'guild001', isEnabled: 0},
+      {id: 'fun',       guildId: 'guild001', isEnabled: 0},
+      {id: 'spotify',   guildId: 'guild001', isEnabled: 0},
+      {id: 'weather',   guildId: 'guild001', isEnabled: 0},
     ])
   })
 
