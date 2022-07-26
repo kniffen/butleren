@@ -10,7 +10,7 @@ jest.mock(
   () => ({__esModule: true, default: jest.fn()})
 )
 
-describe('modules.spotify.commands.spotify.onInterval()', function() {
+describe('modules.spotify.onInterval()', function() {
   let db = null
 
   const notificationChannel = {
