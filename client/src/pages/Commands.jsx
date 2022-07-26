@@ -41,7 +41,7 @@ export default function Commands() {
   }, [guild])
 
   if (isLoading) return (
-    <DashboardLayout>
+    <DashboardLayout title="Commands">
       <StyledModuleButtonsContainer>
         {[...Array(6)].map((value, i) => <StyledLoadingCommandBox key={i} width="4rem" height="2rem" />)}
       </StyledModuleButtonsContainer>
@@ -50,7 +50,7 @@ export default function Commands() {
   )
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Commands">
       <StyledModuleButtonsContainer>
         {modules.map(mod => <StyledModuleButton
           key={mod.id}

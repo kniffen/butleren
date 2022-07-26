@@ -28,7 +28,7 @@ export default function Modules() {
   )
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Modules">
       {modules.map(mod => <ModuleBox
         key={mod.id}
         guild={guild}

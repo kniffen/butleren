@@ -66,7 +66,7 @@ export default function Spotify() {
   }, [params])
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Modules: Spotify">
       <StyledEntries
         title="Shows"
         uri={uri}
