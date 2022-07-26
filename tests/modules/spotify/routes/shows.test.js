@@ -188,12 +188,13 @@ describe(path, function() {
       expect(await db.all('SELECT * FROM spotifyShows')).toEqual(expectedEntries)
     })
 
-    it('should handle unsupported properties', async function() {
+    it('should ignore unsupported properties', async function() {
       req.body.foo = 'bar'
 
       await cb(req, res)
 
-      expect(res.sendStatus).toHaveBeenCalledWith(500)
+      expect(console.error).not.toHaveBeenCalled()
+      expect(res.sendStatus).toHaveBeenCalledWith(200)
       expect(await db.all('SELECT * FROM spotifyShows')).toEqual(expectedEntries)
 
       delete req.body.foo

@@ -71,14 +71,20 @@ router.patch(path, async function(req, res) {
 
     if (!entry)
       return res.sendStatus(404)
-
-    await Promise.all(Object
-      .entries(req.body)
-      .filter(([key]) => !['id', 'guildId'].includes(key))
-      .map(([key, value]) => db.run(
-        `UPDATE spotifyShows SET ${key} = ? WHERE guildId = ? AND id = ?`,
-        [value, req.params.guild, req.body.id]
-      ))
+    
+    const sql = 
+      `UPDATE spotifyShows
+       SET notificationChannelId = ?, notificationRoleId = ?
+       WHERE id = ? AND guildId = ?`
+    
+    await db.run(
+      sql,
+      [
+        req.body.notificationChannelId || null,
+        req.body.notificationRoleId || null,
+        req.body.id,
+        req.params.guild
+      ]
     )
 
     res.sendStatus(200)
