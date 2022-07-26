@@ -32,12 +32,10 @@ export default async function spotifyOnInterval({ guilds, date }) {
       await notificationChannel.send({
         content: `${entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''}A new episode from ${show.latestEpisode.show.name} is out!\n` +
                  show.latestEpisode.external_urls.spotify
-      })
-
-      await db.run(
+      }).then(() => db.run(
         'UPDATE spotifyShows SET latestEpisodeId = ? WHERE id = ? AND guildId = ?',
         [show.latestEpisode.id, entry.id, entry.guildId]
-      )
+      )).catch(console.error)
     }
 
   } catch (err) {
