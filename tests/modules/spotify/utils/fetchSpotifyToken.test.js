@@ -2,11 +2,6 @@ import fetchMock from 'node-fetch'
 
 import fetchSpotifyToken from '../../../../modules/spotify/utils/fetchSpotifyToken.js'
 
-jest.mock('node-fetch', () => ({
-  __esModule: true,
-  default: jest.fn()
-}))
-
 describe('moduled.spotify.utils.fetchSpotifyToken()', function() {
   let access_token = 'spotifyToken'
 

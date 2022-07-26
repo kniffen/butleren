@@ -3,11 +3,6 @@ import fetchMock from 'node-fetch'
 import fetchSpotifyShows from '../../../../modules/spotify/utils/fetchSpotifyShows.js'
 import fetchSpotifyTokenMock from '../../../../modules/spotify/utils/fetchSpotifyToken.js'
 
-jest.mock('node-fetch', () => ({
-  __esModule: true,
-  default: jest.fn()
-}))
-
 jest.mock(
   '../../../../modules/spotify/utils/fetchSpotifyToken.js',
   () => ({__esModule: true, default: jest.fn()})
