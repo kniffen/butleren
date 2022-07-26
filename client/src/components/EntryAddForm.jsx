@@ -113,6 +113,7 @@ const StyledSearchResults = styled.div.attrs(() => ({className: searchResultsCla
   gap: 1em;
   grid-template-columns: repeat(2, 1fr);
   margin-block-start: 1em;
+  width: 100%;
 
   @media (min-width: 26em) {
     grid-template-columns: repeat(4, 1fr);
@@ -126,6 +127,7 @@ const StyledSearchResults = styled.div.attrs(() => ({className: searchResultsCla
     text-align: center;
     
     &__img {
+      width: 100%;
       border-radius: .5em;
       border: .128em solid var(--color-gray--800);
       cursor: pointer;
