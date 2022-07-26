@@ -6,7 +6,7 @@ import fetchSpotifyShows from '../utils/fetchSpotifyShows.js'
 
 const path = '/api/spotify/:guild/shows'
 
-router.get(path, async function getModule(req, res) {
+router.get(path, async function(req, res) {
   try {
     const db = await database
     const entries = await db.all(
@@ -36,7 +36,7 @@ router.get(path, async function getModule(req, res) {
   }
 })
 
-router.post(path, async function getModule(req, res) {
+router.post(path, async function(req, res) {
   try {
     const db = await database
 
@@ -61,7 +61,7 @@ router.post(path, async function getModule(req, res) {
   }
 })
 
-router.patch(path, async function getModule(req, res) {
+router.patch(path, async function(req, res) {
   try {
     const db = await database
     const entry = await db.get(
@@ -89,7 +89,7 @@ router.patch(path, async function getModule(req, res) {
   }
 })
 
-router.delete(path, async function getModule(req, res) {
+router.delete(path, async function(req, res) {
   try {
     const db = await database
 
