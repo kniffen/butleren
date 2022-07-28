@@ -3,7 +3,13 @@ import { Collection } from 'discord.js'
 import database from '../../../database/index.js'
 
 import spotifyOnInterval from '../../../modules/spotify/onInterval.js'
+import fetchSpotifyShowsMock from '../../../modules/spotify/utils/fetchSpotifyShows.js'
 import fetchSpotifyShowEpisodesMock from '../../../modules/spotify/utils/fetchSpotifyShowEpisodes.js'
+
+jest.mock(
+  '../../../modules/spotify/utils/fetchSpotifyShows.js',
+  () => ({__esModule: true, default: jest.fn()})
+)
 
 jest.mock(
   '../../../modules/spotify/utils/fetchSpotifyShowEpisodes.js',
@@ -57,11 +63,16 @@ describe('modules.spotify.onInterval()', function() {
     db = await database
 
     await db.migrate()
+
+    fetchSpotifyShowsMock.mockResolvedValue([
+      {id: 'show001', name: `show001_name`},
+      {id: 'show002', name: `show002_name`},
+    ])
     
-    fetchSpotifyShowEpisodesMock.mockImplementation(async (id) => [
-      {id: 'episode003', external_urls: {spotify: 'episode003_url'}, show: {name: `${id}_name`}},
-      {id: 'episode002', external_urls: {spotify: 'episode002_url'}, show: {name: `${id}_name`}},
-      {id: 'episode001', external_urls: {spotify: 'episode001_url'}, show: {name: `${id}_name`}},
+    fetchSpotifyShowEpisodesMock.mockResolvedValue([
+      {id: 'episode003', external_urls: {spotify: 'episode003_url'}},
+      {id: 'episode002', external_urls: {spotify: 'episode002_url'}},
+      {id: 'episode001', external_urls: {spotify: 'episode001_url'}},
     ])
 
     jest.spyOn(db, 'all')
@@ -80,6 +91,9 @@ describe('modules.spotify.onInterval()', function() {
   it('Should announce new show episodes', async function() {
     await spotifyOnInterval({guilds: [guild001, guild002], date: (new Date('1970-01-01T00:00:00'))})
 
+    expect(console.error).not.toHaveBeenCalled()
+    expect(fetchSpotifyShowsMock).toHaveBeenCalledTimes(1)
+    expect(fetchSpotifyShowsMock).toHaveBeenCalledWith(['show001', 'show002'])
     expect(fetchSpotifyShowEpisodesMock).toHaveBeenCalledTimes(2)
     expect(fetchSpotifyShowEpisodesMock).toHaveBeenNthCalledWith(1, 'show001')
     expect(fetchSpotifyShowEpisodesMock).toHaveBeenNthCalledWith(2, 'show002')
