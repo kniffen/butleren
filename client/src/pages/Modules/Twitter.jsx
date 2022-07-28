@@ -23,10 +23,10 @@ export default function Twitter() {
       isRequired: true,
       search: {
         generateURI: (query) => `/api/twitter/search?q=${query}`,
-        parseResults: (results) => results.map(show => ({
-          id:    show.id,
-          name:  show.name,
-          image: show.profile_image_url,
+        parseResults: (results) => results.map(user => ({
+          id:    user.id,
+          name:  user.name,
+          image: user.profile_image_url,
         }))
       }
     },
