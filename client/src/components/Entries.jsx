@@ -50,7 +50,7 @@ export default function Entries({ className, title, uri, entries, fields, onUpda
         </li>)}
       </ul>
 
-      <StyledAddButton value="Add show" onClick={() => setIsAddingEntry(true)} />
+      <StyledAddButton value="Add new" onClick={() => setIsAddingEntry(true)} />
 
       {(isAddingEntry || entryBeingEdited) && <Overlay
         onExit={() => {
