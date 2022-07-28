@@ -10,7 +10,7 @@ import fetchTwitterUserTweets from './utils/fetchTwitterUserTweets.js'
  * @returns Void
  */
 export default async function twitterOnInterval({ guilds, date }) {
-  // This ensures that the logic will only run every hour on the hour
+  // This ensures that the logic will only run every half hour on the hour and half hour
   // For example 12:00, 12:30, 13:00 etc...
   if (0 !== date.getMinutes() % 30) return
 
