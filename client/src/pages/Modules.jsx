@@ -33,7 +33,7 @@ export default function Modules() {
         key={mod.id}
         guild={guild}
         {...mod}
-        hasSettings={['spotify', 'twitter'].includes(mod.id)}
+        hasSettings={['spotify', 'twitter', 'youtube'].includes(mod.id)}
       />)}
     </DashboardLayout>
   )

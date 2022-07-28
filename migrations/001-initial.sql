@@ -38,6 +38,14 @@ CREATE TABLE IF NOT EXISTS twitterUsers (
   PRIMARY KEY(id, guildId)
 );
 
+CREATE TABLE IF NOT EXISTS youtubeChannels (
+  id TEXT NOT NULL,
+  guildId TEXT NOT NULL,
+  notificationRoleId TEXT,
+  notificationChannelId TEXT,
+  PRIMARY KEY (id, guildId)
+)
+
 -- Down
 
 DROP TABLE guilds;
@@ -45,3 +53,4 @@ DROP TABLE modules;
 DROP TABLE users;
 DROP TABLE spotifyShows;
 DROP TABLE twitterUsers;
+DROP TABLE youtubeChannels;
