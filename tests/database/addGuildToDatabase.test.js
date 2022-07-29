@@ -39,6 +39,7 @@ describe('database.addGuildToDatabase()', function() {
       {id: 'cleverbot', guildId: 'guild001', isEnabled: 0},
       {id: 'fun',       guildId: 'guild001', isEnabled: 0},
       {id: 'spotify',   guildId: 'guild001', isEnabled: 0},
+      {id: 'twitch',    guildId: 'guild001', isEnabled: 0},
       {id: 'twitter',   guildId: 'guild001', isEnabled: 0},
       {id: 'weather',   guildId: 'guild001', isEnabled: 0},
       {id: 'youtube',   guildId: 'guild001', isEnabled: 0},
@@ -49,7 +50,7 @@ describe('database.addGuildToDatabase()', function() {
     jest.spyOn(db, 'run').mockRejectedValue('SQL error')
     await addGuildToDatabase(guild)
 
-    expect(console.error).toHaveBeenCalledTimes(7)
+    expect(console.error).toHaveBeenCalledTimes(8)
     expect(console.error).toHaveBeenCalledWith('SQL error')
 
     db.run.mockRestore()

@@ -44,7 +44,15 @@ CREATE TABLE IF NOT EXISTS youtubeChannels (
   notificationRoleId TEXT,
   notificationChannelId TEXT,
   PRIMARY KEY (id, guildId)
-)
+);
+
+CREATE TABLE IF NOT EXISTS twitchChannels (
+  id TEXT NOT NULL,
+  guildId TEXT NOT NULL,
+  notificationRoleId TEXT,
+  notificationChannelId TEXT,
+  PRIMARY KEY (id, guildId)
+);
 
 -- Down
 
@@ -54,3 +62,4 @@ DROP TABLE users;
 DROP TABLE spotifyShows;
 DROP TABLE twitterUsers;
 DROP TABLE youtubeChannels;
+DROP TABLE twitchChannels;
