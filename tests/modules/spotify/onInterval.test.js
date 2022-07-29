@@ -1,5 +1,3 @@
-import { Collection } from 'discord.js'
-
 import database from '../../../database/index.js'
 
 import spotifyOnInterval from '../../../modules/spotify/onInterval.js'
@@ -37,9 +35,9 @@ describe('modules.spotify.onInterval()', function() {
   }
 
   const defaultDatabaseEntries = [
-    {guildId: 'guild001', id: 'show001', latestEpisodeId: null,         notificationChannelId: 'channel001', notificationRoleId: 'role001'},
-    {guildId: 'guild001', id: 'show002', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},
-    {guildId: 'guild002', id: 'show001', latestEpisodeId: 'episode001', notificationChannelId: 'channel001', notificationRoleId: null},
+    {guildId: 'guild001', id: 'show001', latestEpisodeId: null,                 notificationChannelId: 'channel001', notificationRoleId: 'role001'},
+    {guildId: 'guild001', id: 'show002', latestEpisodeId: 'show002_episode003', notificationChannelId: 'channel001', notificationRoleId: null},
+    {guildId: 'guild002', id: 'show001', latestEpisodeId: 'show001_episode001', notificationChannelId: 'channel001', notificationRoleId: null},
   ]
 
   async function resetShowsInDatabase() {
@@ -51,11 +49,11 @@ describe('modules.spotify.onInterval()', function() {
     )
     await db.run(
       'INSERT INTO spotifyShows (guildId, id, latestEpisodeId, notificationChannelId) VALUES (?,?,?,?)',
-      ['guild001', 'show002', 'episode003', 'channel001']
+      ['guild001', 'show002', 'show002_episode003', 'channel001']
     )
     await db.run(
       'INSERT INTO spotifyShows (guildId, id, latestEpisodeId, notificationChannelId) VALUES (?,?,?,?)',
-      ['guild002', 'show001', 'episode001', 'channel001']
+      ['guild002', 'show001', 'show001_episode001', 'channel001']
     )
   }
   
@@ -64,16 +62,20 @@ describe('modules.spotify.onInterval()', function() {
 
     await db.migrate()
 
-    fetchSpotifyShowsMock.mockResolvedValue([
-      {id: 'show001', name: `show001_name`},
-      {id: 'show002', name: `show002_name`},
-    ])
+    await db.run('INSERT INTO modules (id, guildId, isEnabled) VALUES (?,?,?)', ['spotify', 'guild001', true])
+    await db.run('INSERT INTO modules (id, guildId, isEnabled) VALUES (?,?,?)', ['spotify', 'guild002', true])
+
+    fetchSpotifyShowsMock.mockImplementation(
+      async (ids) => ids.map(id => ({id, name: `${id}_name`}))
+    )
     
-    fetchSpotifyShowEpisodesMock.mockResolvedValue([
-      {id: 'episode003', external_urls: {spotify: 'episode003_url'}},
-      {id: 'episode002', external_urls: {spotify: 'episode002_url'}},
-      {id: 'episode001', external_urls: {spotify: 'episode001_url'}},
-    ])
+    fetchSpotifyShowEpisodesMock.mockImplementation(async function(id) {
+      return [
+        {id: `${id}_episode003`, external_urls: {spotify: `${id}_episode003_url`}},
+        {id: `${id}_episode002`, external_urls: {spotify: `${id}_episode002_url`}},
+        {id: `${id}_episode001`, external_urls: {spotify: `${id}_episode001_url`}},
+      ]
+    })
 
     jest.spyOn(db, 'all')
     jest.spyOn(db, 'run')
@@ -99,18 +101,18 @@ describe('modules.spotify.onInterval()', function() {
     expect(fetchSpotifyShowEpisodesMock).toHaveBeenNthCalledWith(2, 'show002')
 
     expect(notificationChannel001.send).toHaveBeenCalledWith({
-      content: '<@&role001> A new episode from show001_name is out!\nepisode003_url'
+      content: '<@&role001> A new episode from show001_name is out!\nshow001_episode003_url'
     })
 
     expect(notificationChannel002.send).toHaveBeenCalledWith({
-      content: 'A new episode from show001_name is out!\nepisode003_url'
+      content: 'A new episode from show001_name is out!\nshow001_episode003_url'
     })
 
     expect(db.run).toHaveBeenCalledTimes(2)
     expect(await db.all('SELECT * FROM spotifyShows')).toEqual([
-      {guildId: 'guild001', id: 'show001', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: 'role001'},
-      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},
-      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},
+      {guildId: 'guild001', id: 'show001', latestEpisodeId: 'show001_episode003', notificationChannelId: 'channel001', notificationRoleId: 'role001'},
+      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'show002_episode003', notificationChannelId: 'channel001', notificationRoleId: null},
+      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'show001_episode003', notificationChannelId: 'channel001', notificationRoleId: null},
     ])
   })
 
@@ -126,7 +128,27 @@ describe('modules.spotify.onInterval()', function() {
       spotifyOnInterval({guilds: [guild001, guild002], date: (new Date('1970-01-01T02:00:00'))}),
     ])
 
-    expect(db.all).toHaveBeenCalledTimes(3)
+    expect(db.all).toHaveBeenCalledTimes(6)
+  })
+
+  it('Should not run for modules that have the module disabled', async function() {
+    await db.run(
+      'UPDATE modules SET isEnabled = ? WHERE id = ? AND guildId = ?',
+      [false, 'spotify', 'guild001']
+    )
+
+    await spotifyOnInterval({guilds: [guild001, guild002], date: (new Date('1970-01-01T00:00:00'))})
+
+    expect(console.error).not.toHaveBeenCalled()
+    expect(fetchSpotifyShowsMock).toHaveBeenCalledTimes(1)
+    expect(fetchSpotifyShowsMock).toHaveBeenCalledWith(['show001'])
+    expect(fetchSpotifyShowEpisodesMock).toHaveBeenCalledTimes(1)
+    expect(fetchSpotifyShowEpisodesMock).toHaveBeenCalledWith('show001')
+
+    await db.run(
+      'UPDATE modules SET isEnabled = ? WHERE id = ? AND guildId = ?',
+      [true, 'spotify', 'guild001']
+    )
   })
 
   it('Should handle the database not updating', async function() {
@@ -149,9 +171,9 @@ describe('modules.spotify.onInterval()', function() {
     expect(console.error).toHaveBeenCalledWith('Error')
     expect(notificationChannel002.send).toHaveBeenCalled()
     expect(await db.all('SELECT * FROM spotifyShows')).toEqual([
-      {guildId: 'guild001', id: 'show001', latestEpisodeId: null,         notificationChannelId: 'channel001', notificationRoleId: 'role001'},
-      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},
-      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},
+      {guildId: 'guild001', id: 'show001', latestEpisodeId: null,                 notificationChannelId: 'channel001', notificationRoleId: 'role001'},
+      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'show002_episode003', notificationChannelId: 'channel001', notificationRoleId: null},
+      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'show001_episode003', notificationChannelId: 'channel001', notificationRoleId: null},
     ])
 
     notificationChannel001.send.mockResolvedValue()
@@ -165,9 +187,9 @@ describe('modules.spotify.onInterval()', function() {
     expect(console.error).toHaveBeenCalledWith('Error')
     expect(notificationChannel002.send).toHaveBeenCalledTimes(1)
     expect(await db.all('SELECT * FROM spotifyShows')).toEqual([
-      {guildId: 'guild001', id: 'show001', latestEpisodeId: null,         notificationChannelId: 'channel001', notificationRoleId: 'role001'},
-      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},
-      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},  
+      {guildId: 'guild001', id: 'show001', latestEpisodeId: null,                 notificationChannelId: 'channel001', notificationRoleId: 'role001'},
+      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'show002_episode003', notificationChannelId: 'channel001', notificationRoleId: null},
+      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'show001_episode003', notificationChannelId: 'channel001', notificationRoleId: null},  
     ])
 
     guild001.channels.fetch.mockResolvedValue(notificationChannel001)
@@ -179,9 +201,9 @@ describe('modules.spotify.onInterval()', function() {
     expect(notificationChannel001.send).not.toHaveBeenCalled()
     expect(notificationChannel002.send).toHaveBeenCalled()
     expect(await db.all('SELECT * FROM spotifyShows')).toEqual([
-      {guildId: 'guild001', id: 'show001', latestEpisodeId: null,         notificationChannelId: 'channel001', notificationRoleId: 'role001'},
-      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},
-      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'episode003', notificationChannelId: 'channel001', notificationRoleId: null},  
+      {guildId: 'guild001', id: 'show001', latestEpisodeId: null,                 notificationChannelId: 'channel001', notificationRoleId: 'role001'},
+      {guildId: 'guild001', id: 'show002', latestEpisodeId: 'show002_episode003', notificationChannelId: 'channel001', notificationRoleId: null},
+      {guildId: 'guild002', id: 'show001', latestEpisodeId: 'show001_episode003', notificationChannelId: 'channel001', notificationRoleId: null},  
     ])
   })
 

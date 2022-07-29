@@ -38,6 +38,10 @@ describe('modules.twitter.onInterval()', function() {
     db = await database
 
     await db.migrate()
+
+    await db.run('INSERT INTO modules (id, guildId, isEnabled) VALUES (?,?,?)', ['twitter', 'guild001', true])
+    await db.run('INSERT INTO modules (id, guildId, isEnabled) VALUES (?,?,?)', ['twitter', 'guild002', true])
+
     await db.run(
       'INSERT INTO twitterUsers (guildId, id, notificationChannelId) VALUES (?,?,?)',
       ['guild001', 'twitterUser001', 'channel001']
@@ -54,10 +58,9 @@ describe('modules.twitter.onInterval()', function() {
     jest.spyOn(db, 'all')
     jest.spyOn(db, 'run')
 
-    fetchTwitterUsersMock.mockResolvedValue([
-      {id: 'twitterUser001', name: 'twitterUser001_name', username: 'twitterUser001_username'},
-      {id: 'twitterUser002', name: 'twitterUser002_name', username: 'twitterUser002_username'},
-    ])
+    fetchTwitterUsersMock.mockImplementation(
+      async ({ ids }) => ids.map(id => ({id, name: `${id}_name`, username: `${id}_username`}))
+    )
 
     fetchTwitterUserTweetsMock.mockImplementation(async function(id) {
       if ('twitterUser001' === id) return [
@@ -111,7 +114,27 @@ describe('modules.twitter.onInterval()', function() {
       twitterOnInterval({guilds: [guild001, guild002], date: (new Date('1970-01-01T02:00:00Z'))}),
     ])
 
-    expect(db.all).toHaveBeenCalledTimes(5)
+    expect(db.all).toHaveBeenCalledTimes(10)
+  })
+
+  it('Should not run for modules that have the module disabled', async function() {
+    await db.run(
+      'UPDATE modules SET isEnabled = ? WHERE id = ? AND guildId = ?',
+      [false, 'twitter', 'guild001']
+    )
+
+    await twitterOnInterval({guilds: [guild001, guild002], date: (new Date('1970-01-01T00:00:00'))})
+
+    expect(console.error).not.toHaveBeenCalled()
+    expect(fetchTwitterUsersMock).toHaveBeenCalledTimes(1)
+    expect(fetchTwitterUsersMock).toHaveBeenCalledWith({ids: ['twitterUser001']})
+    expect(fetchTwitterUserTweetsMock).toHaveBeenCalledTimes(1)
+    expect(fetchTwitterUserTweetsMock).toHaveBeenCalledWith('twitterUser001')
+
+    await db.run(
+      'UPDATE modules SET isEnabled = ? WHERE id = ? AND guildId = ?',
+      [true, 'twitter', 'guild001']
+    )
   })
   
   it('Should handle a notification not being sent', async function() {

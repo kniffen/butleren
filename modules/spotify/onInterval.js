@@ -8,8 +8,14 @@ export default async function spotifyOnInterval({ guilds, date }) {
   if (0 !== date.getMinutes() % 60) return
   
   try {
-    const db      = await database
-    const entries = await db.all('SELECT * FROM spotifyShows')
+    const db = await database
+    const enabledGuilds
+      = (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['spotify', true]))
+          .map(({ guildId}) => guildId)
+
+    const entries =
+      (await db.all('SELECT * FROM spotifyShows'))
+        .filter(({ guildId }) => enabledGuilds.includes(guildId))
 
     const ids = entries.reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], [])
     const shows = await fetchSpotifyShows(ids)

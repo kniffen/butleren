@@ -15,8 +15,14 @@ export default async function twitterOnInterval({ guilds, date }) {
   if (0 !== date.getMinutes() % 30) return
 
   try {
-    const db      = await database
-    const entries = await db.all('SELECT * FROM twitterUsers')
+    const db = await database
+    const enabledGuilds
+    = (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['twitter', true]))
+        .map(({ guildId}) => guildId)
+
+    const entries =
+      (await db.all('SELECT * FROM twitterUsers'))
+        .filter(({ guildId }) => enabledGuilds.includes(guildId))
 
     const ids = entries.reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], [])
     
