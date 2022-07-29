@@ -33,8 +33,10 @@ export default function EntryAddForm({ className, title, uri, fields, onSuccess,
     try {
       const formData  = new FormData(e.target)
       const body      = new URLSearchParams(formData)
-      const searchURI = searchField.search.generateURI(body.get('query'))
-      const results   = searchField.search.parseResults(await fetch(searchURI).then(res => res.json()))
+
+      const query = body.get('query').toLowerCase()
+      const searchURI = searchField.search.generateURI(query)
+      const results   = searchField.search.parseResults(await fetch(searchURI).then(res => res.json()), query)
 
       setSearchResults(results)
       setSelectedSearchResult(results[0])
