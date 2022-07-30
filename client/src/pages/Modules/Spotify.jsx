@@ -6,6 +6,7 @@ import { Context } from '../../Store.jsx'
 
 import DashboardLayout from '../../layouts/Dashboard'
 
+import ModulePageHeader from '../../components/ModulePageHeader'
 import Entries from '../../components/Entries'
 
 export default function Spotify() {
@@ -66,7 +67,13 @@ export default function Spotify() {
   }, [params])
 
   return (
-    <DashboardLayout title="Modules: Spotify">
+    <DashboardLayout>
+      <ModulePageHeader
+        title="Spotify"
+        id="spotify"
+        guild={params.guild}
+      />
+
       <StyledEntries
         title="Shows"
         uri={uri}

@@ -6,6 +6,7 @@ import { Context } from '../../Store.jsx'
 
 import DashboardLayout from '../../layouts/Dashboard'
 
+import ModulePageHeader from '../../components/ModulePageHeader'
 import Entries from '../../components/Entries'
 
 export default function Twitch() {
@@ -73,7 +74,13 @@ export default function Twitch() {
   }, [params])
 
   return (
-    <DashboardLayout title="Modules: Twitch">
+    <DashboardLayout>
+      <ModulePageHeader
+        title="Twitch"
+        id="twitch"
+        guild={params.guild}
+      />
+
       <StyledEntries
         title="Channels"
         uri={uri}

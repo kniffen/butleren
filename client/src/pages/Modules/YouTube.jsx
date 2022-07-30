@@ -6,6 +6,7 @@ import { Context } from '../../Store.jsx'
 
 import DashboardLayout from '../../layouts/Dashboard'
 
+import ModulePageHeader from '../../components/ModulePageHeader'
 import Entries from '../../components/Entries'
 
 export default function Twitter() {
@@ -66,7 +67,13 @@ export default function Twitter() {
   }, [params])
 
   return (
-    <DashboardLayout title="Modules: YouTube">
+    <DashboardLayout>
+      <ModulePageHeader
+        title="YouTube"
+        id="youtube"
+        guild={params.guild}
+      />
+
       <StyledEntries
         title="YouTube channels"
         uri={uri}

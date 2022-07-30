@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { Context } from '../../Store.jsx'
 
+import ModulePageHeader from '../../components/ModulePageHeader'
 import DashboardLayout from '../../layouts/Dashboard'
 
 import Entries from '../../components/Entries'
@@ -66,7 +67,13 @@ export default function Twitter() {
   }, [params])
 
   return (
-    <DashboardLayout title="Modules: Twitter">
+    <DashboardLayout>
+      <ModulePageHeader
+        title="Twitter"
+        id="twitter"
+        guild={params.guild}
+      />
+
       <StyledEntries
         title="Twitter users"
         uri={uri}
