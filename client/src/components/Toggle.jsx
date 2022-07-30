@@ -6,6 +6,8 @@ export default function Toggle({ className, isDefaultChecked, isLocked, onChange
   const [ isChecked, setIsChecked ] = useState(isDefaultChecked)
 
   function handleCheckboxClick(e) {
+    if(isLocked) return
+    
     setIsChecking(true)
     
     onChange(!isChecked)
