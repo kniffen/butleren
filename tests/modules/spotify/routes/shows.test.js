@@ -1,11 +1,17 @@
 import database from '../../../../database/index.js'
 import { callbacks } from '../../../../routes/router.js'
 import fetchSpotifyShowsMock from '../../../../modules/spotify/utils/fetchSpotifyShows.js'
+import fetchSpotifyShowEpisodesMock from '../../../../modules/spotify/utils/fetchSpotifyShowEpisodes.js'
 
 import '../../../../modules/spotify/routes/shows.js'
 
 jest.mock(
   '../../../../modules/spotify/utils/fetchSpotifyShows.js',
+  () => ({__esModule: true, default: jest.fn()})
+)
+
+jest.mock(
+  '../../../../modules/spotify/utils/fetchSpotifyShowEpisodes.js',
   () => ({__esModule: true, default: jest.fn()})
 )
 
@@ -35,6 +41,12 @@ describe(path, function() {
       description: `${id}-description-${i}`,
       external_urls: {spotify: `${id}-url-${i}`}
     })))
+
+    fetchSpotifyShowEpisodesMock.mockImplementation(id => ([
+      {id: `${id}_episode001`},
+      {id: `${id}_episode002`},
+      {id: `${id}_episode003`},
+    ]))
   })
 
   beforeEach(function() {
@@ -128,6 +140,23 @@ describe(path, function() {
     it('Should add a show to the database', async function() {
       await cb(req, res)
 
+      expect(res.sendStatus).toHaveBeenCalledWith(201)
+      expect(await db.all('SELECT * FROM spotifyShows')).toEqual([
+        {guildId: 'guild001', id: 'show001', latestEpisodeId: null, notificationChannelId: 'channel001', notificationRoleId: null},
+        {guildId: 'guild001', id: 'show002', latestEpisodeId: null, notificationChannelId: 'channel002', notificationRoleId: null},
+        {guildId: 'guild002', id: 'show001', latestEpisodeId: null, notificationChannelId: 'channel003', notificationRoleId: null},
+        {guildId: 'guild002', id: 'show003', latestEpisodeId: null, notificationChannelId: 'channel004', notificationRoleId: null},
+        {guildId: 'guild001', id: 'show999', latestEpisodeId: 'show999_episode001', notificationChannelId: 'channel001', notificationRoleId: 'role001'},
+      ])
+    })
+
+    it('Should handle the show having no episodes', async function() {
+      fetchSpotifyShowEpisodesMock.mockResolvedValue([])
+
+      await db.run('DELETE FROM spotifyShows WHERE id = ? AND guildId = ?', ['show999', 'guild001'])
+      await cb(req, res)
+
+      expect(console.error).not.toHaveBeenCalled()
       expect(res.sendStatus).toHaveBeenCalledWith(201)
       expect(await db.all('SELECT * FROM spotifyShows')).toEqual([
         {guildId: 'guild001', id: 'show001', latestEpisodeId: null, notificationChannelId: 'channel001', notificationRoleId: null},

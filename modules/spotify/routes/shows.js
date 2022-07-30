@@ -3,6 +3,7 @@ import router   from '../../../routes/router.js'
 import { HTTP_CODES } from '../../../database/constants.js'
 
 import fetchSpotifyShows from '../utils/fetchSpotifyShows.js'
+import fetchSpotifyShowEpisodes from '../utils/fetchSpotifyShowEpisodes.js'
 
 const path = '/api/spotify/:guild/shows'
 
@@ -48,9 +49,11 @@ router.post(path, async function(req, res) {
     if (existingEntry)
       return res.sendStatus(409)
 
+    const episodes = await fetchSpotifyShowEpisodes(req.body.id)
+    
     await db.run(
-      'INSERT INTO spotifyShows (guildId, id, notificationChannelId, notificationRoleId) VALUES (?,?,?,?)',
-      [req.params.guild, req.body.id, req.body.notificationChannelId, req.body.notificationRoleId]
+      'INSERT INTO spotifyShows (guildId, id, latestEpisodeId, notificationChannelId, notificationRoleId) VALUES (?,?,?,?,?)',
+      [req.params.guild, req.body.id, episodes[0]?.id || null, req.body.notificationChannelId, req.body.notificationRoleId]
     )
 
     res.sendStatus(201)
