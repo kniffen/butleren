@@ -117,6 +117,9 @@ export default function Entries({ className, title, uri, entries, fields, onUpda
 
 const className = 'entries'
 const StyledEntriesBox = styled(Box).attrs(() => ({className}))`
+  font-size: .9rem;
+  gap: 2em;
+
   .${className}__list {
     display: flex;
     flex-direction: column;
@@ -124,14 +127,15 @@ const StyledEntriesBox = styled(Box).attrs(() => ({className}))`
     padding: 0;
     margin: 0;
     width: 100%;
+    gap: .5em;
   }
 
   .${className}__entry {
     display: flex;
     flex-wrap: wrap;
-    gap: .5em;
+    gap: .5em 1em;
     align-items: center;
-    padding: 1em;
+    padding: .5em 1em;
     width: calc(100% + 2em);
     margin-inline-start: -1em;
     border-radius: .25em;
