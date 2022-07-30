@@ -26,6 +26,7 @@ const StyledLabel = styled.label`
   width: 2em;
   height: 1em;
   border-radius: .25em;
+  font-size: 1rem;
   cursor: pointer;
   
   &::before,
