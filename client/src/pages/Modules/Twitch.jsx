@@ -7,13 +7,14 @@ import { Context } from '../../Store.jsx'
 import DashboardLayout from '../../layouts/Dashboard'
 
 import ModulePageHeader from '../../components/ModulePageHeader'
+import LoadingBox from  '../../components/LoadingBox'
 import Entries from '../../components/Entries'
 
 export default function Twitch() {
   const params = useParams()
   const { discordChannels, discordRoles } = useContext(Context)
   const [ uri, setURI ] = useState(`/api/twitch/${params.guild}/channels`)
-  const [ twitchChannels, setTwitchChannels] = useState([])
+  const [ twitchChannels, setTwitchChannels] = useState(null)
 
   const fields = [
     {
@@ -81,19 +82,25 @@ export default function Twitch() {
         guild={params.guild}
       />
 
-      <StyledEntries
-        title="Channels"
-        uri={uri}
-        entries={twitchChannels}
-        fields={fields}
-        onUpdate={() => fetchAndSetTwitchChannels()}
-      />
+      {!twitchChannels
+        ? <StyledLoadingBox />
+        : <StyledEntries
+            title="Channels"
+            uri={uri}
+            entries={twitchChannels}
+            fields={fields}
+            onUpdate={() => fetchAndSetTwitchChannels()}
+          />
+      }
     </DashboardLayout>
   )
 }
 
+const StyledLoadingBox = styled(LoadingBox)`
+  grid-column: span 12;
+  height: 20rem;
+`
+
 const StyledEntries = styled(Entries)`
-  @media (min-width: 48em) {
-    grid-column: span 12;
-  }
+  grid-column: span 12;
 `

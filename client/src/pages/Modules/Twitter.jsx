@@ -4,16 +4,17 @@ import styled from 'styled-components'
 
 import { Context } from '../../Store.jsx'
 
-import ModulePageHeader from '../../components/ModulePageHeader'
 import DashboardLayout from '../../layouts/Dashboard'
 
+import ModulePageHeader from '../../components/ModulePageHeader'
+import LoadingBox from  '../../components/LoadingBox'
 import Entries from '../../components/Entries'
 
 export default function Twitter() {
   const params = useParams()
   const { discordChannels, discordRoles } = useContext(Context)
   const [ uri, setURI ] = useState(`/api/twitter/${params.guild}/users`)
-  const [ twitterUsers, setTwitterUsers] = useState([])
+  const [ twitterUsers, setTwitterUsers] = useState(null)
 
   const fields = [
     {
@@ -74,19 +75,25 @@ export default function Twitter() {
         guild={params.guild}
       />
 
-      <StyledEntries
-        title="Twitter users"
-        uri={uri}
-        entries={twitterUsers}
-        fields={fields}
-        onUpdate={() => fetchAndSetTwitterUsers()}
-      />
+      {!twitterUsers
+        ? <StyledLoadingBox />
+        : <StyledEntries
+            title="Twitter users"
+            uri={uri}
+            entries={twitterUsers}
+            fields={fields}
+            onUpdate={() => fetchAndSetTwitterUsers()}
+          />
+      }
     </DashboardLayout>
   )
 }
 
+const StyledLoadingBox = styled(LoadingBox)`
+  grid-column: span 12;
+  height: 20rem;
+`
+
 const StyledEntries = styled(Entries)`
-  @media (min-width: 48em) {
-    grid-column: span 12;
-  }
+  grid-column: span 12;
 `

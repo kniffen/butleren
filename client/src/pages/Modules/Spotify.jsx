@@ -7,13 +7,14 @@ import { Context } from '../../Store.jsx'
 import DashboardLayout from '../../layouts/Dashboard'
 
 import ModulePageHeader from '../../components/ModulePageHeader'
+import LoadingBox from  '../../components/LoadingBox'
 import Entries from '../../components/Entries'
 
 export default function Spotify() {
   const params = useParams()
   const { discordChannels, discordRoles } = useContext(Context)
   const [ uri, setURI ] = useState(`/api/spotify/${params.guild}/shows`)
-  const [ shows, setShows] = useState([])
+  const [ shows, setShows] = useState(null)
 
   const fields = [
     {
@@ -74,19 +75,25 @@ export default function Spotify() {
         guild={params.guild}
       />
 
-      <StyledEntries
-        title="Shows"
-        uri={uri}
-        entries={shows}
-        fields={fields}
-        onUpdate={() => fetchAndSetShows()}
-      />
+      {!shows
+        ? <StyledLoadingBox />
+        : <StyledEntries
+            title="Shows"
+            uri={uri}
+            entries={shows}
+            fields={fields}
+            onUpdate={() => fetchAndSetShows()}
+          />
+      }
     </DashboardLayout>
   )
 }
 
+const StyledLoadingBox = styled(LoadingBox)`
+  grid-column: span 12;
+  height: 20rem;
+`
+
 const StyledEntries = styled(Entries)`
-  @media (min-width: 48em) {
-    grid-column: span 12;
-  }
+  grid-column: span 12;
 `

@@ -7,13 +7,14 @@ import { Context } from '../../Store.jsx'
 import DashboardLayout from '../../layouts/Dashboard'
 
 import ModulePageHeader from '../../components/ModulePageHeader'
+import LoadingBox from  '../../components/LoadingBox'
 import Entries from '../../components/Entries'
 
 export default function Twitter() {
   const params = useParams()
   const { discordChannels, discordRoles } = useContext(Context)
   const [ uri, setURI ] = useState(`/api/youtube/${params.guild}/channels`)
-  const [ channels, setChannels] = useState([])
+  const [ channels, setChannels] = useState(null)
 
   const fields = [
     {
@@ -74,19 +75,25 @@ export default function Twitter() {
         guild={params.guild}
       />
 
-      <StyledEntries
-        title="YouTube channels"
-        uri={uri}
-        entries={channels}
-        fields={fields}
-        onUpdate={() => fetchAndSetChannels()}
-      />
+      {!channels
+        ? <StyledLoadingBox />
+        : <StyledEntries
+            title="YouTube channels"
+            uri={uri}
+            entries={channels}
+            fields={fields}
+            onUpdate={() => fetchAndSetChannels()}
+          />
+      }
     </DashboardLayout>
   )
 }
 
+const StyledLoadingBox = styled(LoadingBox)`
+  grid-column: span 12;
+  height: 20rem;
+`
+
 const StyledEntries = styled(Entries)`
-  @media (min-width: 48em) {
-    grid-column: span 12;
-  }
+  grid-column: span 12;
 `
