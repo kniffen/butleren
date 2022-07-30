@@ -33,6 +33,7 @@ export default function ModuleBox({ guild, id, name, description, commands, isEn
 
 const StyledModuleBox = styled(Box)`
   position: relative;
+  gap: .5em;
 `
 
 const StyledToggle = styled(Toggle)`
@@ -45,6 +46,7 @@ const  StyledButton = styled(Button)`
   font-size: .85rem;
   font-weight: 600;
   padding: .5em 1em;
+  margin-block-start: 1em;
 `
 
 const StyledModuleDescription = styled.p`

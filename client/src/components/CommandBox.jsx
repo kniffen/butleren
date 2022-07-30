@@ -31,6 +31,7 @@ export default function CommandBox({ guild, id, name, description, isEnabled, is
 
 const StyledCommandBox = styled(Box)`
   position: relative;
+  gap: .5em;
 
   @media (min-width: 48em) {
     grid-column: span 4;
