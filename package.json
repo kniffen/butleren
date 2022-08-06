@@ -55,7 +55,9 @@
     "@babel/preset-env": "^7.18.2",
     "babel-jest": "^28.1.1",
     "jest": "^28.1.1",
-    "regenerator-runtime": "^0.13.9",
+    "regenerator-runtime": "^0.13.9"
+  },
+  "optionalDependencies": {
     "win-node-env": "^0.6.1"
   }
 }
