@@ -11,7 +11,7 @@ router.get('/api/guilds/:guild/channels', async function(req, res) {
 
     const channels =
       (await guild.channels.fetch())
-        .filter(({ type }) => 'GUILD_TEXT' == type)
+        .filter(({ type }) => ['GUILD_TEXT', 'GUILD_NEWS'].includes(type))
         .map(({ id, name }) => ({id, name}))
 
     res.send(channels)

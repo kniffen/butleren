@@ -31,7 +31,7 @@ describe(path, function() {
   beforeAll(function() {    
     channels.set('channel001', {id: 'channel001', name: 'channelname001', type: 'GUILD_TEXT'})
     channels.set('channel002', {id: 'channel002', name: 'channelname002', type: 'GUILD_CATEGORY'})
-    channels.set('channel003', {id: 'channel003', name: 'channelname003', type: 'GUILD_TEXT'})
+    channels.set('channel003', {id: 'channel003', name: 'channelname003', type: 'GUILD_NEWS'})
 
     discordClientMock.guilds.fetch.mockRejectedValue('Guild not found')
   })
