@@ -1,6 +1,10 @@
+import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 
 import router from './router.js'
+
+if ('development' !== process.env.NODE_ENV)
+  router.use(express.static('client/build'))
 
 import './guilds/index.js'
 import './guilds/guild.js'
