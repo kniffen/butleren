@@ -1,6 +1,6 @@
 {
   "name": "butleren",
-  "version": "1.0.1-beta",
+  "version": "1.0.2-beta",
   "private": true,
   "type": "module",
   "description": "Yet another Discord bot",
