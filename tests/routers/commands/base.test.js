@@ -1,9 +1,10 @@
+import express from 'express'
+import supertest from 'supertest'
 import { Collection } from 'discord.js'
 
-import { callbacks } from '../../../routes/router.js'
 import clientMock from '../../../discord/client.js'
 
-import '../../../routes/commands/index.js'
+import commandsRouter from '../../../routes/commands/index.js'
 
 jest.mock('../../../discord/client.js', () => ({
   __esModule: true,
@@ -43,14 +44,10 @@ jest.mock('../../../modules/index.js', () => ({
   }
 }))
 
-const path = '/api/commands/:guild'
-
-describe(path, function() {
-  const res = {
-    send:       jest.fn(),
-    sendStatus: jest.fn(),
-  }
-
+describe('/api/commands/:guild', function() {
+  let app = null
+  const URI = '/api/commands/guild001'
+  
   const guild = {
     commands: {
       fetch: jest.fn()
@@ -60,6 +57,12 @@ describe(path, function() {
   const guildCommands = new Collection()
   guildCommands.set('cmd001', {name: 'command001'})
   guildCommands.set('cmd003', {name: 'command003'})
+
+  beforeAll(function() {
+    app = express()
+
+    app.use('/api/commands', commandsRouter)
+  })
 
   beforeEach(function() {
     clientMock.guilds.fetch.mockResolvedValue(guild)
@@ -75,20 +78,10 @@ describe(path, function() {
   })
 
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      method: 'GET',
-      originalUrl: path,
-      params: {
-        guild: 'guild001'
-      }
-    }
-
     it('should respond with an array of commands', async function() {
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(res.send).toHaveBeenCalledWith([
+      expect(res.body).toEqual([
         {
           id:   'cmd001',
           name: 'command001',
@@ -119,31 +112,28 @@ describe(path, function() {
     it('should respond with a 404 status code if there was an issue fetching commands from the guild', async function() {
       guild.commands.fetch.mockRejectedValue('Error message')
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(console.error).toHaveBeenCalledWith('GET', path, 'Error message')
-      expect(res.send).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
+      expect(console.error).toHaveBeenCalledWith('GET', URI, 'Error message')
+      expect(res.status).toEqual(404)
     })
 
     it('should resport with a 404 status code if the guild does not exist', async function() {
       clientMock.guilds.fetch.mockRejectedValue('Error message')
+      
+      const res = await supertest(app).get(URI)
 
-      await cb(req, res)
-
-      expect(console.error).toHaveBeenCalledWith('GET', path, 'Error message')
-      expect(res.send).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
+      expect(console.error).toHaveBeenCalledWith('GET', URI, 'Error message')
+      expect(res.status).toEqual(404)
     })
 
     it('should resport with a 500 status code if something went wrong fetching the commands', async function() {
-      const err = new Error('Error message')
-      res.send.mockImplementation(() => { throw err})
+      clientMock.guilds.fetch.mockResolvedValue('foobar')
       
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(console.error).toHaveBeenCalledWith('GET', path, err)
-      expect(res.sendStatus).toHaveBeenCalledWith(500)
+      expect(console.error).toHaveBeenCalledWith('GET', URI, expect.anything())
+      expect(res.status).toEqual(500)
     })
   })
 })

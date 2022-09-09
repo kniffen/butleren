@@ -1,8 +1,9 @@
-import database from '../../../database/index.js'
-import { callbacks } from '../../../routes/router.js'
-import discordClientMock from '../../../discord/client.js'
+import express from 'express'
+import supertest from 'supertest'
 
-import '../../../routes/guilds/index.js'
+import database from '../../../database/index.js'
+import discordClientMock from '../../../discord/client.js'
+import guildsRouter from '../../../routes/guilds/index.js'
 
 jest.mock('../../../discord/client.js', () => ({
   __esModule: true,
@@ -11,22 +12,18 @@ jest.mock('../../../discord/client.js', () => ({
   }
 }))
 
-const path = '/api/guilds'
-
-describe(path, function() {
-  let db = null
-
-  const res = {
-    send: jest.fn()
-  }
-
+describe('/api/guilds', function() {
+  const URI = '/api/guilds'
   const guilds = new Map()
+  const app = express()
+  let db = null
   
   beforeAll(async function() {
     db = await database
 
-    await db.migrate()
+    app.use(URI, guildsRouter)
 
+    await db.migrate()
     await db.run('INSERT INTO guilds (id) VALUES (?)', 'guild001')
     await db.run('INSERT INTO guilds (id) VALUES (?)', 'guild002')
 
@@ -43,18 +40,15 @@ describe(path, function() {
     })
   })
 
+  beforeEach(function() {
+    jest.clearAllMocks()
+  })
+
   afterAll(function() {
     db.close()
   })
 
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      method: 'GET',
-      originalUrl: path
-    }
-
     it('should respond with the details and settings for all guilds', async function() {
       const expected = [
         {
@@ -73,10 +67,11 @@ describe(path, function() {
         }
       ]
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(res.send).toHaveBeenCalledWith(expected)
-      expect(console.error).toHaveBeenCalledWith('GET', path, 'Guild not found')
+      expect(res.status).toEqual(200)
+      expect(res.body).toEqual(expected)
+      expect(console.error).toHaveBeenCalledWith('GET', URI, 'Guild not found')
     })
   })
 })

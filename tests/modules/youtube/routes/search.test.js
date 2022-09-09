@@ -1,49 +1,40 @@
-import { callbacks } from '../../../../routes/router.js'
-import fetchYouTubeSearchMock from '../../../../modules/youtube/utils/fetchYouTubeSearch.js'
+import express from 'express'
+import supertest from 'supertest'
 
-import '../../../../modules/youtube/routes/search.js'
+import fetchYouTubeSearchMock from '../../../../modules/youtube/utils/fetchYouTubeSearch.js'
+import youtubeRouter from '../../../../modules/youtube/routes/index.js'
 
 jest.mock(
   '../../../../modules/youtube/utils/fetchYouTubeSearch.js',
   () => ({__esModule: true, default: jest.fn()})
 )
 
-const path = '/api/youtube/search'
+describe('/api/youtube/search', function() {
+  let app = null
+  const URI = '/api/youtube/search?q=query001&limit=10&type=foo'
 
-describe(path, function() {
-  const res = {
-    send: jest.fn(),
-    sendStatus: jest.fn(),
-  }
+  beforeAll(function() {
+    app = express()
 
+    app.use('/api/youtube', youtubeRouter)
+  })
+  
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      query: {
-        q: 'query001',
-        limit: 10,
-        type: 'foo'
-      },
-    }
-
     it('Should respond with an array of search results', async function() {
       fetchYouTubeSearchMock.mockResolvedValue(['foo', 'bar'])
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(fetchYouTubeSearchMock).toHaveBeenCalledWith({query: 'query001', limit: 10, type: 'foo'})
-      expect(res.sendStatus).not.toHaveBeenCalled()
-      expect(res.send).toHaveBeenCalledWith(['foo', 'bar'])
+      expect(fetchYouTubeSearchMock).toHaveBeenCalledWith({query: 'query001', limit: '10', type: 'foo'})
+      expect(res.body).toEqual(['foo', 'bar'])
     })
 
     it('Should handle there being no search results', async function() {
       fetchYouTubeSearchMock.mockResolvedValue([])
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(res.sendStatus).not.toHaveBeenCalled()
-      expect(res.send).toHaveBeenCalledWith([])
+      expect(res.body).toEqual([])
     })
   })
 })

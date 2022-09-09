@@ -1,13 +1,11 @@
+import router from './router.js'
 import database from '../../../database/index.js'
-import router   from '../../../routes/router.js'
 import { HTTP_CODES } from '../../../database/constants.js'
 
 import fetchSpotifyShows from '../utils/fetchSpotifyShows.js'
 import fetchSpotifyShowEpisodes from '../utils/fetchSpotifyShowEpisodes.js'
 
-const path = '/api/spotify/:guild/shows'
-
-router.get(path, async function(req, res) {
+router.get('/:guild/shows', async function(req, res) {
   try {
     const db = await database
     const entries = await db.all(
@@ -37,7 +35,7 @@ router.get(path, async function(req, res) {
   }
 })
 
-router.post(path, async function(req, res) {
+router.post('/:guild/shows', async function(req, res) {
   try {
     const db = await database
 
@@ -64,7 +62,7 @@ router.post(path, async function(req, res) {
   }
 })
 
-router.patch(path, async function(req, res) {
+router.patch('/:guild/shows', async function(req, res) {
   try {
     const db = await database
     const entry = await db.get(
@@ -98,7 +96,7 @@ router.patch(path, async function(req, res) {
   }
 })
 
-router.delete(path, async function(req, res) {
+router.delete('/:guild/shows', async function(req, res) {
   try {
     const db = await database
 

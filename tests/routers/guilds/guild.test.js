@@ -1,8 +1,10 @@
-import database from '../../../database/index.js'
-import { callbacks } from '../../../routes/router.js'
-import discordClientMock from '../../../discord/client.js'
+import express from 'express'
+import bodyParser from 'body-parser'
+import supertest from 'supertest'
 
-import '../../../routes/guilds/guild.js'
+import database from '../../../database/index.js'
+import discordClientMock from '../../../discord/client.js'
+import guildsRouter from '../../../routes/guilds/index.js'
 
 jest.mock('../../../discord/client.js', () => ({
   __esModule: true,
@@ -12,15 +14,10 @@ jest.mock('../../../discord/client.js', () => ({
   }
 }))
 
-const path = '/api/guilds/:guild'
-
-describe(path, function() {
+describe('/api/guilds/:guild', function() {
+  const URI = '/api/guilds/guild001'
+  const app = express()
   let db = null
-
-  const res = {
-    send:       jest.fn(),
-    sendStatus: jest.fn(),
-  }
 
   const guilds   = new Map()
   const channels = new Map()
@@ -30,8 +27,10 @@ describe(path, function() {
   beforeAll(async function() {
     db = await database
 
-    await db.migrate()
+    app.use(bodyParser.json())
+    app.use('/api/guilds', guildsRouter)
 
+    await db.migrate()
     await db.run('INSERT INTO guilds (id) VALUES (?)', ['guild001'])
     await db.run('INSERT INTO guilds (id) VALUES (?)', ['guild002'])
 
@@ -74,14 +73,6 @@ describe(path, function() {
   })
 
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      method: 'GET',
-      originalUrl: path,
-      params: {guild: 'guild001'}
-    }
-    
     it('should respond with data for the guild', async function() {
       const expected = {
         id: 'guild001',
@@ -96,45 +87,30 @@ describe(path, function() {
         roles: 2,
       }
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(res.sendStatus).not.toHaveBeenCalled()
-      expect(res.send).toHaveBeenCalledWith(expected)
+      expect(res.status).toEqual(200)
+      expect(res.body).toEqual(expected)
     })
 
     it('should respond with a 404 if the guild does not exist', async function() {
-      req.params.guild = 'guild999'
-      await cb(req, res)
+      const res = await supertest(app).get('/api/guilds/guild999')
 
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
-      expect(res.send).not.toHaveBeenCalled()
+      expect(res.status).toEqual(404)
     })
   })
   
   describe('PUT', function() {
-    let req = null
-    const cb = callbacks.put[path]
-
-    beforeEach(function() {
-      req = {
-        method: 'PUT',
-        originalUrl: path,
-        params: {
-          guild: 'guild001'
-        },
-        body: {
-          nickname: '',
-          color: '#0FFFFF',
-          timezone: 'Europe/Berlin',
-        }
-      }
-    })
+    const body = {
+      nickname: '',
+      color: '#0FFFFF',
+      timezone: 'Europe/Berlin',
+    }
     
     it('should update the guild\'s entry in the database', async function() {
-      await cb(req, res)
+      const res = await supertest(app).put(URI).send(body)
 
-      expect(res.sendStatus).toHaveBeenCalledWith(200)
-
+      expect(res.status).toEqual(200)
       expect(await db.all('SELECT * FROM guilds')).toEqual([
         {
           id: 'guild001',
@@ -152,12 +128,13 @@ describe(path, function() {
     })
     
     it('should update the bot\'s nickname', async function() {
-      req.body.nickname = 'foo'
-      
-      await cb(req, res)
+      const res = await supertest(app).put(URI).send({
+        ...body,
+        nickname: 'foo'
+      })
 
       expect(members.get('user001').setNickname).toHaveBeenCalledWith('foo')
-      expect(res.sendStatus).toHaveBeenCalledWith(200)
+      expect(res.status).toEqual(200)
 
       expect(await db.all('SELECT * FROM guilds')).toEqual([
         {
@@ -176,37 +153,13 @@ describe(path, function() {
     })
     
     it('should respond with a 404 code if the Bot\'s member object could not be resolved', async function() {
-      guilds.get(req.params.guild).members.fetch.mockRejectedValue('Member not found')
-      req.body.nickname = 'bar'
+      guilds.get('guild001').members.fetch.mockRejectedValue('Member not found')
+      // req.body.nickname = 'bar'
 
-      await cb(req, res)
+      const res = await supertest(app).put(URI).send(body)
 
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
-      expect(console.error).toHaveBeenCalledWith('PUT', path, 'Member not found')
-
-      expect(await db.all('SELECT * FROM guilds')).toEqual([
-        {
-          id: 'guild001',
-          nickname: 'foo',
-          color: '#0FFFFF',
-          timezone: 'Europe/Berlin',
-        },
-        {
-          id: 'guild002',
-          nickname: null,
-          color: '#19D8B4',
-          timezone: 'UTC',
-        },
-      ])
-    })
-
-    it('should respond with a 404 if the guild does not exist', async function() {
-      req.params.guild = 'guild999'
-
-      await cb(req, res)
-
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
-      expect(console.error).toHaveBeenCalledWith('PUT', path, 'Guild not found')
+      expect(res.status).toEqual(404)
+      expect(console.error).toHaveBeenCalledWith('PUT', URI, 'Member not found')
 
       expect(await db.all('SELECT * FROM guilds')).toEqual([
         {
@@ -223,5 +176,27 @@ describe(path, function() {
         },
       ])
     })
+
+  //   it('should respond with a 404 if the guild does not exist', async function() {
+  //     const res = await supertest(app).put('/api/guilds/guild999').send(body)
+
+  //     expect(res.status).toEqual(404)
+  //     expect(console.error).toHaveBeenCalledWith('PUT', '/api/guilds/guild999', 'Guild not found')
+
+  //     expect(await db.all('SELECT * FROM guilds')).toEqual([
+  //       {
+  //         id: 'guild001',
+  //         nickname: 'foo',
+  //         color: '#0FFFFF',
+  //         timezone: 'Europe/Berlin',
+  //       },
+  //       {
+  //         id: 'guild002',
+  //         nickname: null,
+  //         color: '#19D8B4',
+  //         timezone: 'UTC',
+  //       },
+  //     ])
+  //   })
   })
 })

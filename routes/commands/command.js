@@ -1,11 +1,9 @@
-import database      from '../../database/index.js'
+import router from './router.js'
+import database from '../../database/index.js'
 import discordClient from '../../discord/client.js'
-import * as modules  from '../../modules/index.js'
-import router        from '../router.js'
+import * as modules from '../../modules/index.js'
 
-const path = '/api/commands/:guild/:module/:command'
-
-router.put(path, async function(req, res) {
+router.put('/:guild/:module/:command', async function(req, res) {
   const handleError = (err) => console.error(req.method, req.originalUrl, err)
 
   try {

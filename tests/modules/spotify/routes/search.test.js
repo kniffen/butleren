@@ -1,4 +1,7 @@
-import { callbacks } from '../../../../routes/router.js'
+import supertest from 'supertest'
+import express from 'express'
+
+import spotifyRouter from '../../../../modules/spotify/routes/index.js'
 import fetchSpotifySearchMock from '../../../../modules/spotify/utils/fetchSpotifySearch.js'
 
 import '../../../../modules/spotify/routes/search.js'
@@ -8,26 +11,17 @@ jest.mock(
   () => ({__esModule: true, default: jest.fn()})
 )
 
-const path = '/api/spotify/search'
+describe('/api/spotify/search', function() {
+  let app = null
 
-describe(path, function() {
-  const res = {
-    send: jest.fn(),
-    sendStatus: jest.fn(),
-  }
+  beforeAll(function() {
+    app = express()
+    app.use('/api/spotify', spotifyRouter)
+  })
 
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      query: {
-        q:      'query001',
-        type:   'type001',
-        market: 'market001',
-        limit:  'limit001'
-      },
-    }
-
+    const URI = '/api/spotify/search?q=query001&type=type001&market=market001&limit=limit001'
+    
     it('Should respond with an array of search results', async function() {
       fetchSpotifySearchMock.mockResolvedValue([
         {
@@ -52,10 +46,10 @@ describe(path, function() {
         },
       ])
       
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
       expect(fetchSpotifySearchMock).toHaveBeenCalledWith('query001', 'type001', 'market001', 'limit001')
-      expect(res.send).toHaveBeenCalledWith([
+      expect(res.body).toEqual([
         {
           id: 'result001',
           name: 'result001.name',
@@ -74,9 +68,9 @@ describe(path, function() {
     it('Should handle there being no search results', async function() {
       fetchSpotifySearchMock.mockResolvedValue([])
       
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(res.send).toHaveBeenCalledWith([])
+      expect(res.body).toEqual([])
     })
   })
 })

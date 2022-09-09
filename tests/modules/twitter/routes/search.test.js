@@ -1,30 +1,25 @@
-import { callbacks } from '../../../../routes/router.js'
-import fetchTwitterUsersMock from '../../../../modules/twitter/utils/fetchTwitterUsers.js'
+import express from 'express'
+import supertest from 'supertest'
 
-import '../../../../modules/twitter/routes/search.js'
+import fetchTwitterUsersMock from '../../../../modules/twitter/utils/fetchTwitterUsers.js'
+import twitterRouter from  '../../../../modules/twitter/routes/index.js'
 
 jest.mock(
   '../../../../modules/twitter/utils/fetchTwitterUsers.js',
   () => ({__esModule: true, default: jest.fn()})
 )
 
-const path = '/api/twitter/search'
+describe('/api/twitter/search', function() {
+  const URI = '/api/twitter/search?q=query001'
+  let app = null
 
-describe(path, function() {
-  const res = {
-    send: jest.fn(),
-    sendStatus: jest.fn(),
-  }
+  beforeAll(function() {
+    app = express()
 
+    app.use('/api/twitter', twitterRouter)
+  })
+  
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      query: {
-        q: 'query001',
-      },
-    }
-
     const data = [
       {
         id: 'result001',
@@ -41,18 +36,18 @@ describe(path, function() {
     it('Should respond with an array of search results', async function() {
       fetchTwitterUsersMock.mockResolvedValue(data)
       
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
       expect(fetchTwitterUsersMock).toHaveBeenCalledWith({usernames: ['query001']})
-      expect(res.send).toHaveBeenCalledWith(data)
+      expect(res.body).toEqual(data)
     })
 
     it('Should handle there being no search results', async function() {
       fetchTwitterUsersMock.mockResolvedValue([])
       
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(res.send).toHaveBeenCalledWith([])
+      expect(res.body).toEqual([])
     })
   })
 })

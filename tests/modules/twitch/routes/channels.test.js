@@ -1,23 +1,20 @@
-import database from '../../../../database/index.js'
-import { callbacks } from '../../../../routes/router.js'
-import fetchTwitchUsersMock from '../../../../modules/twitch/utils/fetchTwitchUsers.js'
+import express from 'express'
+import bodyParser from 'body-parser'
+import supertest from 'supertest'
 
-import '../../../../modules/twitch/routes/channels.js'
+import database from '../../../../database/index.js'
+import twitchRouter from '../../../../modules/twitch/routes/index.js'
+import fetchTwitchUsersMock from '../../../../modules/twitch/utils/fetchTwitchUsers.js'
 
 jest.mock(
   '../../../../modules/twitch/utils/fetchTwitchUsers.js',
   () => ({__esModule: true, default: jest.fn()})
 )
 
-const path = '/api/twitch/:guild/channels'
-
-describe(path, function() {
-  let db = null
-
-  const res = {
-    send: jest.fn(),
-    sendStatus: jest.fn()
-  }
+describe('/api/twitch/:guild/channels', function() {
+  const URI = '/twitch/guild001/channels'
+  let app = null
+  let db  = null
 
   async function resetTwitchChannelsInDatabase() {
     await db.run('DELETE FROM twitchChannels')
@@ -48,7 +45,12 @@ describe(path, function() {
   ]
 
   beforeAll(async function() {
+    app = express()
     db = await database
+
+    app.use(bodyParser.urlencoded({extended: false}))
+    app.use(bodyParser.json())
+    app.use('/twitch', twitchRouter)
 
     await db.migrate()
   })
@@ -64,14 +66,6 @@ describe(path, function() {
   })
 
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      method: 'GET',
-      originalUrl: path,
-      params: {guild: 'guild001'}
-    }
-
     it('Should respond with an array of entries for the guild', async function() {
       fetchTwitchUsersMock.mockImplementation(async ({ ids }) => ids.map(id => ({
         id,
@@ -80,12 +74,11 @@ describe(path, function() {
         login:        `${id}_login`,
       })))
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).not.toHaveBeenCalled()
       expect(fetchTwitchUsersMock).toHaveBeenCalledWith({ids: ['twitchChannel001', 'twitchChannel002']})
-      expect(res.send).toHaveBeenCalledWith([
+      expect(res.body).toEqual([
         {
           id:                    'twitchChannel001',
           name:                  'twitchChannel001_display_name',
@@ -108,11 +101,11 @@ describe(path, function() {
     it('Should handle there being no twitch API results corrosponding with the entries', async function() {
       fetchTwitchUsersMock.mockResolvedValue([])
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).not.toHaveBeenCalled()
-      expect(res.send).toHaveBeenCalledWith([
+      expect(res.status).toEqual(200)
+      expect(res.body).toEqual([
         {
           id:                    'twitchChannel001',
           name:                  '',
@@ -135,34 +128,27 @@ describe(path, function() {
     it('Should respond with a 500 status code if there was an issue reading from the database', async function() {
       jest.spyOn(db, 'all').mockRejectedValue('Database error')
 
-      await cb(req, res)
+      const res = await supertest(app).get(URI)
 
-      expect(console.error).toHaveBeenCalledWith('GET', path, 'Database error')
-      expect(res.sendStatus).toHaveBeenCalledWith(500)
+      expect(console.error).toHaveBeenCalledWith('GET', '/twitch/guild001/channels', 'Database error')
+      expect(res.status).toEqual(500)
 
       db.all.mockRestore()
     })
   })
   
   describe('POST', function() {
-    const cb = callbacks.post[path]
-
-    const req = {
-      method: 'POST',
-      originalUrl: path,
-      params: {guild: 'guild001'},
-      body: {
-        id: 'twitchChannel999',
-        notificationChannelId: 'channel999',
-        notificationRoleId: 'role999',
-      }
+    const body = {
+      id: 'twitchChannel999',
+      notificationChannelId: 'channel999',
+      notificationRoleId: 'role999',
     }
 
     it('Should add an entry to the database', async function() {
-      await cb(req, res)
-
+      const res = await supertest(app).post(URI).send(body)
+     
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(201)
+      expect(res.status).toEqual(201)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual([
         ...defaultDatabaseEntries,
         {id: 'twitchChannel999', guildId: 'guild001', notificationChannelId: 'channel999', notificationRoleId: 'role999'},
@@ -172,21 +158,21 @@ describe(path, function() {
     it('Should respond with a 500 status code if there was an issue adding the entry to the database', async function() {
       jest.spyOn(db, 'run').mockRejectedValue('Database error')
       
-      await cb(req, res)
+      const res = await supertest(app).post(URI).send(body)
       
-      expect(console.error).toHaveBeenCalledWith('POST', path, 'Database error')
-      expect(res.sendStatus).toHaveBeenCalledWith(500)
+      expect(console.error).toHaveBeenCalledWith('POST', URI, 'Database error')
+      expect(res.status).toEqual(500)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual(defaultDatabaseEntries)
 
       db.run.mockRestore()
     })
     
     it('Should respond with a 409 status code if entry already exists', async function() {
-      await cb(req, res)
-      await cb(req, res)
+      await supertest(app).post(URI).send(body)
+      const res = await supertest(app).post(URI).send(body)
 
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(409)
+      expect(res.status).toEqual(409)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual([
         ...defaultDatabaseEntries,
         {id: 'twitchChannel999', guildId: 'guild001', notificationChannelId: 'channel999', notificationRoleId: 'role999'},
@@ -194,38 +180,24 @@ describe(path, function() {
     })
 
     it('Should respond with a 400 status code if there were missing body properties', async function() {
-      const req = {
-        method: 'POST',
-        originalUrl: path,
-        params: {guild: 'guild001'},
-        body: {}
-      }
+      const res = await supertest(app).post(URI).send({})
 
-      await cb(req, res)
-
-      expect(res.sendStatus).toHaveBeenCalledWith(400)
+      expect(res.status).toEqual(400)
     })
   })
   
   describe('PATCH', function() {
-    const cb = callbacks.patch[path]
-
-    const req = {
-      method: 'PATCH',
-      originalUrl: path,
-      params: {guild: 'guild001'},
-      body: {
-        id:                    'twitchChannel001',
-        notificationChannelId: 'channel999',
-        notificationRoleId:    'role999'
-      }
+    const body = {
+      id: 'twitchChannel001',
+      notificationChannelId: 'channel999',
+      notificationRoleId: 'role999'
     }
 
     it('Should update an entry in the database', async function() {
-      await cb(req, res)
+      const res = await supertest(app).patch(URI).send(body)
 
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(200)
+      expect(res.status).toEqual(200)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual([
         {id: 'twitchChannel001', guildId: 'guild001', notificationChannelId: 'channel999', notificationRoleId: 'role999'},
         defaultDatabaseEntries[1],
@@ -237,60 +209,53 @@ describe(path, function() {
     it('Should respond with a 500 status code if there was an issue updating the database', async function() {
       jest.spyOn(db, 'run').mockRejectedValue('Database error')
       
-      await cb(req, res)
+      const res = await supertest(app).patch(URI).send(body)
       
-      expect(console.error).toHaveBeenCalledWith('PATCH', path, 'Database error')
-      expect(res.sendStatus).toHaveBeenCalledWith(500)
+      expect(console.error).toHaveBeenCalledWith('PATCH', URI, 'Database error')
+      expect(res.status).toEqual(500)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual(defaultDatabaseEntries)
 
       db.run.mockRestore()
     })
 
     it('should ignore unsupported properties', async function() {
-      req.body.foo = 'bar'
-
-      await cb(req, res)
+      const res = await supertest(app).patch(URI).send({
+        ...body,
+        foo: 'bar'
+      })
 
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(200)
+      expect(res.status).toEqual(200)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual([
         {id: 'twitchChannel001', guildId: 'guild001', notificationChannelId: 'channel999', notificationRoleId: 'role999'},
         defaultDatabaseEntries[1],
         defaultDatabaseEntries[2],
         defaultDatabaseEntries[3],
       ])
-
-      delete req.body.foo
     })
 
     it('Should respond with a 404 status code if the entry does not exist in the database', async function() {
-      req.body.id = 'twitterUser999'
-
-      await cb(req, res)
+      const res = await supertest(app).patch(URI).send({
+        ...body,
+        id: 'twitchUser999'
+      })
 
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
+      expect(res.status).toEqual(404)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual(defaultDatabaseEntries)
     })
   })
   
   describe('DELETE', function() {
-    const cb = callbacks.delete[path]
-
-    const req = {
-      method: 'DELETE',
-      originalUrl: path,
-      params: {guild: 'guild001'},
-      body: {
-        id: 'twitchChannel001',
-      }
+    const body = {
+      id: 'twitchChannel001'
     }
     
     it('Should delete an entry from the database', async function() {
-      await cb(req, res)
+      const res = await supertest(app).delete(URI).send(body)
 
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(200)
+      expect(res.status).toEqual(200)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual([
         defaultDatabaseEntries[1],
         defaultDatabaseEntries[2],
@@ -301,21 +266,21 @@ describe(path, function() {
     it('Should respond with a 500 status code if there was an issue updating the database', async function() {
       jest.spyOn(db, 'run').mockRejectedValue('Database error')
       
-      await cb(req, res)
-      
-      expect(console.error).toHaveBeenCalledWith('DELETE', path, 'Database error')
-      expect(res.sendStatus).toHaveBeenCalledWith(500)
+      const res = await supertest(app).delete(URI).send(body)
+
+      expect(console.error).toHaveBeenCalledWith('DELETE', URI, 'Database error')
+      expect(res.status).toEqual(500)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual(defaultDatabaseEntries)
 
       db.run.mockRestore()
     })
 
     it('Should respond with a 404 status code if the entry does not exist in the database', async function() {
-      await cb(req, res)
-      await cb(req, res)
-
+      await supertest(app).delete(URI).send(body)
+      const res = await supertest(app).delete(URI).send(body)
+      
       expect(console.error).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
+      expect(res.status).toEqual(404)
       expect(await db.all('SELECT * FROM twitchChannels')).toEqual([
         defaultDatabaseEntries[1],
         defaultDatabaseEntries[2],

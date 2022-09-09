@@ -1,10 +1,7 @@
-import router   from '../../../routes/router.js'
-
+import router from './router.js'
 import fetchSpotifySearch from '../utils/fetchSpotifySearch.js'
 
-const path = '/api/spotify/search'
-
-router.get(path, async function(req, res) {
+router.get('/search', async function(req, res) {
   const results = await fetchSpotifySearch(req.query.q, req.query.type, req.query.market, req.query.limit)
 
   res.send(results.map(result => ({

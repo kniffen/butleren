@@ -1,11 +1,9 @@
 import database from '../../../database/index.js'
-import router   from '../../../routes/router.js'
+import router   from './router.js'
 import { HTTP_CODES } from '../../../database/constants.js'
 import fetchYouTubeChannels from '../utils/fetchYouTubeChannels.js'
 
-const path = '/api/youtube/:guild/channels'
-
-router.get(path, async function(req, res) {
+router.get('/:guild/channels', async function(req, res) {
   try {
     const db = await database
     const entries = await db.all(
@@ -36,7 +34,7 @@ router.get(path, async function(req, res) {
   }
 })
 
-router.post(path, async function(req, res) {
+router.post('/:guild/channels', async function(req, res) {
   try {
     const db = await database
 
@@ -61,7 +59,7 @@ router.post(path, async function(req, res) {
   }
 })
 
-router.patch(path, async function(req, res) {
+router.patch('/:guild/channels', async function(req, res) {
   try {
     const db = await database
     const entry = await db.get(
@@ -95,7 +93,7 @@ router.patch(path, async function(req, res) {
   }
 })
 
-router.delete(path, async function(req, res) {
+router.delete('/:guild/channels', async function(req, res) {
   try {
     const db = await database
     const entry = await db.get(

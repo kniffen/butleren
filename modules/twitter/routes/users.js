@@ -1,11 +1,9 @@
 import database from '../../../database/index.js'
-import router   from '../../../routes/router.js'
+import router   from './router.js'
 import { HTTP_CODES } from '../../../database/constants.js'
 import fetchTwitterUsers from '../utils/fetchTwitterUsers.js'
 
-const path = '/api/twitter/:guild/users'
-
-router.get(path, async function(req, res) {
+router.get('/:guild/users', async function(req, res) {
   try {
     const db = await database
     const entries = await db.all(
@@ -25,7 +23,7 @@ router.get(path, async function(req, res) {
   }
 })
 
-router.post(path, async function(req, res) {
+router.post('/:guild/users', async function(req, res) {
   try {
     const db = await database
 
@@ -50,7 +48,7 @@ router.post(path, async function(req, res) {
   }
 })
 
-router.patch(path, async function(req, res) {
+router.patch('/:guild/users', async function(req, res) {
   try {
     const db = await database
     const entry = await db.get(
@@ -84,7 +82,7 @@ router.patch(path, async function(req, res) {
   }
 })
 
-router.delete(path, async function(req, res) {
+router.delete('/:guild/users', async function(req, res) {
   try {
     const db = await database
     const entry = await db.get(

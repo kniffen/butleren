@@ -1,7 +1,7 @@
-import router        from '../router.js'
+import router from './router.js'
 import discordClient from '../../discord/client.js'
 
-router.get('/api/guilds/:guild/roles', async function(req, res) {
+router.get('/:guild/roles', async function(req, res) {
   try {
     const guild =
       await discordClient.guilds.fetch(req.params.guild)

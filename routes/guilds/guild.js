@@ -1,8 +1,8 @@
-import database      from '../../database/index.js'
-import router        from '../router.js'
+import database from '../../database/index.js'
+import router from './router.js'
 import discordClient from '../../discord/client.js'
 
-router.get('/api/guilds/:guild', async function(req, res) {
+router.get('/:guild', async function(req, res) {
   try {
     const guild =
       await discordClient.guilds.fetch(req.params.guild)
@@ -30,7 +30,7 @@ router.get('/api/guilds/:guild', async function(req, res) {
   }
 })
 
-router.put('/api/guilds/:guild', async function(req, res) {
+router.put('/:guild', async function(req, res) {
   try {
     const guild =
       await discordClient.guilds.fetch(req.params.guild)

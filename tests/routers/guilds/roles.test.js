@@ -1,7 +1,8 @@
-import { callbacks } from '../../../routes/router.js'
-import discordClientMock from '../../../discord/client.js'
+import express from 'express'
+import supertest from 'supertest'
 
-import '../../../routes/guilds/roles.js'
+import discordClientMock from '../../../discord/client.js'
+import guildsRouter from '../../../routes/guilds/index.js'
 
 jest.mock('../../../discord/client.js', () => ({
   __esModule: true,
@@ -10,18 +11,14 @@ jest.mock('../../../discord/client.js', () => ({
   }
 }))
 
-const path = '/api/guilds/:guild/roles'
-
-describe(path, function() {
-  const res = {
-    send: jest.fn(),
-    sendStatus: jest.fn(),
-  }
-
+describe('/api/guilds/:guild/roles', function() {
+  const app = express()
   const guilds = new Map()
   const roles  = new Map()
 
   beforeAll(function() {
+    app.use('/api/guilds', guildsRouter)
+    
     guilds.set('guild001', {
       id: 'guild001',
       roles: {
@@ -44,31 +41,20 @@ describe(path, function() {
   })
 
   describe('GET', function() {
-    const cb = callbacks.get[path]
-
-    const req = {
-      method: 'GET',
-      originalUrl: path,
-      params: {guild: 'guild001'}
-    }
-
     it('should respond with a list of available roles', async function() {
-      await cb(req, res)
+      const res = await supertest(app).get('/api/guilds/guild001/roles')
 
-      expect(res.sendStatus).not.toHaveBeenCalled()
-      expect(res.send).toHaveBeenCalledWith([
+      expect(res.body).toEqual([
         {id: 'role001', name: 'rolename001'},
         {id: 'role002', name: 'rolename002'},
       ])
     })
 
     it('should respond with a 404 error code if the guild could not be found', async function() {
-      req.params.guild = 'guild999'
-      await cb(req, res)
+      const res = await supertest(app).get('/api/guilds/guild999/roles')
 
-      expect(res.send).not.toHaveBeenCalled()
-      expect(res.sendStatus).toHaveBeenCalledWith(404)
-      expect(console.error).toHaveBeenCalledWith('GET', path, 'Guild not found')
+      expect(res.status).toEqual(404)
+      expect(console.error).toHaveBeenCalledWith('GET', '/api/guilds/guild999/roles', 'Guild not found')
     })
   })
 })

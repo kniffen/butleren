@@ -1,9 +1,9 @@
-import database     from '../../database/index.js'
-import client       from '../../discord/client.js'
-import router       from '../router.js'
+import database from '../../database/index.js'
+import client from '../../discord/client.js'
+import router from './router.js'
 import * as modules from '../../modules/index.js'
 
-router.get('/api/modules/:guild/:module', async function getModule(req, res) {
+router.get('/:guild/:module', async function getModule(req, res) {
   const handleError = (err) => console.error(req.method, req.originalUrl, err)
   
   try {
@@ -36,7 +36,7 @@ router.get('/api/modules/:guild/:module', async function getModule(req, res) {
   }
 })
 
-router.put('/api/modules/:guild/:module', async function putModule(req, res) {
+router.put('/:guild/:module', async function putModule(req, res) {
   const handleError = (err) => console.error(req.method, req.originalUrl, err)
   
   try {

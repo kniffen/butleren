@@ -13,6 +13,9 @@
   },
   "jest": {
     "coverageProvider": "v8",
+    "collectCoverage": true,
+    "verbose": true,
+    "forceExit": true,
     "setupFiles": [
       "<rootDir>/tests/setupTests.js"
     ]
@@ -54,7 +57,8 @@
     "@babel/preset-env": "^7.18.2",
     "babel-jest": "^28.1.1",
     "jest": "^28.1.1",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.13.9",
+    "supertest": "^6.2.4"
   },
   "optionalDependencies": {
     "http-proxy-middleware": "^2.0.6",
