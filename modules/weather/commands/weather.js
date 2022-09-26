@@ -72,13 +72,18 @@ export async function execute(interaction) {
       `${windDirections[Math.floor(data.wind.deg % 360 / (360 / windDirections.length))]}`,
     true)
 
-    const rainData = data.rain?.['1h'] || data.rain?.['3h']
-    const snowData = data.snow?.['1h'] || data.snow?.['3h']
+    const precips = [
+      {type: 'rain', time: '1h', amount: data.rain?.['1h']},
+      {type: 'rain', time: '3h', amount: data.rain?.['3h']},
+      {type: 'snow', time: '1h', amount: data.rain?.['1h']},
+      {type: 'snow', time: '3h', amount: data.rain?.['3h']},
+    ]
+
+    const precip = precips.find(precip => precip.amount)
+
     embed.addField(
-      snowData  ? '🌨️ Snow' : '🌧️ Rain',
-      snowData
-        ? `${snowData || 0}mm\n${snowData ? (snowData * 0.0393701).toFixed(1) : 0}inch`
-        : `${rainData || 0}mm\n${rainData ? (rainData * 0.0393701).toFixed(1) : 0}inch`,
+      `${'snow' === precip?.type ? '🌨️ Snow' : '🌧️ Rain'} (${precip?.time || '3h'})`,
+      `${precip?.amount || '0.00'}mm\n${precip ? (precip.amount * 0.0393701).toFixed(2) : '0.00'}inch`,
       true
     )
 
