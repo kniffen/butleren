@@ -21,7 +21,7 @@ describe('modules.truckersmp.commands.truckersmp.status()', function() {
       json: async () => {
         switch (uri) {
           case 'https://api.truckersmp.com/v2/game_time':
-            return {game_time: 123456}
+            return {game_time: 150}
           
           case 'https://api.truckersmp.com/v2/servers':
             return {
@@ -49,7 +49,7 @@ describe('modules.truckersmp.commands.truckersmp.status()', function() {
     expectedEmbed.setColor('#B92025')
     expectedEmbed.addField('🟢 Foo', 'Players: 1,111/9,999', true)
     expectedEmbed.addField('🔴 Bar', 'Players: 0/9,999', true)
-    expectedEmbed.setFooter({text: 'Current in-game time: 17:36'})
+    expectedEmbed.setFooter({text: 'Current in-game time: 02:30'})
 
     await status(interaction)
 
