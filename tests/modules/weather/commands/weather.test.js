@@ -72,7 +72,7 @@ describe('modules.weather.commands.weather', function() {
     expectedEmbed.setAuthor({name: 'Weather report for username001', iconURL: 'http://openweathermap.org/img/wn/weather_weather_icon.png'})
     expectedEmbed.addField('January 1, 1970 2:55 AM', 'weather_weather_main (weather_weather_description)')
     expectedEmbed.addField('💨 Wind', '12.3m/s\n27.6mph\nNortheast', true)
-    expectedEmbed.addField('🌧️ Rain', '55mm\n2.2inch', true)
+    expectedEmbed.addField('🌧️ Rain (1h)', '55mm\n2.17inch', true)
     expectedEmbed.addField('🌡️ Temp | Feels like', '65°C | 66°C\n149°F | 151°F', true)
     expectedEmbed.addField('🌅 Sunrise', '5:41 AM', true)
     expectedEmbed.addField('🌇 Sunset', '8:28 AM', true)
@@ -115,10 +115,16 @@ describe('modules.weather.commands.weather', function() {
   })
 
   it('should handle there being no rain data', async function() {
-    delete weatherData.rain
+    fetchMock.mockImplementation(async () => ({
+      json: async () => ({
+        ...weatherData,
+        rain: undefined
+      })
+    }))
 
-    const rainField = expectedEmbed.fields.find(field => '🌧️ Rain' === field.name)
-    rainField.value = '0mm\n0inch'
+    const rainField = expectedEmbed.fields.find(field => '🌧️ Rain (1h)' === field.name)
+    rainField.name  = '🌧️ Rain (3h)'
+    rainField.value = '0.00mm\n0.00inch'
 
     await command.execute(interaction)
 
@@ -128,11 +134,17 @@ describe('modules.weather.commands.weather', function() {
   })
 
   it('should handle there being snow data', async function() {
-    weatherData.snow = {'1h': 555}
+    fetchMock.mockImplementation(async () => ({
+      json: async () => ({
+        ...weatherData,
+        rain: undefined,
+        snow: {'1h': 555}
+      })
+    }))
 
-    const rainField = expectedEmbed.fields.find(field => '🌧️ Rain' === field.name)
-    rainField.name = '🌨️ Snow'
-    rainField.value = '555mm\n21.9inch'
+    const rainField = expectedEmbed.fields.find(field => '🌧️ Rain (1h)' === field.name)
+    rainField.name  = '🌨️ Snow (1h)'
+    rainField.value = '555mm\n21.85inch'
 
     await command.execute(interaction)
 

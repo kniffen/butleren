@@ -75,8 +75,8 @@ export async function execute(interaction) {
     const precips = [
       {type: 'rain', time: '1h', amount: data.rain?.['1h']},
       {type: 'rain', time: '3h', amount: data.rain?.['3h']},
-      {type: 'snow', time: '1h', amount: data.rain?.['1h']},
-      {type: 'snow', time: '3h', amount: data.rain?.['3h']},
+      {type: 'snow', time: '1h', amount: data.snow?.['1h']},
+      {type: 'snow', time: '3h', amount: data.snow?.['3h']},
     ]
 
     const precip = precips.find(precip => precip.amount)
