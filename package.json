@@ -26,8 +26,8 @@
     ]
   },
   "scripts": {
-    "start": "node -r dotenv/config ./index.js",
-    "dev": "NODE_ENV=development node -r dotenv/config ./index.js",
+    "start": "ts-node -r dotenv/config ./index.js",
+    "dev": "NODE_ENV=development ts-node -r dotenv/config ./index.js",
     "test": "jest ./tests",
     "test:watch": "jest ./tests --watch"
   },
@@ -50,15 +50,19 @@
     "express": "^4.18.1",
     "moment-timezone": "^0.5.34",
     "sqlite": "^4.1.1",
-    "sqlite3": "^5.0.8"
+    "sqlite3": "^5.0.8",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
     "babel-jest": "^28.1.1",
     "jest": "^28.1.1",
+    "@types/jest": "^29.2.2",
     "regenerator-runtime": "^0.13.9",
-    "supertest": "^6.2.4"
+    "supertest": "^6.2.4",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.8.4"
   },
   "optionalDependencies": {
     "http-proxy-middleware": "^2.0.6",
