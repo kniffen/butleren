@@ -27,7 +27,7 @@ describe('modules.twitch.commands.twitch.schedule()', function() {
       id:                `${username}_id`,
       login:             `${username}_login`,
       display_name:      `${username}_display_name`,
-      profile_image_url: `${username}_profile_image_url`,
+      profile_image_url: `https://${username}_profile_image_url`,
     })))
 
     fetchTwitchScheduleMock.mockResolvedValue([
@@ -47,15 +47,17 @@ describe('modules.twitch.commands.twitch.schedule()', function() {
   })
 
   it('Should respond with a channel\'s stream schedule', async function() {
-    const expectedEmbed = new DiscordJS.MessageEmbed()
+    const expectedEmbed = new DiscordJS.EmbedBuilder()
     expectedEmbed.setTitle('Stream schedule for foo_display_name')
     expectedEmbed.setColor('#9146FF')
     expectedEmbed.setURL('https://twitch.tv/foo_login/schedule')
-    expectedEmbed.setThumbnail('foo_profile_image_url')
-    expectedEmbed.addField('<t:946684800>', 'foo (category_name)')
-    expectedEmbed.addField('<t:946720800>', 'Untitled (category_name)')
-    expectedEmbed.addField('<t:946756800>', 'bar')
+    expectedEmbed.setThumbnail('https://foo_profile_image_url')
     expectedEmbed.setFooter({text: 'Times are in your local timezone'})
+    expectedEmbed.addFields(
+      {name: '<t:946684800>', value: 'foo (category_name)'},
+      {name: '<t:946720800>', value: 'Untitled (category_name)'},
+      {name: '<t:946756800>', value: 'bar'}
+    )
 
     await execute(interaction)
 

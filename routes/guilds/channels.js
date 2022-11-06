@@ -1,3 +1,5 @@
+import { ChannelType } from 'discord.js'
+
 import router from './router.js'
 import discordClient from '../../discord/client.js'
 
@@ -11,7 +13,10 @@ router.get('/:guild/channels', async function(req, res) {
 
     const channels =
       (await guild.channels.fetch())
-        .filter(({ type }) => ['GUILD_TEXT', 'GUILD_NEWS'].includes(type))
+        .filter(({ type }) => [
+          ChannelType.GuildAnnouncement,
+          ChannelType.GuildText
+        ].includes(type))
         .map(({ id, name }) => ({id, name}))
 
     res.send(channels)

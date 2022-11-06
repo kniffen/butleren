@@ -1,3 +1,5 @@
+import { InteractionType } from 'discord.js'
+
 import * as modules from '../../modules/index.js'
 
 /**
@@ -7,7 +9,7 @@ import * as modules from '../../modules/index.js'
  * @returns {Promise<void>}
  */
 export default async function onInteractionCreate(interaction) {
-  if (interaction.type != 'APPLICATION_COMMAND') return
+  if (interaction.type !== InteractionType.ApplicationCommand) return
 
   for (const mod of Object.values(modules)) {
     if (!mod.commands) continue

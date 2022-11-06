@@ -67,7 +67,7 @@ describe('modules.twitch.onInterval()', function() {
         user_name:     'twitchChannel001_name',
         title:         'twitchChannel001_title',
         game_name:     'twitchChannel001_category',
-        thumbnail_url: 'twitchChannel001_thumbnail_{width}x{height}.ext',
+        thumbnail_url: 'https://twitchChannel001_thumbnail_{width}x{height}.ext',
         started_at:    '2000-01-01T00:58:00Z'
       },
       {
@@ -75,7 +75,7 @@ describe('modules.twitch.onInterval()', function() {
         user_login:    'twitchChannel002_login',
         user_name:     'twitchChannel002_name',
         title:         'twitchChannel002_title',
-        thumbnail_url: 'twitchChannel002_thumbnail_{width}x{height}.ext',
+        thumbnail_url: 'https://twitchChannel002_thumbnail_{width}x{height}.ext',
         started_at:    '2000-01-01T00:55:00Z'
       },
       {
@@ -83,7 +83,7 @@ describe('modules.twitch.onInterval()', function() {
         user_login:    'twitchChannel003_login',
         user_name:     'twitchChannel003_name',
         title:         'twitchChannel003_title',
-        thumbnail_url: 'twitchChannel003_thumbnail_{width}x{height}.ext',
+        thumbnail_url: 'https://twitchChannel003_thumbnail_{width}x{height}.ext',
         started_at:    '2000-01-01T00:54:00Z'
       }
     ])
@@ -100,24 +100,24 @@ describe('modules.twitch.onInterval()', function() {
   })
 
   it('Should channels that have gone live within the last 5 minutes', async function() {
-    const expectedEmbed001 = new DiscordJS.MessageEmbed()
+    const expectedEmbed001 = new DiscordJS.EmbedBuilder()
     expectedEmbed001.setTitle('twitchChannel001_name is streaming on Twitch')
     expectedEmbed001.setURL('https://twitch.tv/twitchChannel001_login')
     expectedEmbed001.setColor('#9146FF')
     expectedEmbed001.setDescription('**twitchChannel001_title**')
-    expectedEmbed001.setImage('twitchChannel001_thumbnail_400x225.ext?t=946688400000')
-    expectedEmbed001.addField('Category', 'twitchChannel001_category')
+    expectedEmbed001.setImage('https://twitchChannel001_thumbnail_400x225.ext?t=946688400000')
+    expectedEmbed001.addFields({name: 'Category', value: 'twitchChannel001_category'})
     
-    const expectedEmbed002 = new DiscordJS.MessageEmbed()
+    const expectedEmbed002 = new DiscordJS.EmbedBuilder()
     expectedEmbed002.setTitle('twitchChannel002_name is streaming on Twitch')
     expectedEmbed002.setURL('https://twitch.tv/twitchChannel002_login')
     expectedEmbed002.setColor('#9146FF')
     expectedEmbed002.setDescription('**twitchChannel002_title**')
-    expectedEmbed002.setImage('twitchChannel002_thumbnail_400x225.ext?t=946688400000')
-    expectedEmbed002.addField('Category', 'Unknown')
+    expectedEmbed002.setImage('https://twitchChannel002_thumbnail_400x225.ext?t=946688400000')
+    expectedEmbed002.addFields({name: 'Category', value: 'Unknown'})
 
     await twitchOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T01:00:00Z'))})
-
+    
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitchStreamsMock).toHaveBeenCalledTimes(1)
     expect(fetchTwitchStreamsMock).toHaveBeenCalledWith({ids: ['twitchChannel001', 'twitchChannel002', 'twitchChannel003']})

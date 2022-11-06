@@ -11,15 +11,15 @@ if (!process.env.DISCORD_TOKEN)
 
 const client = new DiscordJS.Client({
   intents: [
-    DiscordJS.Intents.FLAGS.GUILDS,
-    DiscordJS.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-    DiscordJS.Intents.FLAGS.GUILD_MESSAGES,
-    DiscordJS.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    DiscordJS.Intents.FLAGS.DIRECT_MESSAGES,
-    DiscordJS.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+    DiscordJS.GatewayIntentBits.Guilds,
+    DiscordJS.GatewayIntentBits.GuildEmojisAndStickers,
+    DiscordJS.GatewayIntentBits.GuildMessages,
+    DiscordJS.GatewayIntentBits.GuildMessageReactions,
+    DiscordJS.GatewayIntentBits.DirectMessages,
+    DiscordJS.GatewayIntentBits.DirectMessageReactions,
   ],
   partials: [
-    'CHANNEL', // Required to receive DMs
+    DiscordJS.Partials.Channel // Required to receive DMs
   ]
 })
 

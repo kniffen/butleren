@@ -41,14 +41,17 @@ export default async function twitchOnInterval({ guilds, date }) {
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
       if (!notificationChannel) continue
 
-      const embed = new DiscordJS.MessageEmbed()
+      const embed = new DiscordJS.EmbedBuilder()
 
       embed.setTitle(`${stream.user_name} is streaming on Twitch`)
       embed.setURL(`https://twitch.tv/${stream.user_login}`)
       embed.setColor('#9146FF') // Twitch purple
       embed.setDescription(`**${stream.title}**`)
       embed.setImage(stream.thumbnail_url.replace('{width}', 400).replace('{height}', 225) + `?t=${date.valueOf()}`)
-      embed.addField('Category', stream.game_name || 'Unknown')
+      embed.addFields({
+        name:  'Category',
+        value: stream.game_name || 'Unknown'
+      })
 
       notificationChannel.send({
         content: `${entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''}${stream.user_name} is live!`,

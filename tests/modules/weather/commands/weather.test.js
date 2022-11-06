@@ -66,18 +66,47 @@ describe('modules.weather.commands.weather', function() {
       reply: jest.fn()
     }
 
-    expectedEmbed = new DiscordJS.MessageEmbed()
+    expectedEmbed = new DiscordJS.EmbedBuilder()
 
     expectedEmbed.setColor('#19D8B4')
     expectedEmbed.setAuthor({name: 'Weather report for username001', iconURL: 'http://openweathermap.org/img/wn/weather_weather_icon.png'})
-    expectedEmbed.addField('January 1, 1970 2:55 AM', 'weather_weather_main (weather_weather_description)')
-    expectedEmbed.addField('💨 Wind', '12.3m/s\n27.6mph\nNortheast', true)
-    expectedEmbed.addField('🌧️ Rain (1h)', '55mm\n2.17inch', true)
-    expectedEmbed.addField('🌡️ Temp | Feels like', '65°C | 66°C\n149°F | 151°F', true)
-    expectedEmbed.addField('🌅 Sunrise', '5:41 AM', true)
-    expectedEmbed.addField('🌇 Sunset', '8:28 AM', true)
-    expectedEmbed.addField('💦 Humidity', '50%', true)
     expectedEmbed.setFooter({text: "Weather report provided by OpenWeather"})
+    expectedEmbed.addFields(
+      {
+        name:   'January 1, 1970 2:55 AM',
+        value:  'weather_weather_main (weather_weather_description)'
+      },
+      {
+        name:   '💨 Wind',
+        value:  '12.3m/s\n27.6mph\nNortheast',
+        inline: true
+      },
+      {
+        name:   '🌧️ Rain (1h)',
+        value:  '55mm\n2.17inch',
+        inline: true
+      },
+      {
+        name:   '🌡️ Temp | Feels like',
+        value:  '65°C | 66°C\n149°F | 151°F',
+        inline: true
+      },
+      {
+        name:   '🌅 Sunrise',
+        value:  '5:41 AM',
+        inline: true
+      },
+      {
+        name:   '🌇 Sunset',
+        value:  '8:28 AM', 
+        inline: true
+      },
+      {
+        name: '💦 Humidity',
+        value: '50%',
+        inline: true
+      }
+    )
   })
 
   it('should contain certain properties', function() {
@@ -122,7 +151,9 @@ describe('modules.weather.commands.weather', function() {
       })
     }))
 
-    const rainField = expectedEmbed.fields.find(field => '🌧️ Rain (1h)' === field.name)
+    expectedEmbed.data
+
+    const rainField = expectedEmbed.data.fields.find(field => '🌧️ Rain (1h)' === field.name)
     rainField.name  = '🌧️ Rain (3h)'
     rainField.value = '0.00mm\n0.00inch'
 
@@ -142,7 +173,7 @@ describe('modules.weather.commands.weather', function() {
       })
     }))
 
-    const rainField = expectedEmbed.fields.find(field => '🌧️ Rain (1h)' === field.name)
+    const rainField = expectedEmbed.data.fields.find(field => '🌧️ Rain (1h)' === field.name)
     rainField.name  = '🌨️ Snow (1h)'
     rainField.value = '555mm\n21.85inch'
 

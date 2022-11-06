@@ -1,6 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import supertest from 'supertest'
+import { ChannelType } from 'discord.js'
 
 import database from '../../../database/index.js'
 import discordClientMock from '../../../discord/client.js'
@@ -49,8 +50,8 @@ describe('/api/guilds/:guild', function() {
       }
     })
 
-    channels.set('channel001', {id: 'channel001', name: 'channelname001', type: 'GUILD_TEXT'})
-    channels.set('channel002', {id: 'channel002', name: 'channelname002', type: 'GUILD_CATEGORY'})
+    channels.set('channel001', {id: 'channel001', name: 'channelname001', type: ChannelType.GuildText})
+    channels.set('channel002', {id: 'channel002', name: 'channelname002', type: ChannelType.GuildCategory})
 
     roles.set('role001', {id: 'role001', name: 'rolename001'})
     roles.set('role002', {id: 'role002', name: 'rolename002'})

@@ -15,7 +15,7 @@ export default async function schedule(interaction) {
     })
     
     const schedule = await fetchTwitchSchedule({id: user.id})
-    const embed = new DiscordJS.MessageEmbed()
+    const embed = new DiscordJS.EmbedBuilder()
 
     if (1 > schedule.length) return interaction.reply({
       content: `${user.display_name} does not appear to have a schedule configured`,
@@ -28,12 +28,14 @@ export default async function schedule(interaction) {
     embed.setThumbnail(user.profile_image_url)
     embed.setFooter({text: 'Times are in your local timezone'})
 
+    const fields = []
     for (let i = 0; i < 3 && i < schedule.length; i++) {
-      embed.addField(
-        `<t:${moment(schedule[i].start_time).format('X')}>`,
-        `${schedule[i].title || 'Untitled'}${schedule[i].category ? ' ('+schedule[i].category.name+')' : ''}`,
-      )
+      fields.push({
+        name: `<t:${moment(schedule[i].start_time).format('X')}>`,
+        value: `${schedule[i].title || 'Untitled'}${schedule[i].category ? ' ('+schedule[i].category.name+')' : ''}`,
+      })
     }
+    embed.addFields(...fields)
 
     interaction.reply({embeds: [embed]})
     

@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder } from 'discord.js'
 import fetchMock from 'node-fetch'
 
 import status from '../../../../../modules/truckersmp/commands/truckersmp/status.js'
@@ -44,12 +44,14 @@ describe('modules.truckersmp.commands.truckersmp.status()', function() {
       }
     }))
 
-    const expectedEmbed = new MessageEmbed()
+    const expectedEmbed = new EmbedBuilder()
     expectedEmbed.setTitle('TruckersMP server status')
     expectedEmbed.setColor('#B92025')
-    expectedEmbed.addField('🟢 Foo', 'Players: 1,111/9,999', true)
-    expectedEmbed.addField('🔴 Bar', 'Players: 0/9,999', true)
     expectedEmbed.setFooter({text: 'Current in-game time: 02:30'})
+    expectedEmbed.addFields(
+      {name: '🟢 Foo', value: 'Players: 1,111/9,999', inline: true},
+      {name: '🔴 Bar', value: 'Players: 0/9,999',     inline: true}
+    )
 
     await status(interaction)
 

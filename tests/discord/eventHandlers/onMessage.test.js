@@ -1,26 +1,31 @@
+import { ChannelType } from 'discord.js'
+
 import database from '../../../database/index.js'
 import * as modulesMock from '../../../modules/index.js'
 import onMessage from '../../../discord/eventHandlers/onMessage.js'
 
-jest.mock('../../../modules/index.js', () => ({
-  __esModule: true,
-  staticModule: {
-    id: 'static_module',
-    allowedChannelTypes: ['GUILD_TEXT'],
-    onMessage: jest.fn(),
-  },
-  disabledModule: {
-    id: 'disabled_module',
-    onMessage: jest.fn(),
-    allowedChannelTypes: ['GUILD_TEXT', 'DM']
-  },
-  enabledModule: {
-    id: 'enabled_module',
-    onMessage: jest.fn(),
-    allowedChannelTypes: ['GUILD_TEXT', 'DM']
-  }
+jest.mock('../../../modules/index.js', () => {
+  const { ChannelType } = require('discord.js')
   
-}))
+  return {
+    __esModule: true,
+    staticModule: {
+      id: 'static_module',
+      allowedChannelTypes: [ChannelType.GuildText],
+      onMessage: jest.fn(),
+    },
+    disabledModule: {
+      id: 'disabled_module',
+      onMessage: jest.fn(),
+      allowedChannelTypes: [ChannelType.GuildText, ChannelType.DM]
+    },
+    enabledModule: {
+      id: 'enabled_module',
+      onMessage: jest.fn(),
+      allowedChannelTypes: [ChannelType.GuildText, ChannelType.DM]
+    }
+  }
+})
 
 describe('discord.eventHandlers.onMessage()', function() {
   let db = null
@@ -49,7 +54,7 @@ describe('discord.eventHandlers.onMessage()', function() {
   it('should ignore messages from bots', async function() {
     const message = {
       author: {bot: true},
-      channel: {type: 'GUILD_TEXT'}
+      channel: {type: ChannelType.GuildText}
     }
 
     await onMessage(message)
@@ -62,7 +67,7 @@ describe('discord.eventHandlers.onMessage()', function() {
   it('should ignore direct messages', async function() {
     const message = {
       author: {bot: false},
-      channel: {type: 'DM'},
+      channel: {type: ChannelType.DM},
       cleanContent: 'enabled_module_enabled_command bar baz'
     }
 
@@ -77,7 +82,7 @@ describe('discord.eventHandlers.onMessage()', function() {
     const message = {
       author: {bot: false},
       channel: {
-        type: 'GUILD_TEXT',
+        type: ChannelType.GuildText,
         guild: {id: 'guild001'}
       },
       cleanContent: 'foo bar baz'
@@ -94,7 +99,7 @@ describe('discord.eventHandlers.onMessage()', function() {
     const message = {
       author: {bot: false},
       channel: {
-        type: 'GUILD_TEXT',
+        type: ChannelType.GuildText,
         guild: {id: 'guild999'}
       },
       cleanContent: 'foo bar baz'

@@ -1,3 +1,5 @@
+import { ChannelType } from 'discord.js'
+
 import database from '../../database/index.js'
 import * as modules from '../../modules/index.js'
 
@@ -9,7 +11,7 @@ import * as modules from '../../modules/index.js'
  */
 export default async function onMessage(message) {
   // Quit early if the message originates from a bot
-  if (message.author.bot || 'DM' == message.channel.type) return
+  if (message.author.bot || ChannelType.DM === message.channel.type) return
 
   const db = await database
 

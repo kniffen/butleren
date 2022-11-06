@@ -1,3 +1,5 @@
+import { InteractionType } from 'discord.js'
+
 import onInteractionCreate from '../../../discord/eventHandlers/onInteractionCreate.js'
 
 import * as modulesMock from '../../../modules/index.js'
@@ -25,12 +27,12 @@ describe('discord.eventHandlers.onInteractionCreate()', function() {
   })
 
   it('should ignore interactions that are not application commands', async function() {
-    const interaction = {
-      type: 'FOOBAR',
-      commandName: 'command001'
-    }
-
-    await onInteractionCreate(interaction)
+    await Promise.all([
+      onInteractionCreate({type: InteractionType.ApplicationCommandAutocomplete, commandName: 'command001'}),
+      onInteractionCreate({type: InteractionType.MessageComponent,               commandName: 'command001'}),
+      onInteractionCreate({type: InteractionType.ModalSubmit,                    commandName: 'command001'}),
+      onInteractionCreate({type: InteractionType.Ping,                           commandName: 'command001'})
+    ])
 
     expect(modulesMock.module001.commands.cmd001.execute).not.toHaveBeenCalled()
     expect(modulesMock.module001.commands.cmd002.execute).not.toHaveBeenCalled()
@@ -39,7 +41,7 @@ describe('discord.eventHandlers.onInteractionCreate()', function() {
   
   it('should execute commands', async function() {
     const interaction = {
-      type: 'APPLICATION_COMMAND',
+      type: InteractionType.ApplicationCommand,
       commandName: 'command001'
     }
 
@@ -54,7 +56,7 @@ describe('discord.eventHandlers.onInteractionCreate()', function() {
     modulesMock.module001.commands.cmd001.execute.mockRejectedValue('Command error')
     
     const interaction = {
-      type: 'APPLICATION_COMMAND',
+      type: InteractionType.ApplicationCommand,
       commandName: 'command001'
     }
 

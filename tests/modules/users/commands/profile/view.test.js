@@ -12,7 +12,7 @@ describe('modules.users.commands.profile.view', function() {
         id: 'user001',
         username: 'username001',
         discriminator: '1234',
-        displayAvatarURL: () => 'avatar.url'
+        displayAvatarURL: () => 'https://avatar.url'
       },
       reply: jest.fn()
     },
@@ -21,22 +21,24 @@ describe('modules.users.commands.profile.view', function() {
         id: 'user002',
         username: 'username002',
         discriminator: '5678',
-        displayAvatarURL: () => 'avatar.url'
+        displayAvatarURL: () => 'https://avatar.url'
       },
       reply: jest.fn()
     }
   ]
 
   function createExpectedEmbed(interaction) {
-    const expectedEmbed = new DiscordJS.MessageEmbed()
+    const expectedEmbed = new DiscordJS.EmbedBuilder()
 
     expectedEmbed.setAuthor({name: `Profile for ${interaction.user.username}`})
     expectedEmbed.setThumbnail(interaction.user.displayAvatarURL())
     expectedEmbed.setColor('#19D8B4')
     
-    expectedEmbed.addField('ID', interaction.user.id, true)
-    expectedEmbed.addField('Username', interaction.user.username, true)
-    expectedEmbed.addField('Discriminator', interaction.user.discriminator, true)
+    expectedEmbed.addFields(
+      {name: 'ID',            value: interaction.user.id,            inline: true},
+      {name: 'Username',      value: interaction.user.username,      inline: true},
+      {name: 'Discriminator', value: interaction.user.discriminator, inline: true}
+    )
     
     return expectedEmbed
   }
@@ -54,7 +56,7 @@ describe('modules.users.commands.profile.view', function() {
 
   it('should respond with an embed of the user\'s profile', async function() {
     const expectedEmbeds = interactions.map(interaction => createExpectedEmbed(interaction))
-    expectedEmbeds[1].addField('Location', 'location002')
+    expectedEmbeds[1].addFields({name: 'Location', value: 'location002'})
 
     await subCommandExecutor(interactions[0])
     await subCommandExecutor(interactions[1])

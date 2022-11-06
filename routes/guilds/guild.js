@@ -1,3 +1,5 @@
+import { ChannelType } from 'discord.js'
+
 import database from '../../database/index.js'
 import router from './router.js'
 import discordClient from '../../discord/client.js'
@@ -17,9 +19,9 @@ router.get('/:guild', async function(req, res) {
 
     guildData.name = guild.name
     guildData.iconURL = guild.iconURL()
-    guildData.categories = channels.filter(channel => 'GUILD_CATEGORY' == channel.type)?.length || 0
-    guildData.textChannels = channels.filter(channel => 'GUILD_TEXT' == channel.type)?.length || 0
-    guildData.voiceChannels = channels.filter(channel => 'GUILD_VOICE' == channel.type)?.length || 0
+    guildData.categories = channels.filter(channel => ChannelType.GuildCategory === channel.type)?.length || 0
+    guildData.textChannels = channels.filter(channel => ChannelType.GuildText === channel.type)?.length || 0
+    guildData.voiceChannels = channels.filter(channel => ChannelType.GuildVoice === channel.type)?.length || 0
     guildData.roles = roles.size
 
     res.send(guildData)

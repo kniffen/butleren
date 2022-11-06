@@ -1,3 +1,4 @@
+import { ChannelType } from 'discord.js'
 import Cleverbot from 'cleverbot-node'
 
 import _onMessage from './onMessage.js'
@@ -11,7 +12,7 @@ cleverbot.configure({botapi: process.env.CLEVERBOT_API_KEY})
 
 export const id = 'cleverbot'
 export const name = 'Cleverbot'
-export const allowedChannelTypes = ['GUILD_TEXT']
+export const allowedChannelTypes = [ChannelType.GuildText]
 export const description = 'Talk to the artificial intelligence known as Cleverbot'
 export const isLocked = false
 export const onMessage = (message) => _onMessage(message, cleverbot)

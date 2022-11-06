@@ -54,7 +54,7 @@ export async function execute(interaction) {
           : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(query || location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
 
     const data = await fetch(uri).then(res => res.json())
-    const embed = new DiscordJS.MessageEmbed()
+    const embed = new DiscordJS.EmbedBuilder()
 
     embed.setColor(settings.color)
     embed.setAuthor({
@@ -63,14 +63,7 @@ export async function execute(interaction) {
     })
 
     const date = moment.utc((data.dt + data.timezone) * 1000)
-    embed.addField(date.format('LLL'), `${data.weather?.[0].main} (${data.weather?.[0].description})`)
-
-    embed.addField(
-      '💨 Wind',
-      `${data.wind.speed.toFixed(1)}m/s\n` + 
-      `${(data.wind.speed * 2.23694).toFixed(1)}mph\n` +
-      `${windDirections[Math.floor(data.wind.deg % 360 / (360 / windDirections.length))]}`,
-    true)
+    
 
     const precips = [
       {type: 'rain', time: '1h', amount: data.rain?.['1h']},
@@ -81,33 +74,45 @@ export async function execute(interaction) {
 
     const precip = precips.find(precip => precip.amount)
 
-    embed.addField(
-      `${'snow' === precip?.type ? '🌨️ Snow' : '🌧️ Rain'} (${precip?.time || '3h'})`,
-      `${precip?.amount || '0.00'}mm\n${precip ? (precip.amount * 0.0393701).toFixed(2) : '0.00'}inch`,
-      true
+    embed.addFields(
+      {
+        name:  date.format('LLL'),
+        value: `${data.weather?.[0].main} (${data.weather?.[0].description})`
+      },
+      {
+        name:   '💨 Wind',
+        value:  `${data.wind.speed.toFixed(1)}m/s\n` + 
+                `${(data.wind.speed * 2.23694).toFixed(1)}mph\n` +
+                `${windDirections[Math.floor(data.wind.deg % 360 / (360 / windDirections.length))]}`,
+        inline: true
+      },
+      {
+        name:   `${'snow' === precip?.type ? '🌨️ Snow' : '🌧️ Rain'} (${precip?.time || '3h'})`,
+        value:  `${precip?.amount || '0.00'}mm\n${precip ? (precip.amount * 0.0393701).toFixed(2) : '0.00'}inch`,
+        inline: true
+      },
+      {
+        name:   '🌡️ Temp | Feels like',
+        value:  `${Math.round(data.main.temp)}°C | ${Math.round(data.main.feels_like)}°C\n` +
+                `${Math.round(data.main.temp * 1.8 + 32)}°F | ${Math.round(data.main.feels_like * 1.8 + 32)}°F`,
+        inline: true
+      },
+      {
+        name:   '🌅 Sunrise',
+        value:  moment.utc((data.sys.sunrise + data.timezone) * 1000).format('LT'),
+        inline: true
+      },
+      {
+        name: '🌇 Sunset',
+        value: moment.utc((data.sys.sunset + data.timezone) * 1000).format('LT'),
+        inline: true
+      },
+      {
+        name:   '💦 Humidity',
+        value:  `${data.main.humidity}%`,
+        inline: true
+      }
     )
-
-    embed.addField(
-      '🌡️ Temp | Feels like',
-      `${Math.round(data.main.temp)}°C | ${Math.round(data.main.feels_like)}°C\n` +
-      `${Math.round(data.main.temp * 1.8 + 32)}°F | ${Math.round(data.main.feels_like * 1.8 + 32)}°F`,
-      true
-    )
-
-
-    embed.addField(
-      '🌅 Sunrise',
-      moment.utc((data.sys.sunrise + data.timezone) * 1000).format('LT'),
-      true
-    )
-    
-    embed.addField(
-      '🌇 Sunset',
-      moment.utc((data.sys.sunset + data.timezone) * 1000).format('LT'),
-      true
-    )
-    
-    embed.addField('💦 Humidity', `${data.main.humidity}%`, true)
 
     embed.setFooter({text: "Weather report provided by OpenWeather"})
     

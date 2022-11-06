@@ -15,7 +15,7 @@ export default async function stream(interaction) {
     })
     
     const [ stream ] = await fetchTwitchStreams({ids: [user.id]})
-    const embed = new DiscordJS.MessageEmbed()
+    const embed = new DiscordJS.EmbedBuilder()
 
     embed.setColor('#9146FF') // Twitch purple
     embed.setThumbnail(user.profile_image_url)
@@ -25,9 +25,11 @@ export default async function stream(interaction) {
       embed.setURL(`https://twitch.tv/${user.login}`)
       embed.setDescription(`**${stream.title}**`)
       embed.setImage(stream.thumbnail_url.replace('{width}', 400).replace('{height}', 225))
-      embed.addField('Category', stream.game_name)
-      embed.addField('Viewers', stream.viewer_count.toLocaleString())
-      embed.addField('Started', `<t:${moment(stream.started_at).format('X')}:R>`)
+      embed.addFields(
+        {name: 'Category', value: stream.game_name},
+        {name: 'Viewers',  value: stream.viewer_count.toLocaleString()},
+        {name: 'Started',  value: `<t:${moment(stream.started_at).format('X')}:R>`}
+      )
     
     } else {
       embed.setTitle(`${user.display_name} is offline`)

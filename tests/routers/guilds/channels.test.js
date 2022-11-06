@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import supertest from 'supertest'
-import { Collection } from 'discord.js'
+import { Collection, ChannelType } from 'discord.js'
 
 import discordClientMock from '../../../discord/client.js'
 import guildsRouter from '../../../routes/guilds/index.js'
@@ -28,9 +28,9 @@ describe('/api/guilds/:guild/channels', function() {
   beforeAll(function() {
     app.use('/api/guilds', guildsRouter)
     
-    channels.set('channel001', {id: 'channel001', name: 'channelname001', type: 'GUILD_TEXT'})
-    channels.set('channel002', {id: 'channel002', name: 'channelname002', type: 'GUILD_CATEGORY'})
-    channels.set('channel003', {id: 'channel003', name: 'channelname003', type: 'GUILD_NEWS'})
+    channels.set('channel001', {id: 'channel001', name: 'channelname001', type: ChannelType.GuildText})
+    channels.set('channel002', {id: 'channel002', name: 'channelname002', type: ChannelType.GuildCategory})
+    channels.set('channel003', {id: 'channel003', name: 'channelname003', type: ChannelType.GuildAnnouncement})
 
     discordClientMock.guilds.fetch.mockRejectedValue('Guild not found')
   })
