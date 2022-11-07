@@ -23,7 +23,7 @@ describe('modules.youtube.utils.fetchYouTubeActivities()', function() {
 
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://youtube.googleapis.com/youtube/v3/activities?part=snippet&part=contentDetails&channelId=foobar&maxResults=10&publishedAfter=1970-01-01T00:00:00Z&key=google_api_key',
+      'https://youtube.googleapis.com/youtube/v3/activities?part=snippet&part=contentDetails&channelId=foobar&maxResults=10&key=google_api_key',
       {
         headers: {
           'Accept': 'application/json'
@@ -34,11 +34,11 @@ describe('modules.youtube.utils.fetchYouTubeActivities()', function() {
   })
 
   it('Should generate an API URI', async function() {
-    const activities = await fetchYouTubeActivities({channelId: 'foobar', limit: 99, publishedAfter: 'baz'})
+    const activities = await fetchYouTubeActivities({channelId: 'foobar', limit: 99})
     
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://youtube.googleapis.com/youtube/v3/activities?part=snippet&part=contentDetails&channelId=foobar&maxResults=99&publishedAfter=baz&key=google_api_key',
+      'https://youtube.googleapis.com/youtube/v3/activities?part=snippet&part=contentDetails&channelId=foobar&maxResults=99&key=google_api_key',
       expect.anything()
     )
     expect(activities).toEqual(['foo', 'bar'])

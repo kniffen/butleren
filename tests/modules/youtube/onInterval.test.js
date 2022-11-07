@@ -53,13 +53,30 @@ describe('modules.youtube.onInterval()', function() {
     jest.spyOn(db, 'run')
 
     fetchYouTubeActivitiesMock.mockImplementation(async function({channelId, publishedAfter}) {
+      const createFakeActivity = (id, publishedAt, videoId) => ({
+        snippet: {
+          channelId: id,
+          publishedAt,
+          channelTitle: `${channelId}__title`
+        },
+        contentDetails: {
+          upload: {
+            videoId
+          }
+        }
+      })
+
       switch (channelId) {
         case 'youtubeChannel001': return [
-          {snippet: {channelId, channelTitle: `${channelId}__title`}, contentDetails: {upload: {videoId: 'video001'}}},
+          createFakeActivity(channelId, '2000-01-01T11:01:00Z', 'video001'),
+          createFakeActivity(channelId, '2000-01-01T11:30:00Z', 'video002'),
+          createFakeActivity(channelId, '2000-01-01T10:30:00Z', 'video003')
         ]
-        
+
         case 'youtubeChannel002': return [
-          {snippet: {channelId, channelTitle: `${channelId}__title`}, contentDetails: {upload: {videoId: 'video002'}}},
+          createFakeActivity(channelId, '2000-01-01T11:05:00Z', 'video101'),
+          createFakeActivity(channelId, '2000-01-01T11:45:00Z', 'video102'),
+          createFakeActivity(channelId, '2000-01-01T10:00:00Z', 'video103')
         ]
 
         default: return []
@@ -76,21 +93,30 @@ describe('modules.youtube.onInterval()', function() {
   })
 
   it('Should announce new activities', async function() {
-    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T00:00:25Z')) })
+    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z')) })
 
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchYouTubeActivitiesMock).toHaveBeenCalledTimes(2)
-    expect(fetchYouTubeActivitiesMock).toHaveBeenNthCalledWith(1, {channelId: 'youtubeChannel001', publishedAfter: '1999-12-31T23:00:00.000Z'})
-    expect(fetchYouTubeActivitiesMock).toHaveBeenNthCalledWith(2, {channelId: 'youtubeChannel002', publishedAfter: '1999-12-31T23:00:00.000Z'})
+    expect(fetchYouTubeActivitiesMock).toHaveBeenNthCalledWith(1, {channelId: 'youtubeChannel001', limit: 3})
+    expect(fetchYouTubeActivitiesMock).toHaveBeenNthCalledWith(2, {channelId: 'youtubeChannel002', limit: 3})
     
-    expect(notificationChannel001.send).toHaveBeenCalledTimes(2)
+    expect(notificationChannel001.send).toHaveBeenCalledTimes(4)
     expect(notificationChannel001.send).toHaveBeenCalledWith({
       content: 'youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video001'
     })
+    expect(notificationChannel001.send).toHaveBeenCalledWith({
+      content: 'youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video002'
+    })
+    expect(notificationChannel001.send).not.toHaveBeenCalledWith({
+      content: 'youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video003'
+    })
 
-    expect(notificationChannel002.send).toHaveBeenCalledTimes(1)
+    expect(notificationChannel002.send).toHaveBeenCalledTimes(2)
     expect(notificationChannel002.send).toHaveBeenCalledWith({
       content: '<@&role001> youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video001'
+    })
+    expect(notificationChannel002.send).toHaveBeenCalledWith({
+      content: '<@&role001> youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video002'
     })
   })
 
@@ -115,7 +141,7 @@ describe('modules.youtube.onInterval()', function() {
       [false, 'youtube', 'guild001']
     )
 
-    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T00:00:00Z')) })
+    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z')) })
 
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchYouTubeActivitiesMock).toHaveBeenCalledTimes(1)
@@ -131,7 +157,7 @@ describe('modules.youtube.onInterval()', function() {
   it('Should handle a notification not being sent', async function() {
     notificationChannel001.send.mockRejectedValue('Error')
     
-    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2020-01-01T00:00:00Z'))})
+    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z'))})
 
     expect(console.error).toHaveBeenCalledWith('Error')
     expect(notificationChannel002.send).toHaveBeenCalled()
@@ -142,7 +168,7 @@ describe('modules.youtube.onInterval()', function() {
   it('Should handle a notification channel not existing', async function() {
     guild001.channels.fetch.mockRejectedValue('Error')
 
-    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2020-01-01T00:00:00Z'))})
+    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z'))})
 
     expect(console.error).toHaveBeenCalledWith('Error')
     expect(notificationChannel001.send).not.toHaveBeenCalled()
@@ -152,7 +178,7 @@ describe('modules.youtube.onInterval()', function() {
   })
   
   it('Should handle a guild not existing', async function() {
-    await youtubeOnInterval({guilds: [guild002], date: (new Date('2020-01-01T00:00:00Z'))})
+    await youtubeOnInterval({guilds: [guild002], date: (new Date('2000-01-01T12:00:00Z'))})
 
     expect(console.error).not.toHaveBeenCalled()
     expect(notificationChannel001.send).not.toHaveBeenCalled()
@@ -162,7 +188,7 @@ describe('modules.youtube.onInterval()', function() {
   it('should handle there being no activities', async function() {
     fetchYouTubeActivitiesMock.mockResolvedValue([])
 
-    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2020-01-01T00:00:00Z'))})
+    await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z'))})
 
     expect(console.error).not.toHaveBeenCalled()
     expect(notificationChannel001.send).not.toHaveBeenCalled()

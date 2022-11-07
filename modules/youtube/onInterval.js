@@ -17,13 +17,16 @@ export default async function youTubeOnInterval({ guilds, date }) {
         .filter(({ guildId }) => enabledGuilds.includes(guildId))
 
     const ids = entries.reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], [])
-    const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({
-      channelId,
-      publishedAfter: (new Date(date.valueOf() - 3.6e+6)).toISOString().replace(/\d{2}:\d{2}\.\d*/, '00:00.000')
-    })))
+    const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({channelId, limit: 3})))
 
     for (const entry of entries) {
-      const activities = channelsActivities.find((activities) => activities[0]?.snippet.channelId === entry.id)
+      // The youtube API has a parameter to filter out results by published date and time.
+      // However it's been proven to be unreliable, so we're doing it manually here.
+      const activities =
+        channelsActivities
+          .find((activities) => activities[0]?.snippet.channelId === entry.id)
+          ?.filter(activity => (date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf() < 3.6e+6))
+
       if (!activities || 1 > activities.length) continue
 
       const guild = guilds.find(({ id }) => id == entry.guildId)
