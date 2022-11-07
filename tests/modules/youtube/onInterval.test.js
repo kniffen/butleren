@@ -57,7 +57,7 @@ describe('modules.youtube.onInterval()', function() {
         snippet: {
           channelId: id,
           publishedAt,
-          channelTitle: `${channelId}__title`
+          channelTitle: id ? `${id}__title` : undefined
         },
         contentDetails: {
           upload: {
@@ -69,7 +69,7 @@ describe('modules.youtube.onInterval()', function() {
       switch (channelId) {
         case 'youtubeChannel001': return [
           createFakeActivity(channelId, '2000-01-01T11:01:00Z', 'video001'),
-          createFakeActivity(channelId, '2000-01-01T11:30:00Z', 'video002'),
+          createFakeActivity(null,      '2000-01-01T11:30:00Z', 'video002'),
           createFakeActivity(channelId, '2000-01-01T10:30:00Z', 'video003')
         ]
 
@@ -105,7 +105,7 @@ describe('modules.youtube.onInterval()', function() {
       content: 'youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video001'
     })
     expect(notificationChannel001.send).toHaveBeenCalledWith({
-      content: 'youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video002'
+      content: 'A new YouTube video was just posted\nhttps://www.youtube.com/watch?v=video002'
     })
     expect(notificationChannel001.send).not.toHaveBeenCalledWith({
       content: 'youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video003'
@@ -116,7 +116,7 @@ describe('modules.youtube.onInterval()', function() {
       content: '<@&role001> youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video001'
     })
     expect(notificationChannel002.send).toHaveBeenCalledWith({
-      content: '<@&role001> youtubeChannel001__title just posted a new YouTube video\nhttps://www.youtube.com/watch?v=video002'
+      content: '<@&role001> A new YouTube video was just posted\nhttps://www.youtube.com/watch?v=video002'
     })
   })
 
