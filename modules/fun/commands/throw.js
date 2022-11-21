@@ -17,5 +17,5 @@ export const data =
  * @param {Object} param.interaction - Discord interaction object .
  */
 export async function execute(interaction) {
-  interaction.reply({content: `(╯°□°）╯︵ ${interaction.options.get('item').value}`})
+  await interaction.reply({content: `(╯°□°）╯︵ ${interaction.options.get('item').value}`})
 }

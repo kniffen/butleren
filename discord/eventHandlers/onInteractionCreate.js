@@ -17,7 +17,7 @@ export default async function onInteractionCreate(interaction) {
     const command = Object.values(mod.commands).find(cmd => cmd.data.name == interaction.commandName)
 
     if (command) {
-      await command.execute(interaction).catch(console.error)
+      command.execute(interaction).catch(console.error)
       break
     }
   }

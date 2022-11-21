@@ -22,5 +22,5 @@ export const data =
  * @param {Object} interaction - Discord interaction object.
  */
 export async function execute(interaction) {
-  subCommands[interaction.options.getSubcommand()](interaction)
+  await subCommands[interaction.options.getSubcommand()](interaction)
 }
