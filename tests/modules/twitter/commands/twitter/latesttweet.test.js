@@ -10,7 +10,8 @@ describe('modules.twitter.commands.twitter.latesttweet()', function() {
     options: {
       get: jest.fn()
     },
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   beforeEach(function() {
@@ -37,9 +38,10 @@ describe('modules.twitter.commands.twitter.latesttweet()', function() {
   it('Should respond with the latest tweet from a twitter user', async function() {
     await latesttweet(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchTwitterUsersMock).toHaveBeenCalledWith({usernames: ['userInput001']})
     expect(fetchTwitterUserTweetsMock).toHaveBeenCalledWith('twitterUser001')
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Latest tweet from twitterUser001_name\nhttps://twitter.com/twitterUser001_username/status/tweet002'
     })
   })
@@ -51,6 +53,7 @@ describe('modules.twitter.commands.twitter.latesttweet()', function() {
     interaction.options.get.mockReturnValue({value: 'userInput001 foo bar'})
     await latesttweet(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalledTimes(2)
     expect(fetchTwitterUsersMock).toHaveBeenNthCalledWith(1, {usernames: ['userInput001']})
     expect(fetchTwitterUsersMock).toHaveBeenNthCalledWith(2, {usernames: ['userInput001']})
   })
@@ -60,7 +63,8 @@ describe('modules.twitter.commands.twitter.latesttweet()', function() {
 
     await latesttweet(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'twitterUser001_name does not appear to have any public tweets\nhttps://twitter.com/twitterUser001_username',
       ephemeral: true
     })
@@ -71,7 +75,8 @@ describe('modules.twitter.commands.twitter.latesttweet()', function() {
 
     await latesttweet(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Sorry, i was unable to find "@userInput001" on Twitter :(',
       ephemeral: true
     })

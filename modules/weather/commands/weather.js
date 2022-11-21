@@ -30,6 +30,8 @@ const windDirections = [
  */
 export async function execute(interaction) {
   try {
+    await interaction.deferReply()
+
     const db = await database
     const settings = await db.get('SELECT color FROM guilds WHERE id = ?', [interaction.guild.id])
     const user = interaction.options.get('user')?.user || interaction.user
@@ -41,7 +43,7 @@ export async function execute(interaction) {
         : null
 
     if (!query && !location) {
-      interaction.reply({
+      interaction.editReply({
         content: 'Missing location',
         ephemeral: true
       })
@@ -116,13 +118,13 @@ export async function execute(interaction) {
 
     embed.setFooter({text: "Weather report provided by OpenWeather"})
     
-    interaction.reply({
+    interaction.editReply({
       embeds: [embed]
     })
       
   } catch(err) {
     console.error(err)
-    interaction.reply({
+    interaction.editReply({
       content: 'Sorry, I was unable to fetch a weather report for you',
       ephemeral: true
     })

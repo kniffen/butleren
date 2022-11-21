@@ -6,10 +6,12 @@ import fetchTwitchStreams from '../../utils/fetchTwitchStreams.js'
 
 export default async function stream(interaction) {
   try {
+    await interaction.deferReply()
+
     const username = interaction.options.get('channel')?.value.split(' ').shift()
     const [ user ] = await fetchTwitchUsers({usernames: [username.toLowerCase()]}) 
     
-    if (!user) return interaction.reply({
+    if (!user) return interaction.editReply({
       content: `Sorry, i was unable to find "${username}" on twitch :(`,
       ephemeral: true
     })
@@ -38,7 +40,7 @@ export default async function stream(interaction) {
       embed.setImage(user.offline_image_url.replace('{width}', 400).replace('{height}', 225))
     }
 
-    interaction.reply({embeds: [embed]})
+    interaction.editReply({embeds: [embed]})
     
   } catch(err) {
     console.error(err)

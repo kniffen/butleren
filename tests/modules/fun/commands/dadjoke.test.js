@@ -4,7 +4,8 @@ import * as command from '../../../../modules/fun/commands/dadjoke.js'
 
 describe('fun: commands: dadjoke', function() {
   const interaction = {
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   afterAll(function() {
@@ -35,8 +36,9 @@ describe('fun: commands: dadjoke', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://icanhazdadjoke.com/', {headers: {'Accept': 'application/json'}})
-    expect(interaction.reply).toHaveBeenCalledWith({content: 'foobar'})
+    expect(interaction.editReply).toHaveBeenCalledWith({content: 'foobar'})
   })
 
   it('should post a fallback cat image if the request failed', async function() {
@@ -45,8 +47,9 @@ describe('fun: commands: dadjoke', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://icanhazdadjoke.com/', {headers: {'Accept': 'application/json'}})
     expect(console.error).toHaveBeenCalledWith(err)
-    expect(interaction.reply).toHaveBeenCalledWith('Sorry, I was unable to fetch a dad joke for you.')
+    expect(interaction.editReply).toHaveBeenCalledWith('Sorry, I was unable to fetch a dad joke for you.')
   })
 })

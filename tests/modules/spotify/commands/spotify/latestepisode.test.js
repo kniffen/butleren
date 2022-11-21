@@ -20,7 +20,8 @@ describe('modules.spotify.commands.spotify.latestepisode()', function() {
     options: {
       get: () => ({values: 'userInput001'})
     },
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   beforeAll(async function() {
@@ -49,7 +50,8 @@ describe('modules.spotify.commands.spotify.latestepisode()', function() {
   it('Should respond with the latest episode for a show', async function() {
     await latestepisode(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Latest episode from showName001\nspotifyEpisodeURL002'
     })
   })
@@ -59,7 +61,8 @@ describe('modules.spotify.commands.spotify.latestepisode()', function() {
 
     await latestepisode(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'showName001 does not appear to have any recent episodes\nspotifyShowURL001',
       ephemeral: true
     })
@@ -70,7 +73,8 @@ describe('modules.spotify.commands.spotify.latestepisode()', function() {
 
     await latestepisode(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Sorry, I was unable to fetch that show for you :(',
       ephemeral: true
     })

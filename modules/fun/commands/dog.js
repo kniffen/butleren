@@ -12,11 +12,12 @@ export const data =
  * @param {Object} param.interaction - Discord interaction object .
  */
 export async function execute(interaction) {
+  await interaction.deferReply()
   await fetch('https://dog.ceo/api/breeds/image/random')
     .then(res  => res.json())
-    .then(data => interaction.reply({files: [data.message]}))
+    .then(data => interaction.editReply({files: [data.message]}))
     .catch((err) => {
       console.error(err)
-      interaction.reply({files: ['https://i.imgur.com/9oPUiCu.gif']})
+      interaction.editReply({files: ['https://i.imgur.com/9oPUiCu.gif']})
     })
 }

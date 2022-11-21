@@ -4,7 +4,8 @@ import * as command from '../../../../modules/fun/commands/dog.js'
 
 describe('fun.commands.dog', function() {
   const interaction = {
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   afterAll(function() {
@@ -35,8 +36,9 @@ describe('fun.commands.dog', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://dog.ceo/api/breeds/image/random')
-    expect(interaction.reply).toHaveBeenCalledWith({files: ['foobar']})
+    expect(interaction.editReply).toHaveBeenCalledWith({files: ['foobar']})
   })
 
   it('should post a fallback dog image if the request failed', async function() {
@@ -45,9 +47,10 @@ describe('fun.commands.dog', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://dog.ceo/api/breeds/image/random')
     expect(console.error).toHaveBeenCalledWith(err)
-    expect(interaction.reply).toHaveBeenCalledWith({files: ['https://i.imgur.com/9oPUiCu.gif']})
+    expect(interaction.editReply).toHaveBeenCalledWith({files: ['https://i.imgur.com/9oPUiCu.gif']})
   })
 
 })

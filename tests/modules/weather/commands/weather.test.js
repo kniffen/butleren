@@ -63,7 +63,8 @@ describe('modules.weather.commands.weather', function() {
         username: 'username001'
       },
       options: new DiscordJS.Collection(),
-      reply: jest.fn()
+      deferReply: jest.fn(),
+      editReply: jest.fn()
     }
 
     expectedEmbed = new DiscordJS.EmbedBuilder()
@@ -137,8 +138,9 @@ describe('modules.weather.commands.weather', function() {
   it('should fetch a weather report for the user', async function() {
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://api.openweathermap.org/data/2.5/weather?q=location001&units=metric&APPID=open_weather_map_api_key')
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -159,7 +161,8 @@ describe('modules.weather.commands.weather', function() {
 
     await command.execute(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -179,7 +182,8 @@ describe('modules.weather.commands.weather', function() {
 
     await command.execute(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -199,8 +203,9 @@ describe('modules.weather.commands.weather', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://api.openweathermap.org/data/2.5/weather?q=location002&units=metric&APPID=open_weather_map_api_key')
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -215,8 +220,9 @@ describe('modules.weather.commands.weather', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://api.openweathermap.org/data/2.5/weather?q=location999&units=metric&APPID=open_weather_map_api_key')
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -231,8 +237,9 @@ describe('modules.weather.commands.weather', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://api.openweathermap.org/data/2.5/weather?zip=1234&units=metric&APPID=open_weather_map_api_key')
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -242,8 +249,9 @@ describe('modules.weather.commands.weather', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).not.toHaveBeenCalled()
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Missing location',
       ephemeral: true
     })
@@ -254,8 +262,9 @@ describe('modules.weather.commands.weather', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).toHaveBeenCalledWith('Error message')
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Sorry, I was unable to fetch a weather report for you',
       ephemeral: true
     })

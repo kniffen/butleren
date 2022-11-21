@@ -6,10 +6,12 @@ import fetchTwitchSchedule from '../../utils/fetchTwitchSchedule.js'
 
 export default async function schedule(interaction) {
   try {
+    await interaction.deferReply()
+
     const username = interaction.options.get('channel')?.value.split(' ').shift()
     const [ user ] = await fetchTwitchUsers({usernames: [username.toLowerCase()]}) 
     
-    if (!user) return interaction.reply({
+    if (!user) return interaction.editReply({
       content: `Sorry, i was unable to find "${username}" on twitch :(`,
       ephemeral: true
     })
@@ -17,7 +19,7 @@ export default async function schedule(interaction) {
     const schedule = await fetchTwitchSchedule({id: user.id})
     const embed = new DiscordJS.EmbedBuilder()
 
-    if (1 > schedule.length) return interaction.reply({
+    if (1 > schedule.length) return interaction.editReply({
       content: `${user.display_name} does not appear to have a schedule configured`,
       ephemeral: true
     })
@@ -37,11 +39,11 @@ export default async function schedule(interaction) {
     }
     embed.addFields(...fields)
 
-    interaction.reply({embeds: [embed]})
+    interaction.editReply({embeds: [embed]})
     
   } catch(err) {
     console.error(err)
-    interaction.reply({
+    interaction.editReply({
       content: 'Something went horribly wrong',
       ephemeral: true
     })

@@ -4,7 +4,8 @@ import * as command from '../../../../modules/fun/commands/cat.js'
 
 describe('fun: commands: cat', function() {
   const interaction = {
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   afterAll(function() {
@@ -35,8 +36,9 @@ describe('fun: commands: cat', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://aws.random.cat/meow')
-    expect(interaction.reply).toHaveBeenCalledWith({files: ['foobar']})
+    expect(interaction.editReply).toHaveBeenCalledWith({files: ['foobar']})
   })
 
   it('should post a fallback cat image if the request failed', async function() {
@@ -45,8 +47,9 @@ describe('fun: commands: cat', function() {
 
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://aws.random.cat/meow')
     expect(console.error).toHaveBeenCalledWith(err)
-    expect(interaction.reply).toHaveBeenCalledWith({files: ['http://i.imgur.com/Bai6JTL.jpg']})
+    expect(interaction.editReply).toHaveBeenCalledWith({files: ['http://i.imgur.com/Bai6JTL.jpg']})
   })
 })

@@ -12,11 +12,12 @@ export const data =
  * @param {Object} param.interaction - Discord interaction object .
  */
 export async function execute(interaction) {
+  await interaction.deferReply()
   await fetch('https://icanhazdadjoke.com/', {headers: {'Accept': 'application/json'}})
     .then(res  => res.json())
-    .then(data => interaction.reply({content: data.joke}))
+    .then(data => interaction.editReply({content: data.joke}))
     .catch((err) => {
       console.error(err)
-      interaction.reply('Sorry, I was unable to fetch a dad joke for you.')
+      interaction.editReply('Sorry, I was unable to fetch a dad joke for you.')
     })
 }

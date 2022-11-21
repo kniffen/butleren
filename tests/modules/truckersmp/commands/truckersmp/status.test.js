@@ -5,7 +5,8 @@ import status from '../../../../../modules/truckersmp/commands/truckersmp/status
 
 describe('modules.truckersmp.commands.truckersmp.status()', function() {
   const interaction = {
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   beforeEach(function() {
@@ -55,8 +56,9 @@ describe('modules.truckersmp.commands.truckersmp.status()', function() {
 
     await status(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).not.toHaveBeenCalled()
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -69,8 +71,9 @@ describe('modules.truckersmp.commands.truckersmp.status()', function() {
     
     await status(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).toHaveBeenCalledWith(err)
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Sorry, I was unable fetch the current status of TruckersMP for you :(',
       ephemeral: true
     })

@@ -3,6 +3,7 @@ import DiscordJS from 'discord.js'
 
 export default async function gametime(interaction) {
   try {
+    await interaction.deferReply()
 
     const [ gameTime, servers ] = await Promise.all([
       fetch('https://api.truckersmp.com/v2/game_time').then(res => res.json()),
@@ -13,7 +14,7 @@ export default async function gametime(interaction) {
     const dd = d => d < 10 ? `0${d}` : d
     const hh = dd(Math.floor(gameTime.game_time / 60 % 24))
     const mm = dd(Math.round(gameTime.game_time % 60))
-
+    
     embed.setColor('#B92025') // TruckersMP red
     embed.setTitle('TruckersMP server status')
 
@@ -25,12 +26,12 @@ export default async function gametime(interaction) {
 
     embed.setFooter({text: `Current in-game time: ${hh}:${mm}`})
 
-    interaction.reply({embeds: [embed]})
+    interaction.editReply({embeds: [embed]})
     
   } catch(err) {
     console.error(err)
 
-    interaction.reply({
+    interaction.editReply({
       content: 'Sorry, I was unable fetch the current status of TruckersMP for you :(',
       ephemeral: true
     })

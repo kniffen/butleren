@@ -19,7 +19,8 @@ describe('modules.twitch.commands.twitch.schedule()', function() {
     options: {
       get: () => ({value: 'Foo Bar Baz'})
     },
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   beforeAll(async function() {
@@ -61,10 +62,11 @@ describe('modules.twitch.commands.twitch.schedule()', function() {
 
     await execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitchUsersMock).toHaveBeenCalledWith({usernames: ['foo']})
     expect(fetchTwitchScheduleMock).toHaveBeenCalledWith({id: 'foo_id'})
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -74,10 +76,11 @@ describe('modules.twitch.commands.twitch.schedule()', function() {
 
     await execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitchUsersMock).toHaveBeenCalledWith({usernames: ['foo']})
     expect(fetchTwitchScheduleMock).toHaveBeenCalledWith({id: 'foo_id'})
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content:   'foo_display_name does not appear to have a schedule configured',
       ephemeral: true
     })
@@ -90,10 +93,11 @@ describe('modules.twitch.commands.twitch.schedule()', function() {
 
     await execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitchUsersMock).toHaveBeenCalledWith({usernames: ['foo']})
     expect(fetchTwitchScheduleMock).not.toHaveBeenCalled()
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Sorry, i was unable to find \"Foo\" on twitch :(',
       ephemeral: true
     })

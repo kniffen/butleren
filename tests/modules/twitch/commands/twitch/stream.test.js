@@ -19,7 +19,8 @@ describe('modules.twitch.commands.twitch.stream()', function() {
     options: {
       get: () => ({value: 'Foo Bar Baz'})
     },
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   beforeAll(async function() {
@@ -65,10 +66,11 @@ describe('modules.twitch.commands.twitch.stream()', function() {
 
     await execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitchUsersMock).toHaveBeenCalledWith({usernames: ['foo']})
     expect(fetchTwitchStreamsMock).toHaveBeenCalledWith({ids: ['foo_id']})
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -86,10 +88,11 @@ describe('modules.twitch.commands.twitch.stream()', function() {
 
     await execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitchUsersMock).toHaveBeenCalledWith({usernames: ['foo']})
     expect(fetchTwitchStreamsMock).toHaveBeenCalledWith({ids: ['foo_id']})
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
   })
@@ -101,10 +104,11 @@ describe('modules.twitch.commands.twitch.stream()', function() {
 
     await execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitchUsersMock).toHaveBeenCalledWith({usernames: ['foo']})
     expect(fetchTwitchStreamsMock).not.toHaveBeenCalled()
-    expect(interaction.reply).toHaveBeenCalledWith({
+    expect(interaction.editReply).toHaveBeenCalledWith({
       content: 'Sorry, i was unable to find \"Foo\" on twitch :(',
       ephemeral: true
     })

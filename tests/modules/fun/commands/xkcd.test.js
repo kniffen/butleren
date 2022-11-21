@@ -5,7 +5,8 @@ import * as command from '../../../../modules/fun/commands/xkcd.js'
 describe('fun: commands: xkcd', function() {
   const interaction = {
     options: new Map(),
-    reply: jest.fn()
+    deferReply: jest.fn(),
+    editReply: jest.fn()
   }
 
   beforeAll(function() {
@@ -45,16 +46,18 @@ describe('fun: commands: xkcd', function() {
   it('should respond with the latest XKCD comic', async function() {
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://xkcd.com/info.0.json')
-    expect(interaction.reply).toHaveBeenCalledWith({files: ['foobar']})
+    expect(interaction.editReply).toHaveBeenCalledWith({files: ['foobar']})
   })
 
   it('should respond with a specific XKCD comic', async function() {
     interaction.options.set('id', {value: 'foobar'})
     await command.execute(interaction)
 
+    expect(interaction.deferReply).toHaveBeenCalled()
     expect(fetchMock).toHaveBeenCalledWith('https://xkcd.com/foobar/info.0.json')
-    expect(interaction.reply).toHaveBeenCalledWith({files: ['foobar']})
+    expect(interaction.editReply).toHaveBeenCalledWith({files: ['foobar']})
   })
 
   it('should respond with a fallback XKCD comic if one cannot be resolved', async function() {
@@ -63,6 +66,7 @@ describe('fun: commands: xkcd', function() {
 
     await command.execute(interaction)
 
-    expect(interaction.reply).toHaveBeenCalledWith({files: ['https://imgs.xkcd.com/comics/not_available.png']})
+    expect(interaction.deferReply).toHaveBeenCalled()
+    expect(interaction.editReply).toHaveBeenCalledWith({files: ['https://imgs.xkcd.com/comics/not_available.png']})
   })
 })

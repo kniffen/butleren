@@ -7,11 +7,13 @@ import fetchTwitterUserTweets from '../../utils/fetchTwitterUserTweets.js'
  * @returns Void
  */
 export default async function latesttweet(interaction) {
+  await interaction.deferReply()
+
   const handle = interaction.options.get('handle')?.value.split(' ').shift().replace('@', '')
   const user = (await fetchTwitterUsers({usernames: [handle]}))?.[0]
 
   if (!user) {
-    return interaction.reply({
+    return interaction.editReply({
       content: `Sorry, i was unable to find "@${handle}" on Twitter :(`,
       ephemeral: true
     })
@@ -21,13 +23,13 @@ export default async function latesttweet(interaction) {
   tweets.sort((a, b) => b.created_at.localeCompare(a.created_at))
 
   if (tweets.length < 1) {
-    return interaction.reply({
+    return interaction.editReply({
       content: `${user.name} does not appear to have any public tweets\nhttps://twitter.com/${user.username}`,
       ephemeral: true
     }) 
   }
 
-  interaction.reply({
+  interaction.editReply({
     content: `Latest tweet from ${user.name}\nhttps://twitter.com/${user.username}/status/${tweets[0].id}`
   })
 }
