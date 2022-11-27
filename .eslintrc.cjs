@@ -8,7 +8,7 @@ module.exports = {
     'overrides': [
         {
             "files": [
-                "tests/mockups/*.js",
+                "mockups/*.js",
                 "**/*.test.js",
                 "**/*.test.jsx"
             ],

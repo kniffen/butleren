@@ -17,7 +17,11 @@
     "verbose": true,
     "forceExit": true,
     "setupFiles": [
-      "<rootDir>/tests/setupTests.js"
+      "<rootDir>/setupTests.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/client/"
     ]
   },
   "babel": {
@@ -28,8 +32,8 @@
   "scripts": {
     "start": "node -r dotenv/config ./index.js",
     "dev": "NODE_ENV=development node -r dotenv/config ./index.js",
-    "test": "jest ./tests",
-    "test:watch": "jest ./tests --watch",
+    "test": "npx jest",
+    "test:watch": "npx jest --watch",
     "lint": "npx eslint . --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx"
   },
   "repository": {
