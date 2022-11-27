@@ -24,6 +24,7 @@ export default async function twitterOnInterval({ guilds, date }) {
       (await db.all('SELECT * FROM twitterUsers'))
         .filter(({ guildId }) => enabledGuilds.includes(guildId))
 
+    // Consolidate ids so none are repeated
     const ids = entries.reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], [])
     
     const twitterUsers = await fetchTwitterUsers({ids})
@@ -33,7 +34,7 @@ export default async function twitterOnInterval({ guilds, date }) {
     }))
 
     for (const entry of entries) {
-      const user = twitterUsers.find(user => user.id === entry.id)
+      const twitterUser = twitterUsers.find(user => user.id === entry.id)
       const tweets = twitterUsersTweets[twitterUsers.findIndex(user => user.id === entry.id)]
       if (1 > tweets.length) continue
 
@@ -43,12 +44,14 @@ export default async function twitterOnInterval({ guilds, date }) {
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
       if (!notificationChannel) continue
 
-      await Promise.all(tweets.map(tweet => notificationChannel.send({
-        content:
-          `${entry.notificationRoleId 
-            ? `<@&${entry.notificationRoleId}> `
-            : ''}${user.name} just tweeted\nhttps://twitter.com/${user.username}/status/${tweet.id}`
-      }))).catch(console.error)
+      const prefix = entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''
+      notificationChannel.send({
+        content: 
+          tweets.length > 1
+            ? `${prefix}${twitterUser.name} just posted some tweets\n${tweets.map(({ id }) => `https://twitter.com/${twitterUser.username}/status/${id}`).join('\n')}`
+            : `${prefix}${twitterUser.name} just tweeted\nhttps://twitter.com/${twitterUser.username}/status/${tweets[0].id}`
+      }).catch(console.error)
+
     }
 
   } catch(err) {

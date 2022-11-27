@@ -35,17 +35,17 @@ export default async function youTubeOnInterval({ guilds, date }) {
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
       if (!notificationChannel) continue
 
-      await Promise.all(activities.map(({ snippet, contentDetails }) => {
-        const mention = entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''
-        const text =
-          snippet.channelTitle
-            ? `${snippet.channelTitle} just posted a new YouTube video`
+      const mention = entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''
+      const text = 
+        1 < activities.length
+          ? 'New YouTube videos were just posted'
+          : activities[0].snippet.channelTitle
+            ? `${activities[0].snippet.channelTitle} just posted a new YouTube video`
             : 'A new YouTube video was just posted'
-        
-        return notificationChannel.send({
-          content: `${mention}${text}\nhttps://www.youtube.com/watch?v=${contentDetails.upload.videoId}`
-        })
-      })).catch(console.error)
+
+      notificationChannel.send({
+        content: `${mention}${text}\n${activities.map(({ contentDetails }) => `https://www.youtube.com/watch?v=${contentDetails.upload.videoId}`).join('\n')}`
+      }).catch(console.error)
     }
 
   } catch(err) {

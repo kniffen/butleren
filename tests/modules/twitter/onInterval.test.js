@@ -17,8 +17,8 @@ jest.mock(
 describe('modules.twitter.onInterval()', function() {
   let db = null
 
-  const notificationChannel001 = {send: jest.fn()}
-  const notificationChannel002 = {send: jest.fn()}
+  const notificationChannel001 = {send: jest.fn(async () => {})}
+  const notificationChannel002 = {send: jest.fn(async () => {})}
 
   const guild001 = {
     id: 'guild001',
@@ -51,8 +51,16 @@ describe('modules.twitter.onInterval()', function() {
       ['guild001', 'twitterUser002', 'channel001']
     )
     await db.run(
+      'INSERT INTO twitterUsers (guildId, id, notificationChannelId) VALUES (?,?,?)',
+      ['guild001', 'twitterUser003', 'channel001']
+    )
+    await db.run(
       'INSERT INTO twitterUsers (guildId, id, notificationChannelId, notificationRoleId) VALUES (?,?,?,?)',
-      ['guild002', 'twitterUser001', 'channel001', 'role001']
+      ['guild002', 'twitterUser001', 'channel002', 'role001']
+    )
+    await db.run(
+      'INSERT INTO twitterUsers (guildId, id, notificationChannelId, notificationRoleId) VALUES (?,?,?,?)',
+      ['guild002', 'twitterUser003', 'channel002', 'role001']
     )
 
     jest.spyOn(db, 'all')
@@ -73,6 +81,11 @@ describe('modules.twitter.onInterval()', function() {
         {id: 'tweet004', created_at: '1970-01-01T00:15:00Z'},
       ]
 
+      if ('twitterUser003' === id) return [
+        {id: 'tweet005', created_at: '1970-01-01T00:50:00Z'},
+        {id: 'tweet006', created_at: '1970-01-01T00:55:00Z'},
+      ]
+
       return []
     })
   })
@@ -89,17 +102,41 @@ describe('modules.twitter.onInterval()', function() {
     await twitterOnInterval({guilds: [guild001, guild002], date: (new Date('1970-01-01T01:00:00Z'))})
 
     expect(console.error).not.toHaveBeenCalled()
+
     expect(fetchTwitterUsersMock).toHaveBeenCalledTimes(1)
-    expect(fetchTwitterUsersMock).toHaveBeenCalledWith({ids: ['twitterUser001', 'twitterUser002']})
-    expect(fetchTwitterUserTweetsMock).toHaveBeenCalledTimes(2)
+    expect(fetchTwitterUsersMock).toHaveBeenCalledWith({ids: ['twitterUser001', 'twitterUser002', 'twitterUser003']})
+    
+    expect(fetchTwitterUserTweetsMock).toHaveBeenCalledTimes(3)
     expect(fetchTwitterUserTweetsMock).toHaveBeenNthCalledWith(1, 'twitterUser001')
     expect(fetchTwitterUserTweetsMock).toHaveBeenNthCalledWith(2, 'twitterUser002')
-    expect(notificationChannel001.send).toHaveBeenCalledWith({
-      content: 'twitterUser001_name just tweeted\nhttps://twitter.com/twitterUser001_username/status/tweet002'
-    })
-    expect(notificationChannel002.send).toHaveBeenCalledWith({
-      content: '<@&role001> twitterUser001_name just tweeted\nhttps://twitter.com/twitterUser001_username/status/tweet002'
-    })
+    expect(fetchTwitterUserTweetsMock).toHaveBeenNthCalledWith(3, 'twitterUser003')
+    
+    expect(notificationChannel001.send).toHaveBeenCalledTimes(2)
+    expect(notificationChannel001.send).toHaveBeenNthCalledWith(
+      1,
+      {content: 'twitterUser001_name just tweeted\nhttps://twitter.com/twitterUser001_username/status/tweet002'}
+    )
+    expect(notificationChannel001.send).toHaveBeenNthCalledWith(
+      2,
+      {content: 'twitterUser003_name just posted some tweets\n'
+              + 'https://twitter.com/twitterUser003_username/status/tweet005\n'
+              + 'https://twitter.com/twitterUser003_username/status/tweet006'
+      }
+    )
+
+    expect(notificationChannel002.send).toHaveBeenCalledTimes(2)
+    expect(notificationChannel002.send).toHaveBeenNthCalledWith(
+      1,
+      {content: '<@&role001> twitterUser001_name just tweeted\nhttps://twitter.com/twitterUser001_username/status/tweet002'
+      }
+    )
+    expect(notificationChannel002.send).toHaveBeenNthCalledWith(
+      2,
+      {content: '<@&role001> twitterUser003_name just posted some tweets\n'
+              + 'https://twitter.com/twitterUser003_username/status/tweet005\n'
+              + 'https://twitter.com/twitterUser003_username/status/tweet006'
+      }
+    )
   })
 
   it('Should only run every half hour, on the half hour or hour mark', async function() {
@@ -127,9 +164,10 @@ describe('modules.twitter.onInterval()', function() {
 
     expect(console.error).not.toHaveBeenCalled()
     expect(fetchTwitterUsersMock).toHaveBeenCalledTimes(1)
-    expect(fetchTwitterUsersMock).toHaveBeenCalledWith({ids: ['twitterUser001']})
-    expect(fetchTwitterUserTweetsMock).toHaveBeenCalledTimes(1)
-    expect(fetchTwitterUserTweetsMock).toHaveBeenCalledWith('twitterUser001')
+    expect(fetchTwitterUsersMock).toHaveBeenCalledWith({ids: ['twitterUser001', 'twitterUser003']})
+    expect(fetchTwitterUserTweetsMock).toHaveBeenCalledTimes(2)
+    expect(fetchTwitterUserTweetsMock).toHaveBeenNthCalledWith(1, 'twitterUser001')
+    expect(fetchTwitterUserTweetsMock).toHaveBeenNthCalledWith(2, 'twitterUser003')
 
     await db.run(
       'UPDATE modules SET isEnabled = ? WHERE id = ? AND guildId = ?',
