@@ -25,7 +25,10 @@ export default async function youTubeOnInterval({ guilds, date }) {
       const activities =
         channelsActivities
           .find((activities) => activities[0]?.snippet.channelId === entry.id)
-          ?.filter(activity => (date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf() < 3.6e+6))
+          ?.filter(activity => 
+            (date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf() < 3.6e+6) &&
+            activity.contentDetails?.upload
+          )
 
       if (!activities || 1 > activities.length) continue
 
@@ -44,10 +47,7 @@ export default async function youTubeOnInterval({ guilds, date }) {
             : 'A new YouTube video was just posted'
 
       notificationChannel.send({
-        content: `${mention}${text}\n${activities.map(({ contentDetails }) => {
-          const videoId = contentDetails.upload?.videoId || contentDetails.playlistItem?.resourceId.videoId
-          return `https://www.youtube.com/watch?v=${videoId}`
-        }).join('\n')}`
+        content: `${mention}${text}\n${activities.map(({ contentDetails }) => `https://www.youtube.com/watch?v=${contentDetails.upload.videoId }`).join('\n')}`
       }).catch(console.error)
     }
 
