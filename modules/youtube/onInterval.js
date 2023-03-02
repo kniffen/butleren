@@ -44,7 +44,10 @@ export default async function youTubeOnInterval({ guilds, date }) {
             : 'A new YouTube video was just posted'
 
       notificationChannel.send({
-        content: `${mention}${text}\n${activities.map(({ contentDetails }) => `https://www.youtube.com/watch?v=${contentDetails.upload.videoId}`).join('\n')}`
+        content: `${mention}${text}\n${activities.map(({ contentDetails }) => {
+          const videoId = contentDetails.upload?.videoId || contentDetails.playlistItem?.resourceId.videoId
+          return `https://www.youtube.com/watch?v=${videoId}`
+        }).join('\n')}`
       }).catch(console.error)
     }
 
