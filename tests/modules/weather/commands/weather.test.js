@@ -71,7 +71,7 @@ describe('modules.weather.commands.weather', function() {
 
     expectedEmbed.setColor('#19D8B4')
     expectedEmbed.setAuthor({name: 'Weather report for username001', iconURL: 'http://openweathermap.org/img/wn/weather_weather_icon.png'})
-    expectedEmbed.setFooter({text: "Weather report provided by OpenWeather"})
+    expectedEmbed.setFooter({text: 'Weather report provided by OpenWeather'})
     expectedEmbed.addFields(
       {
         name:   'January 1, 1970 2:55 AM',
@@ -143,6 +143,67 @@ describe('modules.weather.commands.weather', function() {
     expect(interaction.editReply).toHaveBeenCalledWith({
       embeds: [expectedEmbed]
     })
+  })
+
+  it('should output a special weather report on april foold', async function() {
+    fetchMock.mockImplementation(async () => ({
+      json: async () => ({
+        ...weatherData,
+        dt: 1680307200
+      })
+    }))
+
+    jest.spyOn(global.Math, 'random').mockReturnValue(0.5)
+
+    expectedEmbed = new DiscordJS.EmbedBuilder()
+
+    expectedEmbed.setColor('#19D8B4')
+    expectedEmbed.setAuthor({name: 'Weather report for username001', iconURL: 'http://openweathermap.org/img/wn/02d.png'})
+    expectedEmbed.setFooter({text: 'Weather report provided by the Union Aerospace Corporation'})
+    expectedEmbed.addFields([
+      {
+        name: 'April 1, 3023 12:08 AM',
+        value: 'Hot and cloudy',
+      },
+      {
+        inline: true,
+        name: '🌬️ Zephyr',
+        value: '12340.0 sec/km\n485827.0 thou/sec\nNortheast',
+      },
+      {
+        inline: true,
+        name: '☔ Acid deposition',
+        value: '55000000 µm\n2165.36 thou',
+      },
+      {
+        inline: true,
+        name: '☢️ Radiation',
+        value: '1100 nSv/h\n11000000 mR/h',
+      },
+      {
+        inline: true,
+        name: '🌆 Natural light',
+        value: '05:41:40',
+      },
+      {
+        inline: true,
+        name: '💡 Illumination',
+        value: '08:28:20',
+      },
+      {
+        inline: true,
+        name: '🫧 Carbon dioxide',
+        value: '50%',
+      },
+    ])
+
+    await command.execute(interaction)
+
+    expect(interaction.editReply).toHaveBeenCalledWith({
+      embeds: [expectedEmbed]
+    })
+
+    Math.random.mockRestore()
   })
 
   it('should handle there being no rain data', async function() {
