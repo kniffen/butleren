@@ -3,12 +3,12 @@ import bodyParser from 'body-parser'
 import supertest from 'supertest'
 
 import database from '../../../../database/index.js'
-import fetchtwitterUsersMock from '../../../../modules/twitter/utils/fetchtwitterUsers.js'
+import fetchtwitterUsersMock from '../../../../modules/twitter/utils/fetchTwitterUsers.js'
 
 import twitterRouter from '../../../../modules/twitter/routes/index.js'
 
 jest.mock(
-  '../../../../modules/twitter/utils/fetchtwitterUsers.js',
+  '../../../../modules/twitter/utils/fetchTwitterUsers.js',
   () => ({__esModule: true, default: jest.fn()})
 )
 
