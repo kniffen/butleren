@@ -8,6 +8,7 @@ module.exports = {
     'overrides': [
         {
             "files": [
+                "tests/mockups/*.js",
                 "**/*.test.js",
                 "**/*.test.jsx"
             ],
@@ -21,15 +22,24 @@ module.exports = {
         'sourceType': 'module'
     },
     'rules': {
-        'indent': ['error', 2],
+        'indent': ['error', 2, {SwitchCase: 1}],
         'quotes': ['error', 'single'],
-        'semi': ['error', 'never'],
-        'no-await-in-loop': 1,
-        'no-use-before-define': 1,
-        'no-unreachable-loop': 1,
-        'no-duplicate-imports': 1,
-        'array-callback-return': 1,
-        'eqeqeq': 2,
-        'yoda': 1,
+        'no-await-in-loop': ['warn'],
+        'no-use-before-define': ['warn'],
+        'no-unreachable-loop': ['warn'],
+        'no-duplicate-imports': ['warn'],
+        'array-callback-return': ['warn'],
+        'eqeqeq': ['error'],
+        'yoda': ['warn', 'always'],
+        'no-new-wrappers': ['warn'],
+        'space-before-blocks': ['warn'],
+        'no-else-return': ['warn'],
+        'no-unneeded-ternary': ['warn'],
+        'no-loop-func': ['warn'],
+        'no-eval': ['error'],
+        'prefer-template': ['warn'],
+        'no-array-constructor': ['warn'],
+        'prefer-object-spread': ['warn'],
+        'no-new-object': ['warn']
     }
 }
