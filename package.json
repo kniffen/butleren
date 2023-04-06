@@ -29,7 +29,8 @@
     "start": "node -r dotenv/config ./index.js",
     "dev": "NODE_ENV=development node -r dotenv/config ./index.js",
     "test": "jest ./tests",
-    "test:watch": "jest ./tests --watch"
+    "test:watch": "jest ./tests --watch",
+    "lint": "npx eslint . --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx"
   },
   "repository": {
     "type": "git",
@@ -56,6 +57,7 @@
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
     "babel-jest": "^28.1.1",
+    "eslint": "^8.37.0",
     "jest": "^28.1.1",
     "regenerator-runtime": "^0.13.9",
     "supertest": "^6.2.4"
