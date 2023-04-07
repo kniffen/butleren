@@ -7,7 +7,7 @@ router.put('/:guild/:module/:command', async function(req, res) {
   const handleError = (err) => console.error(req.method, req.originalUrl, err)
 
   try {
-    if (!req.body.hasOwnProperty('isEnabled')) return res.sendStatus(400)
+    if (!Object.hasOwn(req.body, 'isEnabled')) return res.sendStatus(400)
     
     const guild = await discordClient.guilds.fetch(req.params.guild).catch(handleError)
     const commands = Object.values(modules).reduce((commands, mod) => {
@@ -21,7 +21,7 @@ router.put('/:guild/:module/:command', async function(req, res) {
     const guildCommands = await guild.commands.fetch()
 
     if (!req.body.isEnabled) {
-      const guildCommand = guildCommands.find(guildCmd => guildCmd.name == command.data.name)
+      const guildCommand = guildCommands.find(guildCmd => guildCmd.name === command.data.name)
       
       guild.commands
         .delete(guildCommand)
@@ -36,7 +36,7 @@ router.put('/:guild/:module/:command', async function(req, res) {
         [command.mod.id, guild.id]
       ).then(async modSettings => {
         if (!modSettings.isEnabled) {
-         await db.run(
+          await db.run(
             'UPDATE modules SET isEnabled = 1 WHERE id = ? AND guildId = ?',
             [command.mod.id, guild.id]
           )

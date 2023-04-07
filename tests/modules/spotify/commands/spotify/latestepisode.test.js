@@ -1,4 +1,3 @@
-import database from '../../../../../database/index.js'
 import fetchSpotifySearchMock from '../../../../../modules/spotify/utils/fetchSpotifySearch.js'
 import fetchSpotifyShowEpisodesMock from '../../../../../modules/spotify/utils/fetchSpotifyShowEpisodes.js'
 import latestepisode from '../../../../../modules/spotify/commands/spotify/latestepisode.js'
@@ -14,8 +13,6 @@ jest.mock(
 )
 
 describe('modules.spotify.commands.spotify.latestepisode()', function() {
-  let db = null
-  
   const interaction = {
     options: {
       get: () => ({values: 'userInput001'})
@@ -25,8 +22,6 @@ describe('modules.spotify.commands.spotify.latestepisode()', function() {
   }
 
   beforeAll(async function() {
-    db = await database
-
     fetchSpotifySearchMock.mockResolvedValue([
       {id: 'show001', name: 'showName001', external_urls: {spotify: 'spotifyShowURL001'}},
       {id: 'show002', name: 'showName002', external_urls: {spotify: 'spotifyShowURL002'}},

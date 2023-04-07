@@ -29,7 +29,7 @@ describe('modules.twitter.utils.fetchTwitterToken()', function() {
         body: 'grant_type=client_credentials',
         headers: {
           Authorization: `Basic ${Buffer.from(`${process.env.TWITTER_API_KEY}:${process.env.TWITTER_API_SECRET}`).toString('base64')}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
       }
     )

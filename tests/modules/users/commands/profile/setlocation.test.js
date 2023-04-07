@@ -16,7 +16,7 @@ describe('modules.users.commands.profile.setlocation', function() {
   beforeEach(async function() {
     jest.clearAllMocks()
 
-    fetchMock.mockResolvedValue({status: 200})
+    fetchMock.mockResolvedValue({ok: true})
 
     interaction = {
       user: {
@@ -62,7 +62,7 @@ describe('modules.users.commands.profile.setlocation', function() {
   })
 
   it('should not set the location if it cannot be verified', async function() {
-    fetchMock.mockResolvedValue({status: 404})
+    fetchMock.mockResolvedValue({ok: false})
 
     await subCommandExecutor(interaction)
 

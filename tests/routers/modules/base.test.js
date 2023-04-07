@@ -23,7 +23,6 @@ jest.mock('../../../modules/index.js', () => ({
     id: 'module001',
     name: 'moduleName001',
     description: 'moduleDescription001',
-    commands: [{id: 'command001'}],
     isLocked: false,
     commands: {
       cmd001: {

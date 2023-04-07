@@ -6,8 +6,9 @@ import discordClient from '../../discord/client.js'
 router.get('/:guild/channels', async function(req, res) {
   try {
     const guild =
-      await discordClient.guilds.fetch(req.params.guild)
-                                .catch(err => console.error(req.method, req.originalUrl, err))
+      await discordClient.guilds
+        .fetch(req.params.guild)
+        .catch(err => console.error(req.method, req.originalUrl, err))
     
     if (!guild) return res.sendStatus(404)
 

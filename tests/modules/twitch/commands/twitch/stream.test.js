@@ -109,7 +109,7 @@ describe('modules.twitch.commands.twitch.stream()', function() {
     expect(fetchTwitchUsersMock).toHaveBeenCalledWith({usernames: ['foo']})
     expect(fetchTwitchStreamsMock).not.toHaveBeenCalled()
     expect(interaction.editReply).toHaveBeenCalledWith({
-      content: 'Sorry, i was unable to find \"Foo\" on twitch :(',
+      content: 'Sorry, i was unable to find "Foo" on twitch :(',
       ephemeral: true
     })
   })

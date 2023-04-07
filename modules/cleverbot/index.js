@@ -6,7 +6,7 @@ import _onMessage from './onMessage.js'
 const cleverbot = new Cleverbot()
 
 if ( !process.env.CLEVERBOT_API_KEY )
-  throw new Error("Missing Cleverbot API key")
+  throw new Error('Missing Cleverbot API key')
 
 cleverbot.configure({botapi: process.env.CLEVERBOT_API_KEY})
 

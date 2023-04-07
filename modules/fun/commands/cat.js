@@ -19,5 +19,5 @@ export async function execute(interaction) {
     .catch((err) => {
       console.error(err)
       interaction.editReply({files: ['http://i.imgur.com/Bai6JTL.jpg']})
-  })
+    })
 }

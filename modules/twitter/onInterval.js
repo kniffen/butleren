@@ -16,8 +16,8 @@ export default async function twitterOnInterval({ guilds, date }) {
 
   try {
     const db = await database
-    const enabledGuilds
-    = (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['twitter', true]))
+    const enabledGuilds =
+      (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['twitter', true]))
         .map(({ guildId}) => guildId)
 
     const entries =
@@ -28,17 +28,17 @@ export default async function twitterOnInterval({ guilds, date }) {
     const ids = entries.reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], [])
     
     const twitterUsers = await fetchTwitterUsers({ids})
-    const twitterUsersTweets = await Promise.all(twitterUsers.map(async user => {
-      return (await fetchTwitterUserTweets(user.id))
-              .filter(tweet => date.valueOf() - (new Date(tweet.created_at)).valueOf() < 1.8e+6)
-    }))
+    const twitterUsersTweets = await Promise.all(twitterUsers.map(async user => 
+      (await fetchTwitterUserTweets(user.id))
+        .filter(tweet => 1.8e+6 > date.valueOf() - (new Date(tweet.created_at)).valueOf())
+    ))
 
     for (const entry of entries) {
       const twitterUser = twitterUsers.find(user => user.id === entry.id)
       const tweets = twitterUsersTweets[twitterUsers.findIndex(user => user.id === entry.id)]
       if (1 > tweets.length) continue
 
-      const guild = guilds.find(({ id }) => id == entry.guildId)
+      const guild = guilds.find(({ id }) => id === entry.guildId)
       if (!guild) continue
 
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
@@ -47,11 +47,10 @@ export default async function twitterOnInterval({ guilds, date }) {
       const prefix = entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''
       notificationChannel.send({
         content: 
-          tweets.length > 1
+          1 < tweets.length
             ? `${prefix}${twitterUser.name} just posted some tweets\n${tweets.map(({ id }) => `https://twitter.com/${twitterUser.username}/status/${id}`).join('\n')}`
             : `${prefix}${twitterUser.name} just tweeted\nhttps://twitter.com/${twitterUser.username}/status/${tweets[0].id}`
       }).catch(console.error)
-
     }
 
   } catch(err) {

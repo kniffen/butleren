@@ -22,7 +22,7 @@ export default async function latesttweet(interaction) {
   const tweets = await fetchTwitterUserTweets(user.id)
   tweets.sort((a, b) => b.created_at.localeCompare(a.created_at))
 
-  if (tweets.length < 1) {
+  if (1 > tweets.length) {
     return interaction.editReply({
       content: `${user.name} does not appear to have any public tweets\nhttps://twitter.com/${user.username}`,
       ephemeral: true

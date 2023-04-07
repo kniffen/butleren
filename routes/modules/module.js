@@ -10,7 +10,7 @@ router.get('/:guild/:module', async function getModule(req, res) {
     const guild = await client.guilds.fetch(req.params.guild).catch(handleError)
     if (!guild) return res.sendStatus(404)
 
-    const mod = Object.values(modules).find(mod => mod.id == req.params.module)
+    const mod = Object.values(modules).find(mod => mod.id === req.params.module)
     if (!mod) return res.sendStatus(404)
 
     const db = await database
@@ -24,8 +24,8 @@ router.get('/:guild/:module', async function getModule(req, res) {
       id: mod.id,
       name: mod.name,
       description: mod.description,
-      isEnabled: !entry || entry.isEnabled ? true : false,
-      isLocked: !entry ? true : false,
+      isEnabled: !!(!entry || entry.isEnabled),
+      isLocked: !entry,
     }
 
     res.send(data)
@@ -46,19 +46,19 @@ router.put('/:guild/:module', async function putModule(req, res) {
     const db = await database
   
     const settings = await db.get(
-      `SELECT * FROM modules WHERE guildId = ? AND id = ?`,
+      'SELECT * FROM modules WHERE guildId = ? AND id = ?',
       [req.params.guild, req.params.module]
     )
 
     if (!settings) return res.sendStatus(404)
 
     // disable or enable all commands associated with the module
-    if (req.body.hasOwnProperty('isEnabled')) {
-      const mod = Object.values(modules).find(mod => mod.id == req.params.module)
+    if (Object.hasOwn(req.body, 'isEnabled')) {
+      const mod = Object.values(modules).find(mod => mod.id === req.params.module)
       const moduleCommands = mod.commands ? Object.values(mod.commands) : []
       const guildCommands = 
         await guild.commands.fetch()
-          .then(gc => gc.filter(gc => moduleCommands.find(c => gc.name == c.data.name)))
+          .then(gc => gc.filter(gc => moduleCommands.find(c => gc.name === c.data.name)))
           .catch(handleError)
 
       if (!req.body.isEnabled) {
@@ -71,7 +71,7 @@ router.put('/:guild/:module', async function putModule(req, res) {
     const entries = Object.entries(req.body).filter(([ key]) => !['id', 'guildId'].includes(key))
     
     const sqlStr = `UPDATE modules
-      ${entries.map(([ key, value ]) => `SET ${key} = ${'string' == typeof value ? '"'+value+'"': value}`).join(',')}
+      ${entries.map(([ key, value ]) => `SET ${key} = ${'string' === typeof value ? `"${value}"`: value}`).join(',')}
       WHERE guildId = ? AND id = ?`
 
     await db.run(sqlStr, [req.params.guild, req.params.module])

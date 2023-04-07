@@ -35,6 +35,10 @@ jest.mock('../../../database/addGuildToDatabase.js', () => ({
 }))
 
 describe('discord.eventHandlers.onReady()', function() {
+  const guilds           = new Collection()
+  const guildCommands001 = new Collection()
+  const guildCommands002 = new Collection()
+  
   const client = {
     user: {
       setActivity: jest.fn()
@@ -43,10 +47,6 @@ describe('discord.eventHandlers.onReady()', function() {
       fetch: jest.fn().mockImplementation(async (id) => id ? guilds.get(id) : guilds)
     }
   }
-
-  const guilds           = new Collection()
-  const guildCommands001 = new Collection()
-  const guildCommands002 = new Collection()
 
   guilds.set('guild001', {
     id: 'guild001',

@@ -5,13 +5,13 @@ export default async function youTubeOnInterval({ guilds, date }) {
   // This ensures that the logic will only run every hour on the hour
   // For example 11:00, 12:00, 13:00 etc...
   if (0 !== date.getMinutes() % 60) return
-  
+
   try {
     const db = await database
-    const enabledGuilds
-      = (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['youtube', true]))
-          .map(({ guildId}) => guildId)
-    
+    const enabledGuilds =
+      (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['youtube', true]))
+        .map(({ guildId}) => guildId)
+
     const entries =
       (await db.all('SELECT * FROM youtubeChannels'))
         .filter(({ guildId }) => enabledGuilds.includes(guildId))
@@ -26,13 +26,13 @@ export default async function youTubeOnInterval({ guilds, date }) {
         channelsActivities
           .find((activities) => activities[0]?.snippet.channelId === entry.id)
           ?.filter(activity => 
-            (date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf() < 3.6e+6) &&
+            (3.6e+6 > date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf()) &&
             activity.contentDetails?.upload
           )
 
       if (!activities || 1 > activities.length) continue
 
-      const guild = guilds.find(({ id }) => id == entry.guildId)
+      const guild = guilds.find(({ id }) => id === entry.guildId)
       if (!guild) continue
 
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)

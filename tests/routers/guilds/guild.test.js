@@ -178,26 +178,6 @@ describe('/api/guilds/:guild', function() {
       ])
     })
 
-  //   it('should respond with a 404 if the guild does not exist', async function() {
-  //     const res = await supertest(app).put('/api/guilds/guild999').send(body)
-
-  //     expect(res.status).toEqual(404)
-  //     expect(console.error).toHaveBeenCalledWith('PUT', '/api/guilds/guild999', 'Guild not found')
-
-  //     expect(await db.all('SELECT * FROM guilds')).toEqual([
-  //       {
-  //         id: 'guild001',
-  //         nickname: 'foo',
-  //         color: '#0FFFFF',
-  //         timezone: 'Europe/Berlin',
-  //       },
-  //       {
-  //         id: 'guild002',
-  //         nickname: null,
-  //         color: '#19D8B4',
-  //         timezone: 'UTC',
-  //       },
-  //     ])
-  //   })
+    it.todo('should respond with a 404 if the guild does not exist')
   })
 })

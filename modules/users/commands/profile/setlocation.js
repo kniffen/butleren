@@ -4,13 +4,13 @@ import database from '../../../../database/index.js'
 
 async function testLocation(location) {
   const zip = parseInt(location) || null
-  const uri = 
-    zip ? `https://api.openweathermap.org/data/2.5/weather?zip=${encodeURIComponent(zip)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
-        : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
+  const uri = zip
+    ? `https://api.openweathermap.org/data/2.5/weather?zip=${encodeURIComponent(zip)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
+    : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
 
   const res = await fetch(uri).catch(() => null)
 
-  return res && 200 === res.status ? true : false
+  return res?.ok
 }
 
 /**

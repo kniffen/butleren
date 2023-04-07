@@ -7,18 +7,23 @@ router.get('/', async function (req, res) {
     const db = await database
     const guildsData = await db.all('SELECT * FROM guilds')
 
-    for (const guildData of guildsData) {
-      const guild =
-        await discordClient.guilds.fetch(guildData.id)
-                                  .catch(err => console.error(req.method, req.originalUrl, err))
+    const guilds = await Promise.all(guildsData.map((guildData) =>
+      discordClient.guilds
+        .fetch(guildData.id)
+        .catch(err => console.error(req.method, req.originalUrl, err))
+    ))
 
-      if (!guild) continue
-    
-      guildData.iconURL = guild.iconURL()
-      guildData.name = guild.name
-    }
+    res.send(guildsData.map((guildData) => {
+      const guild = guilds.find((guild) => guild?.id === guildData.id)
+      
+      if (!guild) return guildData
 
-    res.send(guildsData)
+      return {
+        ...guildData,
+        iconURL: guild.iconURL(),
+        name: guild.name
+      }
+    }))
   
   } catch (err) {
     console.error(req.method, req.originalUrl, err)

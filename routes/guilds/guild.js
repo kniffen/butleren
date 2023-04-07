@@ -7,8 +7,9 @@ import discordClient from '../../discord/client.js'
 router.get('/:guild', async function(req, res) {
   try {
     const guild =
-      await discordClient.guilds.fetch(req.params.guild)
-                                .catch(err => console.error(req.method, req.originalUrl, err))
+      await discordClient.guilds
+        .fetch(req.params.guild)
+        .catch(err => console.error(req.method, req.originalUrl, err))
     
     if (!guild) return res.sendStatus(404)
 
@@ -35,25 +36,27 @@ router.get('/:guild', async function(req, res) {
 router.put('/:guild', async function(req, res) {
   try {
     const guild =
-      await discordClient.guilds.fetch(req.params.guild)
-                                .catch(err => console.error(req.method, req.originalUrl, err))
+      await discordClient.guilds
+        .fetch(req.params.guild)
+        .catch(err => console.error(req.method, req.originalUrl, err))
 
     if (!guild) return res.sendStatus(404)
 
     const member =
-      await guild.members.fetch(discordClient.user.id)
-                         .catch(err => console.error(req.method, req.originalUrl, err))
+      await guild.members
+        .fetch(discordClient.user.id)
+        .catch(err => console.error(req.method, req.originalUrl, err))
 
     if (!member) return res.sendStatus(404)
 
     const db = await database
 
-    for (const key in req.body) {
-      await db.run(`UPDATE guilds SET ${key} = ? WHERE id = ?`, [req.body[key] || null, guild.id])
-
-      if ('nickname' == key)
+    await Promise.all(Object.keys(req.body).map((key) => {
+      if ('nickname' === key)
         member.setNickname(req.body[key] || null)
-    }
+
+      return db.run(`UPDATE guilds SET ${key} = ? WHERE id = ?`, [req.body[key] || null, guild.id])
+    }))
 
     res.sendStatus(200)
   

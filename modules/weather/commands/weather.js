@@ -51,9 +51,9 @@ export async function execute(interaction) {
     }
 
     const zip = parseInt(query || location) || null
-    const uri = 
-      zip ? `https://api.openweathermap.org/data/2.5/weather?zip=${encodeURIComponent(zip)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
-          : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(query || location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
+    const uri = zip
+      ? `https://api.openweathermap.org/data/2.5/weather?zip=${encodeURIComponent(zip)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
+      : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(query || location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
 
     const data = await fetch(uri).then(res => res.json())
     const embed = new DiscordJS.EmbedBuilder()
@@ -75,7 +75,7 @@ export async function execute(interaction) {
       name: `Weather report for ${location ? user.username : `${data.name} (${data.sys.country})`}`,
       iconURL:
         isAprilFools
-          ? `http://openweathermap.org/img/wn/02d.png`
+          ? 'http://openweathermap.org/img/wn/02d.png'
           : `http://openweathermap.org/img/wn/${data.weather?.[0].icon}.png`
     })
 
@@ -86,8 +86,8 @@ export async function execute(interaction) {
 
       embed.addFields(
         {
-          name:  date.add(1000, "year").format('LLL'),
-          value: `Hot and cloudy`
+          name:  date.add(1000, 'year').format('LLL'),
+          value: 'Hot and cloudy'
         },
         {
           name:   '🌬️ Zephyr',
@@ -97,7 +97,7 @@ export async function execute(interaction) {
           inline: true
         },
         {
-          name:   `☔ Acid deposition`,
+          name:   '☔ Acid deposition',
           value:  `${precip?.amount * 1000000 || '0.00'} µm\n${precip ? (precip.amount * 39.3701).toFixed(2) : '0.00'} thou`,
           inline: true
         },
@@ -117,13 +117,13 @@ export async function execute(interaction) {
           inline: true
         },
         {
-          name:   `🫧 Carbon dioxide`,
+          name:   '🫧 Carbon dioxide',
           value:  `${data.main.humidity}%`,
           inline: true
         }
       )
 
-      embed.setFooter({text: "Weather report provided by the Union Aerospace Corporation"})
+      embed.setFooter({text: 'Weather report provided by the Union Aerospace Corporation'})
     
     } else {
       embed.addFields(
@@ -166,7 +166,7 @@ export async function execute(interaction) {
         }
       )
 
-      embed.setFooter({text: "Weather report provided by OpenWeather"})
+      embed.setFooter({text: 'Weather report provided by OpenWeather'})
     }
     
     interaction.editReply({

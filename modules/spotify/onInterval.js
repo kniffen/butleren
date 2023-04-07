@@ -9,9 +9,9 @@ export default async function spotifyOnInterval({ guilds, date }) {
   
   try {
     const db = await database
-    const enabledGuilds
-      = (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['spotify', true]))
-          .map(({ guildId}) => guildId)
+    const enabledGuilds =
+      (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['spotify', true]))
+        .map(({ guildId}) => guildId)
 
     const entries =
       (await db.all('SELECT * FROM spotifyShows'))
@@ -27,17 +27,16 @@ export default async function spotifyOnInterval({ guilds, date }) {
     for (const entry of entries) {
       const latestEpisode = latestEpisodes.find(({ show }) => show.id === entry.id)
 
-      if (latestEpisode.id == entry.latestEpisodeId) continue
+      if (latestEpisode.id === entry.latestEpisodeId) continue
 
-      const guild = guilds.find(({ id }) => id == entry.guildId)
+      const guild = guilds.find(({ id }) => id === entry.guildId)
       if (!guild) continue
 
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
       if (!notificationChannel) continue
       
       await notificationChannel.send({
-        content: `${entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''}A new episode from ${latestEpisode.show.name} is out!\n` +
-                 latestEpisode.external_urls.spotify
+        content: `${entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''}A new episode from ${latestEpisode.show.name} is out!\n${latestEpisode.external_urls.spotify}`
       }).then(() => db.run(
         'UPDATE spotifyShows SET latestEpisodeId = ? WHERE id = ? AND guildId = ?',
         [latestEpisode.id, entry.id, entry.guildId]

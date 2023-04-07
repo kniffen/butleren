@@ -31,10 +31,10 @@ export default async function schedule(interaction) {
     embed.setFooter({text: 'Times are in your local timezone'})
 
     const fields = []
-    for (let i = 0; i < 3 && i < schedule.length; i++) {
+    for (let i = 0; 3 > i && i < schedule.length; i++) {
       fields.push({
         name: `<t:${moment(schedule[i].start_time).format('X')}>`,
-        value: `${schedule[i].title || 'Untitled'}${schedule[i].category ? ' ('+schedule[i].category.name+')' : ''}`,
+        value: `${schedule[i].title || 'Untitled'}${schedule[i].category ? ` (${schedule[i].category.name})` : ''}`,
       })
     }
     embed.addFields(...fields)

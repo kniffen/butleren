@@ -9,11 +9,19 @@ import * as modules from '../../modules/index.js'
  */
 export default async function onGuildCreate(guild) {
   await addGuildToDatabase(guild)
-  
-  for (const mod of Object.values(modules)) {
-    if (mod.commands) {
-      await Promise.all(Object.values(mod.commands).map(cmd => guild.commands.create(cmd.data.toJSON())))
-                   .catch(console.error)
-    }
+ 
+  try {
+    await Promise.all(Object.values(modules).reduce((commandPromises, mod) => {
+      if (!mod.commands) return commandPromises
+      return [
+        ...commandPromises,
+        ...Object
+          .values(mod.commands)
+          .map(cmd => guild.commands.create(cmd.data.toJSON()))
+      ]
+    }, []))
+
+  } catch(err) {
+    console.error(err)
   }
 }

@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 import fetchSpotifyToken from './fetchSpotifyToken.js'
 
 export default async function fetchSpotifyShows(ids = [], market = 'US', isTokenExpired = false) {
-  if (!Array.isArray(ids) || ids.length < 1) return []
+  if (!Array.isArray(ids) || 1 > ids.length) return []
 
   try {
     const uri = `https://api.spotify.com/v1/shows?ids=${ids.join(',')}&market=${market}`

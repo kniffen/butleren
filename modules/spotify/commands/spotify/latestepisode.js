@@ -7,7 +7,7 @@ export default async function latestepisode(interaction) {
   const query = interaction.options.get('show')?.value
   const shows = await fetchSpotifySearch(query)
 
-  if (shows.length < 1) {
+  if (1 > shows.length) {
     return interaction.editReply({
       content: 'Sorry, I was unable to fetch that show for you :(',
       ephemeral: true
@@ -16,7 +16,7 @@ export default async function latestepisode(interaction) {
 
   const episodes = await fetchSpotifyShowEpisodes(shows[0].id)
 
-  if (episodes.length < 1) {
+  if (1 > episodes.length) {
     return interaction.editReply({
       content: `${shows[0].name} does not appear to have any recent episodes\n${shows[0].external_urls.spotify}`,
       ephemeral: true

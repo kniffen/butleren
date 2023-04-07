@@ -20,9 +20,9 @@ export default async function onMessage(message) {
     if (!mod.onMessage || !mod.allowedChannelTypes?.includes(message.channel.type)) return promises
 
     const entries = (await db.all('SELECT id, isEnabled FROM modules WHERE guildId = ?', [message.channel.guild.id]))
-    if (entries.length < 1) return promises
+    if (1 > entries.length) return promises
 
-    const settings = entries.find(entry => entry.id == mod.id)
+    const settings = entries.find(entry => entry.id === mod.id)
     return (!settings || settings.isEnabled) ? [...promises, mod.onMessage(message)] : promises
   }, []))
 }

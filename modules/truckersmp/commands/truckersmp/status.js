@@ -11,7 +11,7 @@ export default async function gametime(interaction) {
     ])
 
     const embed = new DiscordJS.EmbedBuilder()
-    const dd = d => d < 10 ? `0${d}` : d
+    const dd = d => 10 > d ? `0${d}` : d
     const hh = dd(Math.floor(gameTime.game_time / 60 % 24))
     const mm = dd(Math.round(gameTime.game_time % 60))
     

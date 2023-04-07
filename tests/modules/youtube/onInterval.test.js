@@ -60,7 +60,7 @@ describe('modules.youtube.onInterval()', function() {
     jest.spyOn(db, 'all')
     jest.spyOn(db, 'run')
 
-    fetchYouTubeActivitiesMock.mockImplementation(async function({channelId, publishedAfter}) {
+    fetchYouTubeActivitiesMock.mockImplementation(async function({ channelId }) {
       const createFakeActivity = (channelId, channelTitle, publishedAt, videoId) => ({
         snippet: {
           channelId,
@@ -75,25 +75,29 @@ describe('modules.youtube.onInterval()', function() {
       })
 
       switch (channelId) {
-        case 'youtubeChannel001': return [
-          createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T11:01:00Z', 'video101'),
-          createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T10:45:00Z', 'video102'),
-          createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T10:30:00Z', 'video103')
-        ]
+        case 'youtubeChannel001':
+          return [
+            createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T11:01:00Z', 'video101'),
+            createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T10:45:00Z', 'video102'),
+            createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T10:30:00Z', 'video103')
+          ]
 
-        case 'youtubeChannel002': return [
-          createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T11:05:00Z', 'video201'),
-          createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T11:45:00Z', 'video202'),
-          createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T10:00:00Z', 'video203')
-        ]
+        case 'youtubeChannel002':
+          return [
+            createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T11:05:00Z', 'video201'),
+            createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T11:45:00Z', 'video202'),
+            createFakeActivity(channelId, `${channelId}__title`, '2000-01-01T10:00:00Z', 'video203')
+          ]
         
-        case 'youtubeChannel003': return [
-          createFakeActivity(channelId, null, '2000-01-01T11:01:00Z', 'video301'),
-          createFakeActivity(channelId, null, '2000-01-01T10:10:00Z', 'video302'),
-          createFakeActivity(channelId, null, '2000-01-01T10:15:00Z', 'video303')
-        ]
+        case 'youtubeChannel003':
+          return [
+            createFakeActivity(channelId, null, '2000-01-01T11:01:00Z', 'video301'),
+            createFakeActivity(channelId, null, '2000-01-01T10:10:00Z', 'video302'),
+            createFakeActivity(channelId, null, '2000-01-01T10:15:00Z', 'video303')
+          ]
 
-        default: return []
+        default:
+          return []
       }
     })
   })

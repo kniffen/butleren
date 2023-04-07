@@ -17,18 +17,19 @@ router.get('/:guild', async function(req, res) {
 
       return [
         ...commands,
-        ...Object.entries(mod.commands)
-                 .map(([ id, cmd ]) => ({
-                    id,
-                    name: cmd.data.name,
-                    description: cmd.data.description,
-                    isEnabled: guildCommands.find(c => c.name == cmd.data.name) ? true : false,
-                    isLocked: cmd.isLocked,
-                    module: {
-                      id: modId,
-                      name: mod.name
-                    }
-                 }))
+        ...Object
+          .entries(mod.commands)
+          .map(([ id, cmd ]) => ({
+            id,
+            name: cmd.data.name,
+            description: cmd.data.description,
+            isEnabled: !!guildCommands.find(c => c.name === cmd.data.name),
+            isLocked: cmd.isLocked,
+            module: {
+              id: modId,
+              name: mod.name
+            }
+          }))
       ]
     }, [])
 

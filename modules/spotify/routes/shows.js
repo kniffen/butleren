@@ -17,7 +17,7 @@ router.get('/:guild/shows', async function(req, res) {
     const shows = await fetchSpotifyShows(showIds)
 
     return res.send(shows.map((show) => {
-      const entry = entries.find(({ id }) => id == show.id)
+      const entry = entries.find(({ id }) => id === show.id)
   
       return {
         id:          show.id,

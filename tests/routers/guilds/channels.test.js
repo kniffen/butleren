@@ -1,5 +1,4 @@
 import express from 'express'
-import bodyParser from 'body-parser'
 import supertest from 'supertest'
 import { Collection, ChannelType } from 'discord.js'
 

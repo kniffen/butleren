@@ -12,8 +12,7 @@ import fetchTwitterToken from './fetchTwitterToken.js'
  */
 export default async function fetchTwitterUsers({ ids = [], usernames = [] }, isTokenExpired = false) {
   try {
-    const uri =
-      0 < ids.length
+    const uri = 0 < ids.length
       ? `https://api.twitter.com/2/users/?ids=${ids.join(',')}&user.fields=profile_image_url`
       : `https://api.twitter.com/2/users/by?usernames=${usernames.join(',')}&user.fields=profile_image_url`
     

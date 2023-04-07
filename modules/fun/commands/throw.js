@@ -6,10 +6,10 @@ export const data =
     .setName('throw')
     .setDescription('Throws things!')
     .addStringOption(option =>
-        option
-          .setName('item')
-          .setDescription('item to throw')
-          .setRequired(true)
+      option
+        .setName('item')
+        .setDescription('item to throw')
+        .setRequired(true)
     )
 
 /**

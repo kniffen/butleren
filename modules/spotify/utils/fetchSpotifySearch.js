@@ -8,7 +8,7 @@ export default async function fetchSpotifySearch(query, type = 'show', market = 
     const init = {
       headers: {
         Authorization: `Bearer ${await fetchSpotifyToken(isTokenExpired)}`,
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       }
     }
 
@@ -19,7 +19,7 @@ export default async function fetchSpotifySearch(query, type = 'show', market = 
 
     const data = await res.json()
 
-    return data[type+'s'].items || []
+    return data[`${type}s`].items || []
 
   } catch(err) {
     console.error(err)

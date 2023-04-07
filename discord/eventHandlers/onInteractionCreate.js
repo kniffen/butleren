@@ -14,7 +14,7 @@ export default async function onInteractionCreate(interaction) {
   for (const mod of Object.values(modules)) {
     if (!mod.commands) continue
     
-    const command = Object.values(mod.commands).find(cmd => cmd.data.name == interaction.commandName)
+    const command = Object.values(mod.commands).find(cmd => cmd.data.name === interaction.commandName)
 
     if (command) {
       command.execute(interaction).catch(console.error)

@@ -17,8 +17,8 @@ export default async function twitchOnInterval({ guilds, date }) {
 
   try {
     const db = await database
-    const enabledGuilds
-    = (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['twitch', true]))
+    const enabledGuilds =
+      (await db.all('SELECT guildId FROM modules WHERE id = ? AND isEnabled = ?', ['twitch', true]))
         .map(({ guildId}) => guildId)
 
     const entries =
@@ -32,10 +32,10 @@ export default async function twitchOnInterval({ guilds, date }) {
       const stream = streams.find(({user_id}) => user_id === entry.id)
       if (!stream) continue
 
-      if (date.valueOf() - (new Date(stream.started_at)).valueOf() > 300000)
+      if (300000 < date.valueOf() - (new Date(stream.started_at)).valueOf())
         continue
 
-      const guild = guilds.find(({ id }) => id == entry.guildId)
+      const guild = guilds.find(({ id }) => id === entry.guildId)
       if (!guild) continue
 
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
@@ -47,7 +47,7 @@ export default async function twitchOnInterval({ guilds, date }) {
       embed.setURL(`https://twitch.tv/${stream.user_login}`)
       embed.setColor('#9146FF') // Twitch purple
       embed.setDescription(`**${stream.title}**`)
-      embed.setImage(stream.thumbnail_url.replace('{width}', 400).replace('{height}', 225) + `?t=${date.valueOf()}`)
+      embed.setImage(`${stream.thumbnail_url.replace('{width}', 400).replace('{height}', 225)}?t=${date.valueOf()}`)
       embed.addFields({
         name:  'Category',
         value: stream.game_name || 'Unknown'

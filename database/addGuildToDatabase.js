@@ -9,13 +9,14 @@ import * as modules from '../modules/index.js'
 export default async function addGuildToDatabase(guild) {
   const db = await database
 
-  await db.run('INSERT OR IGNORE INTO guilds (id) VALUES (?)', [guild.id])
-          .catch(console.error)
+  await db
+    .run('INSERT OR IGNORE INTO guilds (id) VALUES (?)', [guild.id])
+    .catch(console.error)
 
-  for (const mod of Object.values(modules)) {
-    if (!mod.isLocked) {
-      await db.run('INSERT OR IGNORE INTO modules (id, guildId) VALUES (?,?)', [mod.id, guild.id])
-              .catch(console.error)
-    }
-  }
+  const mods = Object.values(modules).filter((mod) => !mod.isLocked)
+  const results = await Promise.allSettled(mods.map((mod) =>
+    db.run('INSERT OR IGNORE INTO modules (id, guildId) VALUES (?,?)', [mod.id, guild.id])
+  ))
+
+  results.forEach(({ reason }) => reason && console.error(reason))
 }
