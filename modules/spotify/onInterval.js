@@ -24,24 +24,24 @@ export default async function spotifyOnInterval({ guilds, date }) {
       return {show, ...latestEpisode}
     }))
 
-    for (const entry of entries) {
+    await Promise.all(entries.map((entry) => (async () => {
       const latestEpisode = latestEpisodes.find(({ show }) => show.id === entry.id)
 
-      if (latestEpisode.id === entry.latestEpisodeId) continue
+      if (latestEpisode.id === entry.latestEpisodeId) return
 
       const guild = guilds.find(({ id }) => id === entry.guildId)
-      if (!guild) continue
+      if (!guild) return
 
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
-      if (!notificationChannel) continue
-      
+      if (!notificationChannel) return
+
       await notificationChannel.send({
         content: `${entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''}A new episode from ${latestEpisode.show.name} is out!\n${latestEpisode.external_urls.spotify}`
       }).then(() => db.run(
         'UPDATE spotifyShows SET latestEpisodeId = ? WHERE id = ? AND guildId = ?',
         [latestEpisode.id, entry.id, entry.guildId]
       )).catch(console.error)
-    }
+    })()))
 
   } catch (err) {
     console.error(err)

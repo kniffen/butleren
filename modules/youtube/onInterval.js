@@ -6,6 +6,7 @@ export default async function youTubeOnInterval({ guilds, date }) {
   // For example 11:00, 12:00, 13:00 etc...
   if (0 !== date.getMinutes() % 60) return
 
+
   try {
     const db = await database
     const enabledGuilds =
@@ -19,7 +20,7 @@ export default async function youTubeOnInterval({ guilds, date }) {
     const ids = entries.reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], [])
     const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({channelId, limit: 3})))
 
-    for (const entry of entries) {
+    await Promise.all(entries.map((entry) => (async () => {
       // The youtube API has a parameter to filter out results by published date and time.
       // However it's been proven to be unreliable, so we're doing it manually here.
       const activities =
@@ -27,16 +28,17 @@ export default async function youTubeOnInterval({ guilds, date }) {
           .find((activities) => activities[0]?.snippet.channelId === entry.id)
           ?.filter(activity => 
             (3.6e+6 > date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf()) &&
+            (3.6e+6 > date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf()) &&
             activity.contentDetails?.upload
           )
 
-      if (!activities || 1 > activities.length) continue
+      if (!activities || 1 > activities.length) return
 
       const guild = guilds.find(({ id }) => id === entry.guildId)
-      if (!guild) continue
+      if (!guild) return
 
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
-      if (!notificationChannel) continue
+      if (!notificationChannel) return
 
       const mention = entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''
       const text = 
@@ -46,10 +48,10 @@ export default async function youTubeOnInterval({ guilds, date }) {
             ? `${activities[0].snippet.channelTitle} just posted a new YouTube video`
             : 'A new YouTube video was just posted'
 
-      notificationChannel.send({
+      await notificationChannel.send({
         content: `${mention}${text}\n${activities.map(({ contentDetails }) => `https://www.youtube.com/watch?v=${contentDetails.upload.videoId }`).join('\n')}`
       }).catch(console.error)
-    }
+    })()))
 
   } catch(err) {
     console.error(err)

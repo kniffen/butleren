@@ -28,18 +28,18 @@ export default async function twitchOnInterval({ guilds, date }) {
     const ids = entries.reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], [])
     const streams = await fetchTwitchStreams({ids})
 
-    for (const entry of entries) {
+    await Promise.all(entries.map((entry) => (async () => {
       const stream = streams.find(({user_id}) => user_id === entry.id)
-      if (!stream) continue
+      if (!stream) return
 
       if (300000 < date.valueOf() - (new Date(stream.started_at)).valueOf())
-        continue
+        return
 
       const guild = guilds.find(({ id }) => id === entry.guildId)
-      if (!guild) continue
+      if (!guild) return
 
       const notificationChannel = await guild.channels.fetch(entry.notificationChannelId).catch(console.error)
-      if (!notificationChannel) continue
+      if (!notificationChannel) return
 
       const embed = new DiscordJS.EmbedBuilder()
 
@@ -48,16 +48,17 @@ export default async function twitchOnInterval({ guilds, date }) {
       embed.setColor('#9146FF') // Twitch purple
       embed.setDescription(`**${stream.title}**`)
       embed.setImage(`${stream.thumbnail_url.replace('{width}', 400).replace('{height}', 225)}?t=${date.valueOf()}`)
+      embed.setImage(`${stream.thumbnail_url.replace('{width}', 400).replace('{height}', 225)}?t=${date.valueOf()}`)
       embed.addFields({
         name:  'Category',
         value: stream.game_name || 'Unknown'
       })
 
-      notificationChannel.send({
+      await notificationChannel.send({
         content: `${entry.notificationRoleId ? `<@&${entry.notificationRoleId}> ` : ''}${stream.user_name} is live!`,
         embeds: [embed]
       }).catch(console.error)
-    }
+    })()))
  
   } catch(err) {
     console.error(err)
