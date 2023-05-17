@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["jest", "node"],
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -8,6 +9,6 @@
     "resolveJsonModule": true,
     "isolatedModules": false,
     "noEmit": true,
-    "noImplicitAny": true,
+    "noImplicitAny": true
   }
 }

@@ -1,6 +1,8 @@
-import 'regenerator-runtime/runtime'
-import dotenv from 'dotenv-flow'
+/* eslint-disable */
+require('regenerator-runtime/runtime')
+const dotenv = require('dotenv-flow')
 
-import './mockups/index.js'
+require('./mockups')
 
 dotenv.config()
+/* eslint-enable */
