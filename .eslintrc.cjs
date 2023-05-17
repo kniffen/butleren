@@ -4,22 +4,31 @@ module.exports = {
         'node': true,
         'es2021': true
     },
-    'extends': 'eslint:recommended',
+    'extends': [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended'
+    ],
     'overrides': [
         {
             "files": [
-                "mockups/*.js",
+                "mockups/*.ts",
                 "**/*.test.js",
-                "**/*.test.jsx"
+                "**/*.test.jsx",
+                "**/*.test.ts",
+                "**/*.test.tsx"
             ],
             "env": {
                 "jest": true
             }
         }
     ],
+    'plugins': [
+        '@typescript-eslint'
+    ],
     'parserOptions': {
         'ecmaVersion': 'latest',
-        'sourceType': 'module'
+        'sourceType': 'module',
+        'tsconfigRootDir': __dirname,
     },
     'rules': {
         'indent': ['error', 2, {SwitchCase: 1}],
@@ -40,6 +49,7 @@ module.exports = {
         'prefer-template': ['warn'],
         'no-array-constructor': ['warn'],
         'prefer-object-spread': ['warn'],
-        'no-new-object': ['warn']
+        'no-new-object': ['warn'],
+        'semi': ['error']
     }
 }
