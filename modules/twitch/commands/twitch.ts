@@ -1,14 +1,15 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
+import DiscordJS, { ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-import subCommandStream   from './twitch/stream.js'
-import subCommandSchedule from './twitch/schedule.js'
+import subCommandStream from './twitch/stream';
+import subCommandSchedule from './twitch/schedule';
 
-const subCommands = {
-  'stream':   subCommandStream,
+const subCommands: Record<string, (interaction: ChatInputCommandInteraction) => Promise<DiscordJS.Message<boolean> | undefined>> = {
+  'stream': subCommandStream,
   'schedule': subCommandSchedule,
-}
+};
 
-export const isLocked = false
+export const isLocked = false;
 
 export const data =
   new SlashCommandBuilder()
@@ -18,7 +19,7 @@ export const data =
       subcommand
         .setName('stream')
         .setDescription('Information about a Twitch stream')
-        .addStringOption(option => 
+        .addStringOption(option =>
           option
             .setName('channel')
             .setDescription('Name of the channel')
@@ -29,17 +30,17 @@ export const data =
       subcommand
         .setName('schedule')
         .setDescription('Schedule for a Twitch channel')
-        .addStringOption(option => 
+        .addStringOption(option =>
           option
             .setName('channel')
             .setDescription('Name of the channel')
             .setRequired(true)
         )
-    )
+    );
 
 /**
  * @param {Object} interaction - Discord interaction object.
  */
-export async function execute(interaction) {
-  await subCommands[interaction.options.getSubcommand()](interaction)
+export async function execute(interaction: ChatInputCommandInteraction) {
+  await subCommands[interaction.options.getSubcommand()](interaction);
 }
