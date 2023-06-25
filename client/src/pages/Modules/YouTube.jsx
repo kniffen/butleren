@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -10,11 +10,13 @@ import ModulePageHeader from '../../components/ModulePageHeader'
 import LoadingBox from  '../../components/LoadingBox'
 import Entries from '../../components/Entries'
 
-export default function Twitter() {
+export default function YouTube() {
   const params = useParams()
   const { discordChannels, discordRoles } = useContext(Context)
-  const [ uri, setURI ] = useState(`/api/youtube/${params.guild}/channels`)
+  const channelsURL = useMemo(() => `/api/youtube/${params.guild}/channels`, [params])
+  const liveChannelsURL = useMemo(() => `/api/youtube/${params.guild}/live-channels`, [params])
   const [ channels, setChannels] = useState(null)
+  const [ liveChannels, setLiveChannels] = useState(null)
 
   const fields = [
     {
@@ -53,19 +55,26 @@ export default function Twitter() {
       options: [{id: null, value: ''}, ...discordRoles.map(({ id, name }) => ({id, value: name}))]
     }
   ]
-  
-  async function fetchAndSetChannels() {
+
+  const fetchAndSetChannels = async () => {
     try {
-      setChannels(await fetch(uri).then(res => res.json()))
+      const [
+        channels,
+        liveChannels
+      ] = await Promise.all([
+        fetch(channelsURL).then(res => res.json()),
+        fetch(liveChannelsURL).then(res => res.json()),
+      ])
+      setChannels(channels);
+      setLiveChannels(liveChannels);
     } catch(err) {
       console.error(err)
     }
   }
 
   useEffect(function() {
-    setURI(`/api/youtube/${params.guild}/channels`)
     fetchAndSetChannels()
-  }, [params])
+  }, [channelsURL, liveChannelsURL])
 
   return (
     <DashboardLayout>
@@ -79,8 +88,19 @@ export default function Twitter() {
         ? <StyledLoadingBox />
         : <StyledEntries
             title="YouTube channels"
-            uri={uri}
+            uri={channelsURL}
             entries={channels}
+            fields={fields}
+            onUpdate={() => fetchAndSetChannels()}
+          />
+      }
+
+      {!liveChannels
+        ? <StyledLoadingBox />
+        : <StyledEntries
+            title="YouTube Live channels"
+            uri={liveChannelsURL}
+            entries={liveChannels}
             fields={fields}
             onUpdate={() => fetchAndSetChannels()}
           />
