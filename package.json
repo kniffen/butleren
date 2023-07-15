@@ -5,10 +5,10 @@
   "description": "Yet another Discord bot",
   "main": "dist/index.js",
   "engines": {
-    "node": ">=16.10.0"
+    "node": ">=18.0.0"
   },
   "volta": {
-    "node": "16.10.0"
+    "node": "18.16.1"
   },
   "babel": {
     "presets": [
