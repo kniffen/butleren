@@ -1,14 +1,16 @@
-import DiscordJS from 'discord.js'
-import fetchMock from 'node-fetch'
+import DiscordJS, { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js'
+import fetch, { Response } from 'node-fetch'
 
 import database from '../../../database/index.js'
 import * as command from './weather.js'
 
 describe('modules.weather.commands.weather', function() {
-  let db = null
-  let interaction = null
-  let expectedEmbed = null
-  let weatherData = null
+  let db: Awaited<typeof database>
+  let interaction: Partial<ChatInputCommandInteraction>
+  let expectedEmbed: EmbedBuilder
+  let weatherData: unknown
+
+  const fetchMock = fetch as jest.MockedFunction<typeof fetch>
 
   beforeAll(async function() {
     db = await database
@@ -21,11 +23,11 @@ describe('modules.weather.commands.weather', function() {
 
   beforeEach(function() {
     jest.clearAllMocks()
-    
+
     fetchMock.mockImplementation(async () => ({
       json: async () => weatherData
-    }))
-    
+    } as Response))
+
     weatherData = {
       name: 'weather_name',
       dt: 10000,
@@ -65,7 +67,7 @@ describe('modules.weather.commands.weather', function() {
       options: new DiscordJS.Collection(),
       deferReply: jest.fn(),
       editReply: jest.fn()
-    }
+    } as unknown as ChatInputCommandInteraction
 
     expectedEmbed = new DiscordJS.EmbedBuilder()
 
@@ -99,7 +101,7 @@ describe('modules.weather.commands.weather', function() {
       },
       {
         name:   '🌇 Sunset',
-        value:  '8:28 AM', 
+        value:  '8:28 AM',
         inline: true
       },
       {

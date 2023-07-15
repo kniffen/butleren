@@ -1,11 +1,9 @@
-import DiscordJS from 'discord.js'
+import DiscordJS, { CommandInteraction } from 'discord.js'
 import { SlashCommandBuilder } from '@discordjs/builders'
 import fetch from 'node-fetch'
 import moment from 'moment-timezone'
 
-import database from '../../../database/index.js'
-
-export const isLocked = false
+import database from '../../../database'
 
 export const data =
   new SlashCommandBuilder()
@@ -25,27 +23,25 @@ const windDirections = [
   'Northwest'
 ]
 
-/**
- * @param {Object} interaction - Discord interaction object.
- */
-export async function execute(interaction) {
+export async function execute(interaction: CommandInteraction) {
   try {
+    if (!interaction.guild) return
+
     await interaction.deferReply()
 
     const db = await database
     const settings = await db.get('SELECT color FROM guilds WHERE id = ?', [interaction.guild.id])
     const user = interaction.options.get('user')?.user || interaction.user
-    let query = interaction.options.get('location')?.value
+    const query = interaction.options.get('location')?.value
 
     const location =
-      !query 
+      !query
         ? (await db.get('SELECT location FROM users WHERE id = ?', [user.id]))?.location
         : null
 
     if (!query && !location) {
       interaction.editReply({
         content: 'Missing location',
-        ephemeral: true
       })
       return
     }
@@ -60,7 +56,7 @@ export async function execute(interaction) {
 
     const date = moment.utc((data.dt + data.timezone) * 1000)
     const isAprilFools = '1Apr' === date.format('DMMM')
-    
+
     const precips = [
       {type: 'rain', time: '1h', amount: data.rain?.['1h']},
       {type: 'rain', time: '3h', amount: data.rain?.['3h']},
@@ -91,7 +87,7 @@ export async function execute(interaction) {
         },
         {
           name:   '🌬️ Zephyr',
-          value:  `${(data.wind.speed * 1000).toFixed(1)} sec/km\n` + 
+          value:  `${(data.wind.speed * 1000).toFixed(1)} sec/km\n` +
                   `${(data.wind.speed * 39370.1).toFixed(1)} thou/sec\n` +
                   `${windDirections[Math.floor(data.wind.deg % 360 / (360 / windDirections.length))]}`,
           inline: true
@@ -124,7 +120,7 @@ export async function execute(interaction) {
       )
 
       embed.setFooter({text: 'Weather report provided by the Union Aerospace Corporation'})
-    
+
     } else {
       embed.addFields(
         {
@@ -133,7 +129,7 @@ export async function execute(interaction) {
         },
         {
           name:   '💨 Wind',
-          value:  `${data.wind.speed.toFixed(1)}m/s\n` + 
+          value:  `${data.wind.speed.toFixed(1)}m/s\n` +
                   `${(data.wind.speed * 2.23694).toFixed(1)}mph\n` +
                   `${windDirections[Math.floor(data.wind.deg % 360 / (360 / windDirections.length))]}`,
           inline: true
@@ -168,16 +164,21 @@ export async function execute(interaction) {
 
       embed.setFooter({text: 'Weather report provided by OpenWeather'})
     }
-    
+
     interaction.editReply({
       embeds: [embed]
     })
-      
+
   } catch(err) {
     console.error(err)
     interaction.editReply({
       content: 'Sorry, I was unable to fetch a weather report for you',
-      ephemeral: true
     })
   }
 }
+
+export default {
+  isLocked: true,
+  data,
+  execute
+} satisfies BotCommand
