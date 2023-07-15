@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 let token: TwitterToken['access_token'] | null = null;
 
 /**

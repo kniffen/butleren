@@ -1,5 +1,3 @@
-import fetch, { Response } from 'node-fetch';
-
 import fetchTwitchToken from './fetchTwitchToken';
 
 describe('modules.twitch.utils.fetchTwitchToken()', function () {

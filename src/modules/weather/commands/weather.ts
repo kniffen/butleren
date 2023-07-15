@@ -1,6 +1,5 @@
 import DiscordJS, { CommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import fetch from 'node-fetch';
 import moment from 'moment-timezone';
 
 import database from '../../../database';

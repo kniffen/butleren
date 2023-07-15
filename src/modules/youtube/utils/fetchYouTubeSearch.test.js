@@ -1,5 +1,3 @@
-import fetchMock from 'node-fetch'
-
 import fetchYouTubeSearch from './fetchYouTubeSearch.js'
 
 describe('modules.youtube.utils.fetchYouTubeSearch()', function() {

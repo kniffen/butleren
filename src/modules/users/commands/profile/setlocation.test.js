@@ -1,5 +1,3 @@
-import fetchMock from 'node-fetch'
-
 import database from '../../../../database'
 import subCommandExecutor from './setlocation.js'
 

@@ -1,5 +1,3 @@
-import fetch from  'node-fetch'
-
 export default async function fetchYouTubeActivities({channelId, limit = 10 }: {channelId: string, limit: number}) {
   try {
     const uri = `https://youtube.googleapis.com/youtube/v3/activities?part=snippet&part=contentDetails&channelId=${channelId}&maxResults=${limit}&key=${process.env.GOOGLE_API_KEY}`

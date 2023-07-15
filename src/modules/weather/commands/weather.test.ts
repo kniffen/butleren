@@ -1,5 +1,4 @@
 import DiscordJS, { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js'
-import fetch, { Response } from 'node-fetch'
 
 import database from '../../../database'
 import * as command from './weather.js'

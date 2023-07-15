@@ -1,5 +1,3 @@
-import fetchMock from 'node-fetch'
-
 import fetchYouTubeActivities from './fetchYouTubeActivities'
 
 describe('modules.youtube.utils.fetchYouTubeActivities()', function() {

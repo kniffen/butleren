@@ -1,5 +1,3 @@
-import fetch, { Response } from 'node-fetch';
-
 import { fetchSpotifyToken } from './fetchSpotifyToken';
 
 describe('moduled.spotify.utils.fetchSpotifyToken()', function () {

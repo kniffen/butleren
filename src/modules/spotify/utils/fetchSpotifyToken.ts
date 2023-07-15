@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 let token: string | null = null;
 
 export const fetchSpotifyToken = async (isTokenExpired = false) => {

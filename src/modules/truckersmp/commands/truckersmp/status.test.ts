@@ -1,5 +1,4 @@
 import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-import fetch, { Response } from 'node-fetch';
 
 import status from './status';
 

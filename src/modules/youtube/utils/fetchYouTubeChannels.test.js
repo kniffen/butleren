@@ -1,5 +1,3 @@
-import fetchMock from 'node-fetch'
-
 import fetchYouTubeChannels from './fetchYouTubeChannels.js'
 
 describe('modules.youtube.utils.fetchYouTubeChannels()', function() {

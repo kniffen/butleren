@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 let token: string | null = null;
 
 export default async function fetchTwitchToken(isTokenExpired = false): Promise<TwitchToken['access_token']> {

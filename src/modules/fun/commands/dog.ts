@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 

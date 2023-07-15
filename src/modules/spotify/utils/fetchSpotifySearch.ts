@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 import { fetchSpotifyToken } from './fetchSpotifyToken';
 
 export const fetchSpotifySearch = async (

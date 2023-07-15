@@ -1,5 +1,3 @@
-import fetch, { RequestInit } from 'node-fetch';
-
 import fetchTwitchToken from './fetchTwitchToken';
 
 interface SearchOptions {

@@ -1,5 +1,3 @@
-import fetch, { Response } from 'node-fetch';
-
 import fetchTwitchSearch from './fetchTwitchSearch';
 import fetchTwitchToken from './fetchTwitchToken';
 

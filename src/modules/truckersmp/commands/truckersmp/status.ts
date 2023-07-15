@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import DiscordJS, { ChatInputCommandInteraction } from 'discord.js';
 
 export default async function gametime(interaction: ChatInputCommandInteraction) {

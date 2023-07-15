@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 import fetchTwitterToken from './fetchTwitterToken';
 
 export default async function fetchTwitterUserTweets(

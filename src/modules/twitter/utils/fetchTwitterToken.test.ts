@@ -1,5 +1,3 @@
-import fetch, { Response } from 'node-fetch';
-
 import fetchTwitterToken from './fetchTwitterToken';
 
 describe('modules.twitter.utils.fetchTwitterToken()', function () {

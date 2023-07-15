@@ -1,5 +1,3 @@
-import fetch from  'node-fetch';
-
 interface YouTubeSearchArgs {
   query: string,
   type?: string,

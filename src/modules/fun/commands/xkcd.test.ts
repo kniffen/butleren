@@ -1,4 +1,3 @@
-import fetch, { Response } from 'node-fetch';
 import { ChatInputCommandInteraction } from 'discord.js';
 
 import { xkcdCommand } from './xkcd';

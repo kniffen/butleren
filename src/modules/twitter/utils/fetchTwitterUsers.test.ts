@@ -1,5 +1,3 @@
-import fetch, { Response } from 'node-fetch';
-
 import fetchTwitterUsers from './fetchTwitterUsers';
 import fetchTwitterToken from './fetchTwitterToken';
 

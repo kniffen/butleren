@@ -1,5 +1,4 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import fetch from 'node-fetch';
 
 import database from '../../../../database';
 

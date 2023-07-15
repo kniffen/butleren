@@ -1,5 +1,3 @@
-import fetch, { Response } from 'node-fetch';
-
 import { fetchSpotifyShows } from './fetchSpotifyShows';
 import { fetchSpotifyToken } from './fetchSpotifyToken';
 
