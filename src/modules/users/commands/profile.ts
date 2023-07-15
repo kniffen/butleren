@@ -4,6 +4,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import profileSubCommandView        from './profile/view';
 import profileSubCommandDelete      from './profile/delete';
 import profileSubCommandSetLocation from './profile/setlocation';
+import { BotCommand } from '../../../types/butleren';
 
 const subCommands: Record<string, (interaction: ChatInputCommandInteraction) => Promise<void>> = {
   'view':        profileSubCommandView,

@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 
 import subCommandStream from './twitch/stream';
 import subCommandSchedule from './twitch/schedule';
+import { BotCommand } from '../../../types/butleren';
 
 const subCommands: Record<string, (interaction: ChatInputCommandInteraction) => Promise<DiscordJS.Message<boolean> | undefined>> = {
   'stream': subCommandStream,

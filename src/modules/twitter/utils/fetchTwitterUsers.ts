@@ -1,4 +1,5 @@
 import fetchTwitterToken from './fetchTwitterToken';
+import { TwitterUsers } from '../types';
 
 interface FetchTwitterUsersOptions {
   ids?: string[];

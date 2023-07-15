@@ -1,4 +1,5 @@
 import fetchTwitchToken from './fetchTwitchToken';
+import { TwitchStreams } from '../types';
 
 interface fetchTwitchStreamsOptions {
   ids: string[];

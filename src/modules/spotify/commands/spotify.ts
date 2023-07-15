@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 import { latestEpisodeSubCommand } from './spotify/latestepisode';
+import { BotCommand } from '../../../types/butleren';
 
 const subCommands: Record<string, (interaction: ChatInputCommandInteraction) => void> = {
   'latestepisode': latestEpisodeSubCommand

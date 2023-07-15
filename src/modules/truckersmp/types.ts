@@ -1,9 +1,9 @@
-interface TruckersMPGameTime {
+export interface TruckersMPGameTime {
   error: boolean;
   game_time: number;
 }
 
-interface TruckersMPServer {
+export interface TruckersMPServer {
   response: {
     id: number;
     game: string;

@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from 'discord.js';
 
 import subCommandStatus from './truckersmp/status';
+import { BotCommand } from '../../../types/butleren';
 
 const subCommands: Record<string, (interaction: ChatInputCommandInteraction) => Awaited<void>> = {
   'status': subCommandStatus

@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import router from './router';
 import discordClient from '../../discord/client';
 import { modules } from '../../modules';
+import { APIBotCommand } from '../types';
 
 router.get('/:guild', async function(req: Request, res: Response) {
   const handleError = (err: Error) => console.error(req.method, req.originalUrl, err);
@@ -14,14 +15,14 @@ router.get('/:guild', async function(req: Request, res: Response) {
     const guildCommands = await guild.commands.fetch().catch(handleError);
     if (!guildCommands) return res.sendStatus(404);
 
-    const commands = Object.entries(modules).reduce<ButlerenAPIBotCommand[]>(function(commands, [ modId, mod ]) {
+    const commands = Object.entries(modules).reduce<APIBotCommand[]>(function(commands, [ modId, mod ]) {
       if (!mod.commands) return commands;
 
       return [
         ...commands,
         ...Object
           .entries(mod.commands)
-          .map<ButlerenAPIBotCommand>(([ id, cmd ]) => ({
+          .map<APIBotCommand>(([ id, cmd ]) => ({
             id,
             name: cmd.data.name || '',
             description: cmd.data.description || '',

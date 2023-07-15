@@ -1,6 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from 'discord.js';
 
+import { BotCommand } from '../../../types/butleren';
+
 const data =
   new SlashCommandBuilder()
     .setName('ping')

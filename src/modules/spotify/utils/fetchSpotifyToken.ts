@@ -1,4 +1,5 @@
 let token: string | null = null;
+import { SpotifyTokenResponse } from '../types';
 
 export const fetchSpotifyToken = async (isTokenExpired = false) => {
   if (null !== token && !isTokenExpired) return token;

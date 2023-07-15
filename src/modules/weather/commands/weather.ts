@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import moment from 'moment-timezone';
 
 import database from '../../../database';
+import { BotCommand } from '../../../types/butleren';
 
 export const data =
   new SlashCommandBuilder()

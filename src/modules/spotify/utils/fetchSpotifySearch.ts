@@ -1,4 +1,5 @@
 import { fetchSpotifyToken } from './fetchSpotifyToken';
+import { SpotifySearchResult } from '../types';
 
 export const fetchSpotifySearch = async (
   query: string,

@@ -1,4 +1,5 @@
 import fetchTwitterToken from './fetchTwitterToken';
+import { TwitterTweets } from '../types';
 
 export default async function fetchTwitterUserTweets(
   id: string,

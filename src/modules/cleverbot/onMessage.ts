@@ -1,5 +1,7 @@
 import { Message } from 'discord.js';
 
+import { Cleverbot } from './types';
+
 export default async function cleverbotOnMessage(message: Message, cleverbot: Cleverbot) {
   const args   = message.content.split(' ');
   const handle = args.shift();

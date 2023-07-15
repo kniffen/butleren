@@ -1,4 +1,5 @@
 import fetchTwitchToken from './fetchTwitchToken';
+import { TwitchSearchCategoryResult, TwitchSearchChannelResult } from '../types';
 
 interface SearchOptions {
   query: string;

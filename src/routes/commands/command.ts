@@ -3,6 +3,7 @@ import database from '../../database';
 import discordClient from '../../discord/client';
 import { modules } from '../../modules';
 import { Request, Response } from 'express';
+import { BotModule, BotCommand } from '../../types/butleren';
 
 interface BotCommandWithModule extends BotCommand {
   mod: BotModule;

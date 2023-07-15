@@ -1,4 +1,4 @@
-interface ButlerenAPIBotCommand {
+export interface APIBotCommand {
   id: string;
   name: string;
   description: string;

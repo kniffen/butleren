@@ -1,4 +1,5 @@
 import { fetchSpotifyToken } from './fetchSpotifyToken';
+import { SpotifyShow } from '../types';
 
 export const fetchSpotifyShows = async (
   ids: string[] = [],

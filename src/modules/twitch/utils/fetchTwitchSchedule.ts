@@ -1,4 +1,5 @@
 import fetchTwitchToken from './fetchTwitchToken';
+import { TwitchSchedule } from '../types';
 
 export default async function fetchTwitchSchedule({ id }: {id: string}, isTokenExpired = false): Promise<TwitchSchedule['data']['segments']> {
   try {

@@ -1,11 +1,16 @@
 import { ChannelType } from 'discord.js';
-import Cleverbot from 'cleverbot-node';
-
-import onMessage from './onMessage';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const cleverbot = new Cleverbot();
+import CleverbotNode from 'cleverbot-node';
+
+import onMessage from './onMessage';
+import { BotModule } from '../../types/butleren';
+import { Cleverbot } from './types';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const cleverbot: Cleverbot = new CleverbotNode();
 
 if (!process.env.CLEVERBOT_API_KEY)
   throw new Error('Missing Cleverbot API key');

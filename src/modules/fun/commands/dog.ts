@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { BotCommand } from '../../../types/butleren';
 
 const data =
   new SlashCommandBuilder()

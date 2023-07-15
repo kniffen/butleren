@@ -1,6 +1,7 @@
 import { ChannelType } from 'discord.js';
 
 import { commands } from './commands';
+import { BotModule } from '../../types/butleren';
 
 export const infoModule: BotModule = {
   id: 'info',

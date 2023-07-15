@@ -1,4 +1,5 @@
 import { fetchSpotifyToken } from './fetchSpotifyToken';
+import { SpotifyShowEpisodes } from '../types';
 
 export const fetchSpotifyShowEpisodes = async (
   id: string,

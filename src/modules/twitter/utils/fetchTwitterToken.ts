@@ -1,3 +1,5 @@
+import { TwitterToken } from '../types';
+
 let token: TwitterToken['access_token'] | null = null;
 
 /**

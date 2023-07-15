@@ -1,4 +1,5 @@
 import fetchTwitchToken from './fetchTwitchToken';
+import { TwitchUsers } from '../types';
 
 interface FetchTwitchUsersOptions {
   ids: string[];

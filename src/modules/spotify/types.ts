@@ -1,10 +1,10 @@
-interface SpotifyTokenResponse {
+export interface SpotifyTokenResponse {
   access_token: string;
   token_type: string;
   expires_in: number;
 }
 
-interface SpotifyShow {
+export interface SpotifyShow {
   available_markets: string;
   copyrights: {
     text: string;
@@ -33,7 +33,7 @@ interface SpotifyShow {
   total_episodes: number;
 }
 
-type SpotifySearchResult = {
+export type SpotifySearchResult = {
   shows?: {
     href: string;
     limit: number;
@@ -45,7 +45,7 @@ type SpotifySearchResult = {
   }
 };
 
-interface SpotifyShowEpisodes {
+export interface SpotifyShowEpisodes {
   href: string;
   limit: number;
   next: string;
@@ -87,7 +87,7 @@ interface SpotifyShowEpisodes {
   }[];
 }
 
-interface SpotifyErrorResponse {
+export interface SpotifyErrorResponse {
   error: {
     status: number;
     message: string;

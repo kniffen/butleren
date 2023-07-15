@@ -1,5 +1,7 @@
 import DiscordJS, { ChatInputCommandInteraction } from 'discord.js';
 
+import { TruckersMPGameTime, TruckersMPServer } from '../../types';
+
 export default async function gametime(interaction: ChatInputCommandInteraction) {
   try {
     await interaction.deferReply();

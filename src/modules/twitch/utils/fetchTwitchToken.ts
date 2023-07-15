@@ -1,3 +1,5 @@
+import { TwitchToken } from '../types';
+
 let token: string | null = null;
 
 export default async function fetchTwitchToken(isTokenExpired = false): Promise<TwitchToken['access_token']> {

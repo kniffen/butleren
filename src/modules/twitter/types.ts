@@ -1,8 +1,8 @@
-interface TwitterToken {
+export interface TwitterToken {
   access_token: string;
 }
 
-interface TwitterUsers {
+export interface TwitterUsers {
   data: {
     id: string;
     username: string;
@@ -10,7 +10,7 @@ interface TwitterUsers {
   }[];
 }
 
-interface TwitterTweets {
+export interface TwitterTweets {
   data: {
     id: string;
     edit_history_tweet_ids: string[];

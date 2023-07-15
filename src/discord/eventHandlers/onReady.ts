@@ -2,6 +2,7 @@ import { Client } from 'discord.js';
 
 import addGuildToDatabase from '../../database/addGuildToDatabase';
 import { modules } from '../../modules';
+import { BotCommand } from '../../types/butleren';
 
 const commands = modules.reduce<BotCommand[]>((commands, mod) =>
   mod.commands ? [...commands, ...mod.commands] : commands
