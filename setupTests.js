@@ -1,8 +1,8 @@
 /* eslint-disable */
-require('regenerator-runtime/runtime')
+// require('regenerator-runtime/runtime')
 const dotenv = require('dotenv-flow')
 
-require('./mockups')
+require('./src/mockups')
 
 dotenv.config()
 /* eslint-enable */

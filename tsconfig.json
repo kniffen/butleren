@@ -9,9 +9,17 @@
     "isolatedModules": false,
     "noImplicitAny": true,
     "outDir": "dist",
+    "target": "ES2015",
+    "moduleResolution": "Node"
   },
   "ts-node": {
     "files": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.js",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.js"
+  ]
 }

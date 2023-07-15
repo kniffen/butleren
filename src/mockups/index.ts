@@ -1,2 +1,0 @@
-import './console';
-import './database';
