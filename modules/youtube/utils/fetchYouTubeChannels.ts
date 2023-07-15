@@ -1,6 +1,6 @@
 import fetch from  'node-fetch'
 
-export default async function fetchYouTubeChannels({ ids }) {
+export default async function fetchYouTubeChannels({ ids }: {ids: string[]}) {
   try {
     const uri = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet${ids.map(id => `&id=${id}`).join('')}&key=${process.env.GOOGLE_API_KEY}`
     const init = {

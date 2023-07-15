@@ -2,19 +2,20 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import supertest from 'supertest'
 
-import database from '../../../database/index.js'
-import fetchYouTubeChannelsMock from '../utils/fetchYouTubeChannels.js'
-import youtubeRouter from './index.js'
+import database from '../../../database'
+import fetchYouTubeChannels from '../utils/fetchYouTubeChannels'
+import youtubeRouter from './router'
 
 jest.mock(
-  '../utils/fetchYouTubeChannels.js',
+  '../utils/fetchYouTubeChannels',
   () => ({__esModule: true, default: jest.fn()})
 )
 
 describe('/api/youtube/:guild/channels', function() {
-  let app = null
-  let db = null
+  let app: ReturnType<typeof express>
+  let db: Awaited<typeof database>
   const URI = '/api/youtube/guild001/channels'
+  const fetchYouTubeChannelsMock = fetchYouTubeChannels as jest.MockedFunction<typeof fetchYouTubeChannels>
 
   async function resetDatabase() {
     await db.run('DELETE FROM youtubeChannels')
@@ -24,15 +25,15 @@ describe('/api/youtube/:guild/channels', function() {
       ['guild001', 'youtubeChannel001', 'channel001']
     )
     await db.run(
-      'INSERT INTO youtubeChannels (guildId, id, notificationChannelId) VALUES (?,?,?)', 
+      'INSERT INTO youtubeChannels (guildId, id, notificationChannelId) VALUES (?,?,?)',
       ['guild001', 'youtubeChannel002', 'channel002']
     )
     await db.run(
-      'INSERT INTO youtubeChannels (guildId, id, notificationChannelId) VALUES (?,?,?)', 
+      'INSERT INTO youtubeChannels (guildId, id, notificationChannelId) VALUES (?,?,?)',
       ['guild002', 'youtubeChannel001', 'channel003']
     )
     await db.run(
-      'INSERT INTO youtubeChannels (guildId, id, notificationChannelId) VALUES (?,?,?)', 
+      'INSERT INTO youtubeChannels (guildId, id, notificationChannelId) VALUES (?,?,?)',
       ['guild002', 'youtubeChannel003', 'channel004']
     )
   }
@@ -56,7 +57,7 @@ describe('/api/youtube/:guild/channels', function() {
 
   beforeEach(async function() {
     await resetDatabase()
-    
+
     jest.clearAllMocks()
 
     fetchYouTubeChannelsMock.mockImplementation(async ({ids}) => ids.map(id => ({
@@ -97,7 +98,7 @@ describe('/api/youtube/:guild/channels', function() {
         },
       ])
     })
-    
+
     it('Should handle there being no channels for the IDs', async function() {
       fetchYouTubeChannelsMock.mockResolvedValue([])
 
@@ -125,14 +126,15 @@ describe('/api/youtube/:guild/channels', function() {
     })
 
     it('Should respond with a 500 status code if there was an issue reading from the database', async function() {
-      jest.spyOn(db, 'all').mockRejectedValue('Database error')
+      const dbAll = jest.spyOn(db, 'all')
+      dbAll.mockRejectedValue('Database error')
 
       const res = await supertest(app).get(URI)
 
       expect(console.error).toHaveBeenCalledWith('GET', URI, 'Database error')
       expect(res.status).toEqual(500)
 
-      db.all.mockRestore()
+      dbAll.mockRestore()
     })
   })
 
@@ -153,19 +155,20 @@ describe('/api/youtube/:guild/channels', function() {
         {id: 'youtubeChannel999', guildId: 'guild001', notificationChannelId: 'channel999', notificationRoleId: 'role999'},
       ])
     })
-    
+
     it('Should respond with a 500 status code if there was an issue adding the entry to the database', async function() {
-      jest.spyOn(db, 'run').mockRejectedValue('Database error')
-      
+      const dbRunSpy = jest.spyOn(db, 'run')
+      dbRunSpy.mockRejectedValue('Database error')
+
       const res = await supertest(app).post(URI).send(body)
-      
+
       expect(console.error).toHaveBeenCalledWith('POST', URI, 'Database error')
       expect(res.status).toEqual(500)
       expect(await db.all('SELECT * FROM youtubeChannels')).toEqual(defaultDatabaseEntries)
 
-      db.run.mockRestore()
+      dbRunSpy.mockRestore()
     })
-    
+
     it('Should respond with a 409 status code if entry already exists', async function() {
       await supertest(app).post(URI).send(body)
       const res = await supertest(app).post(URI).send(body)
@@ -177,7 +180,7 @@ describe('/api/youtube/:guild/channels', function() {
         {id: 'youtubeChannel999', guildId: 'guild001', notificationChannelId: 'channel999', notificationRoleId: 'role999'},
       ])
     })
-    
+
     it('Should respond with a 400 status code if there were missing body properties', async function() {
       const res = await supertest(app).post(URI).send({})
 
@@ -206,15 +209,16 @@ describe('/api/youtube/:guild/channels', function() {
     })
 
     it('Should respond with a 500 status code if there was an issue updating the database', async function() {
-      jest.spyOn(db, 'run').mockRejectedValue('Database error')
-      
+      const dbRunSpy = jest.spyOn(db, 'run')
+      dbRunSpy.mockRejectedValue('Database error')
+
       const res = await supertest(app).patch(URI).send(body)
-      
+
       expect(console.error).toHaveBeenCalledWith('PATCH', URI, 'Database error')
       expect(res.status).toEqual(500)
       expect(await db.all('SELECT * FROM youtubeChannels')).toEqual(defaultDatabaseEntries)
 
-      db.run.mockRestore()
+      dbRunSpy.mockRestore()
     })
 
     it('should ignore unsupported properties', async function() {
@@ -263,15 +267,16 @@ describe('/api/youtube/:guild/channels', function() {
     })
 
     it('Should respond with a 500 status code if there was an issue updating the database', async function() {
-      jest.spyOn(db, 'run').mockRejectedValue('Database error')
-      
+      const dbRunSpy = jest.spyOn(db, 'run')
+      dbRunSpy.mockRejectedValue('Database error')
+
       const res = await supertest(app).delete(URI).send(body)
-      
+
       expect(console.error).toHaveBeenCalledWith('DELETE', URI, 'Database error')
       expect(res.status).toEqual(500)
       expect(await db.all('SELECT * FROM youtubeChannels')).toEqual(defaultDatabaseEntries)
 
-      db.run.mockRestore()
+      dbRunSpy.mockRestore()
     })
 
     it('Should respond with a 404 status code if the entry does not exist in the database', async function() {

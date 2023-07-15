@@ -1,6 +1,9 @@
 import fetch from  'node-fetch'
 
-export default async function fetchYouTubeSearch({query, type = 'channel', limit = 10}) {
+export default async function fetchYouTubeSearch(
+  {query, type = 'channel', limit = 10}:
+  {query: string, type: string, limit: number}
+) {
   try {
     const uri = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=${type}&maxResults=${limit}&key=${process.env.GOOGLE_API_KEY}`
     const init = {

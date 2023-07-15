@@ -1,7 +1,6 @@
-import database from '../../../database/index.js'
-import router   from './router.js'
-import { HTTP_CODES } from '../../../database/constants.js'
-import fetchYouTubeChannels from '../utils/fetchYouTubeChannels.js'
+import database from '../../../database'
+import router   from './router'
+import fetchYouTubeChannels from '../utils/fetchYouTubeChannels'
 
 router.get('/:guild/channels', async function(req, res) {
   try {
@@ -14,7 +13,7 @@ router.get('/:guild/channels', async function(req, res) {
 
     res.send(entries.reduce((final, entry) => {
       const channel = channels.find(({ id }) => id === entry.id)
-      
+
       return [
         ...final,
         {
@@ -27,10 +26,10 @@ router.get('/:guild/channels', async function(req, res) {
         }
       ]
     }, []))
-  
+
   } catch(err) {
     console.error(req.method, req.originalUrl, err)
-    res.sendStatus(HTTP_CODES[err.code] || 500)
+    res.sendStatus(500)
   }
 })
 

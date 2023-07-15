@@ -1,24 +1,25 @@
 import express from 'express'
 import supertest from 'supertest'
 
-import fetchYouTubeSearchMock from '../utils/fetchYouTubeSearch.js'
-import youtubeRouter from './index.js'
+import fetchYouTubeSearch from '../utils/fetchYouTubeSearch'
+import youtubeRouter from './router'
 
 jest.mock(
-  '../utils/fetchYouTubeSearch.js',
+  '../utils/fetchYouTubeSearch',
   () => ({__esModule: true, default: jest.fn()})
 )
 
 describe('/api/youtube/search', function() {
-  let app = null
+  let app: ReturnType<typeof express>
   const URI = '/api/youtube/search?q=query001&limit=10&type=foo'
+  const fetchYouTubeSearchMock = fetchYouTubeSearch as jest.MockedFunction<typeof fetchYouTubeSearch>
 
   beforeAll(function() {
     app = express()
 
     app.use('/api/youtube', youtubeRouter)
   })
-  
+
   describe('GET', function() {
     it('Should respond with an array of search results', async function() {
       fetchYouTubeSearchMock.mockResolvedValue(['foo', 'bar'])

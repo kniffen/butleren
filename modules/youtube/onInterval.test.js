@@ -11,8 +11,8 @@ jest.mock(
 describe('modules.youtube.onInterval()', function() {
   let db = null
 
-  const notificationChannel001 = {send: jest.fn(async () => {})}
-  const notificationChannel002 = {send: jest.fn(async () => {})}
+  const notificationChannel001 = {send: jest.fn(async () => undefined)}
+  const notificationChannel002 = {send: jest.fn(async () => undefined)}
 
   const guild001 = {
     id: 'guild001',
