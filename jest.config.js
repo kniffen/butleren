@@ -11,6 +11,6 @@ const config = {
     '/node_modules/',
     '/client/'
   ]
-}
+};
 
-export default config
+export default config;

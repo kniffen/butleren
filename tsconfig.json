@@ -7,7 +7,11 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": false,
-    "noEmit": true,
     "noImplicitAny": true,
-  }
+    "outDir": "dist",
+  },
+  "ts-node": {
+    "files": true
+  },
+  "include": ["src/**/*"]
 }
