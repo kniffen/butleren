@@ -23,9 +23,11 @@ jest.mock('../../modules', () => {
     ]
   };
 
-  return [
-    module001,
-  ];
+  return {
+    modules: [
+      module001,
+    ]
+  };
 });
 
 jest.mock('../../database/addGuildToDatabase', () => ({

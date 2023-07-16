@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import * as command from './truckersmp';
+import { truckersMPCommand } from './truckersmp';
 import statusSubCommand from './truckersmp/status';
 
 jest.mock(
@@ -10,8 +10,8 @@ jest.mock(
 
 describe('modules.truckersmp.commands.truckersmp', function () {
   it('Should contain certain properties', function () {
-    expect(command.isLocked).toEqual(false);
-    expect(command.data.toJSON()).toEqual({
+    expect(truckersMPCommand.isLocked).toEqual(false);
+    expect(truckersMPCommand.data.toJSON?.()).toEqual({
       name: 'truckersmp',
       description: 'TruckersMP integration',
       options: [
@@ -32,7 +32,7 @@ describe('modules.truckersmp.commands.truckersmp', function () {
       }
     } as ChatInputCommandInteraction;
 
-    await command.execute(interaction);
+    await truckersMPCommand.execute(interaction);
 
     expect(statusSubCommand).toHaveBeenCalledWith(interaction);
   });

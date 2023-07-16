@@ -1,3 +1,4 @@
+import { TwitchSchedule } from '../types';
 import fetchTwitchSchedule from './fetchTwitchSchedule';
 import fetchTwitchToken    from './fetchTwitchToken';
 
@@ -7,7 +8,7 @@ jest.mock(
 );
 
 describe('modules.twitch.utils.fetchTwitchSchedule()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   const fetchTwitchTokenMock = fetchTwitchToken as jest.MockedFunction<typeof fetchTwitchToken>;
 
   beforeAll(function () {
@@ -42,7 +43,7 @@ describe('modules.twitch.utils.fetchTwitchSchedule()', function () {
   });
 
   it('Should handle there being no scheduled streams', async function () {
-    const results = [];
+    const results: TwitchSchedule['data']['segments'][] = [];
 
     fetchMock.mockResolvedValue({ json: async () => ({ data: { segments: [] } }) } as  Response);
     results.push(await fetchTwitchSchedule({ id: 'twitchChannel001' }));

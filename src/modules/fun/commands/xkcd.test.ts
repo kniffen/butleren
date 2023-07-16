@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import { xkcdCommand } from './xkcd';
 
 describe('fun: commands: xkcd', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   const options = new Map();
 
   const interaction = {

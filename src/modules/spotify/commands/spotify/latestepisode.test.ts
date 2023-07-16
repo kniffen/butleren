@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import { fetchSpotifySearch } from '../../utils/fetchSpotifySearch';
 import { fetchSpotifyShowEpisodes } from '../../utils/fetchSpotifyShowEpisodes';
 import { latestEpisodeSubCommand } from './latestepisode';
+import { SpotifySearchResult, SpotifyShowEpisodes } from '../../types';
 
 jest.mock(
   '../../utils/fetchSpotifySearch',

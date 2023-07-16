@@ -7,7 +7,7 @@ jest.mock(
 );
 
 describe('modules.twitter.utils.fetchTwitterUserTweets()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   const fetchTwitterTokenMock = fetchTwitterToken as jest.MockedFunction<typeof fetchTwitterToken>;
 
   beforeAll(function () {

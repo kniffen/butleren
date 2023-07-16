@@ -1,7 +1,7 @@
 import fetchTwitterToken from './fetchTwitterToken';
 
 describe('modules.twitter.utils.fetchTwitterToken()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   let access_token = 'twitterToken';
 
   beforeAll(function () {

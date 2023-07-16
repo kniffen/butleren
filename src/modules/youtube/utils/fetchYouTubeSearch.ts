@@ -1,3 +1,5 @@
+import { YouTubeSearchResults } from '../types';
+
 interface YouTubeSearchArgs {
   query: string,
   type?: string,
@@ -8,7 +10,7 @@ export default async function fetchYouTubeSearch({
   query,
   type = 'channel',
   limit = 10
-}: YouTubeSearchArgs) {
+}: YouTubeSearchArgs): Promise<YouTubeSearchResults['items']> {
   try {
     const uri = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=${type}&maxResults=${limit}&key=${process.env.GOOGLE_API_KEY}`;
     const init = {
@@ -18,7 +20,7 @@ export default async function fetchYouTubeSearch({
     };
 
     const res  = await fetch(uri, init);
-    const data = await res.json();
+    const data = await res.json() as YouTubeSearchResults;
 
     return data.items || [];
 

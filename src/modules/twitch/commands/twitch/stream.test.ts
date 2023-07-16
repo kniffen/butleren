@@ -3,6 +3,7 @@ import DiscordJS, { ChatInputCommandInteraction } from 'discord.js';
 import fetchTwitchUsers from '../../utils/fetchTwitchUsers';
 import fetchTwitchStreams from '../../utils/fetchTwitchStreams';
 import execute from './stream';
+import { TwitchUsers, TwitchStreams } from '../../types';
 
 jest.mock(
   '../../utils/fetchTwitchUsers',

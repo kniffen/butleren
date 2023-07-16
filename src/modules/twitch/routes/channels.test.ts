@@ -5,6 +5,7 @@ import supertest from 'supertest';
 import database from '../../../database';
 import twitchRouter from './';
 import fetchTwitchUsers from '../utils/fetchTwitchUsers';
+import { TwitchUsers } from '../types';
 
 jest.mock(
   '../utils/fetchTwitchUsers',

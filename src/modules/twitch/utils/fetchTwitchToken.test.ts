@@ -1,7 +1,7 @@
 import fetchTwitchToken from './fetchTwitchToken';
 
 describe('modules.twitch.utils.fetchTwitchToken()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   let access_token = 'twitchToken';
 
   beforeAll(function () {

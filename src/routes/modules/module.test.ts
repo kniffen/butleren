@@ -19,51 +19,53 @@ jest.mock('../../discord/client', () => ({
 
 jest.mock('../../modules', () => ({
   __esModule: true,
-  mod001: {
-    id: 'module001',
-    name: 'modulename001',
-    description: 'moduledescription001',
-    commands: {
-      cmd001: {
-        data: {
-          name: 'command001',
-          toJSON: () => 'commanddata001'
+  modules: [
+    {
+      id: 'module001',
+      name: 'modulename001',
+      description: 'moduledescription001',
+      commands: [
+        {
+          data: {
+            name: 'command001',
+            toJSON: () => 'commanddata001'
+          }
+        },
+        {
+          data: {
+            name: 'command002',
+            toJSON: () => 'commanddata002'
+          }
         }
-      },
-      cmd002: {
-        data: {
-          name: 'command002',
-          toJSON: () => 'commanddata002'
+      ]
+    },
+    {
+      id: 'module002',
+      name: 'modulename002',
+      description: 'moduledescription002',
+      commands: [
+        {
+          data: {
+            name: 'command003',
+            toJSON: () => 'commanddata003'
+          }
         }
-      }
+      ]
+    },
+    {
+      id: 'module003',
+      name: 'modulename003',
+      description: 'moduledescription003',
+      commands: [
+        {
+          data: {
+            name: 'command004',
+            toJSON: () => 'commanddata004'
+          }
+        }
+      ]
     }
-  },
-  mod002: {
-    id: 'module002',
-    name: 'modulename002',
-    description: 'moduledescription002',
-    commands: {
-      cmd003: {
-        data: {
-          name: 'command003',
-          toJSON: () => 'commanddata003'
-        }
-      }
-    }
-  },
-  mod003: {
-    id: 'module003',
-    name: 'modulename003',
-    description: 'moduledescription003',
-    commands: {
-      cmd004: {
-        data: {
-          name: 'command004',
-          toJSON: () => 'commanddata004'
-        }
-      }
-    }
-  }
+  ]
 }));
 
 describe('/api/modules/:guild/:module', function () {

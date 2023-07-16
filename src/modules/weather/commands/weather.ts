@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import database from '../../../database';
 import { BotCommand } from '../../../types/butleren';
 
-export const data =
+const data =
   new SlashCommandBuilder()
     .setName('weather')
     .setDescription('Get a weather report for a location')
@@ -23,7 +23,7 @@ const windDirections = [
   'Northwest'
 ];
 
-export async function execute(interaction: CommandInteraction) {
+async function execute(interaction: CommandInteraction) {
   try {
     if (!interaction.guild) return;
 
@@ -178,7 +178,7 @@ export async function execute(interaction: CommandInteraction) {
 }
 
 export const weatherCommand: BotCommand = {
-  isLocked: true,
+  isLocked: false,
   data,
   execute
 };

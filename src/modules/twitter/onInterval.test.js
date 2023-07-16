@@ -1,48 +1,48 @@
-import database from '../../database'
+import database from '../../database';
 
-import fetchTwitterUsersMock from './utils/fetchTwitterUsers.js'
-import fetchTwitterUserTweetsMock from './utils/fetchTwitterUserTweets.js'
-import twitterOnInterval from './onInterval.js'
-
-jest.mock(
-  './utils/fetchTwitterUsers.js',
-  () => ({__esModule: true, default: jest.fn()})
-)
+import fetchTwitterUsersMock from './utils/fetchTwitterUsers';
+import fetchTwitterUserTweetsMock from './utils/fetchTwitterUserTweets';
+import twitterOnInterval from './onInterval';
 
 jest.mock(
-  './utils/fetchTwitterUserTweets.js',
+  './utils/fetchTwitterUsers',
   () => ({__esModule: true, default: jest.fn()})
-)
+);
+
+jest.mock(
+  './utils/fetchTwitterUserTweets',
+  () => ({__esModule: true, default: jest.fn()})
+);
 
 describe('modules.twitter.onInterval()', function() {
-  let db = null
+  let db = null;
 
-  const notificationChannel = {send: jest.fn()}
+  const notificationChannel = {send: jest.fn()};
 
   const guild = {
     id: 'guild001',
     channels: {
       fetch: jest.fn()
     }
-  }
+  };
 
   beforeAll(async function() {
-    db = await database
+    db = await database;
 
-    await db.migrate()
+    await db.migrate();
 
-    jest.spyOn(db, 'all')
-    jest.spyOn(db, 'run')
+    jest.spyOn(db, 'all');
+    jest.spyOn(db, 'run');
   })
 
   beforeEach(async function() {
-    await db.run('DELETE FROM modules')
-    await db.run('DELETE FROM twitterUsers')
-    
+    await db.run('DELETE FROM modules');
+    await db.run('DELETE FROM twitterUsers');
+
     await db.run(
       'INSERT INTO modules (id, guildId, isEnabled) VALUES (?,?,?)',
       ['twitter', 'guild001', true]
-    )
+    );
 
     await db.run(
       'INSERT INTO twitterUsers (guildId, id, notificationChannelId) VALUES (?,?,?)',

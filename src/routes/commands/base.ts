@@ -15,21 +15,19 @@ router.get('/:guild', async function(req: Request, res: Response) {
     const guildCommands = await guild.commands.fetch().catch(handleError);
     if (!guildCommands) return res.sendStatus(404);
 
-    const commands = Object.entries(modules).reduce<APIBotCommand[]>(function(commands, [ modId, mod ]) {
+    const commands = modules.reduce<APIBotCommand[]>(function(commands, mod) {
       if (!mod.commands) return commands;
 
       return [
         ...commands,
-        ...Object
-          .entries(mod.commands)
-          .map<APIBotCommand>(([ id, cmd ]) => ({
-            id,
+        ...mod.commands
+          .map<APIBotCommand>((cmd) => ({
             name: cmd.data.name || '',
             description: cmd.data.description || '',
             isEnabled: !!guildCommands.find(c => c.name === cmd.data.name),
             isLocked: cmd.isLocked,
             module: {
-              id: modId,
+              id: mod.id,
               name: mod.name
             }
           }))

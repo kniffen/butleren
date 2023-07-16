@@ -1,3 +1,4 @@
+import { TwitchSearchCategoryResult, TwitchSearchChannelResult } from '../types';
 import fetchTwitchSearch from './fetchTwitchSearch';
 import fetchTwitchToken from './fetchTwitchToken';
 
@@ -7,7 +8,7 @@ jest.mock(
 );
 
 describe('modules.twitch.utils.fetchTwitchSearch()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   const fetchTwitchTokenMock = fetchTwitchToken as jest.MockedFunction<typeof fetchTwitchToken>;
 
   beforeAll(function () {
@@ -49,7 +50,7 @@ describe('modules.twitch.utils.fetchTwitchSearch()', function () {
   });
 
   it('Should handle there being no search results', async function () {
-    const results = [];
+    const results: (TwitchSearchChannelResult | TwitchSearchCategoryResult)['data'][] = [];
 
     fetchMock.mockResolvedValue({ json: async () => ({ data: [] }) } as Response);
     results.push(await fetchTwitchSearch({ query: 'foo bar' }));

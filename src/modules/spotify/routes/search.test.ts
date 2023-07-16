@@ -3,6 +3,7 @@ import express from 'express';
 
 import spotifyRouter from './index';
 import { fetchSpotifySearch } from '../utils';
+import { SpotifySearchResult } from '../types';
 
 import './search';
 

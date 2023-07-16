@@ -1,5 +1,6 @@
 import { fetchSpotifyShows } from './fetchSpotifyShows';
 import { fetchSpotifyToken } from './fetchSpotifyToken';
+import { SpotifyShow } from '../types';
 
 jest.mock(
   './fetchSpotifyToken',
@@ -7,7 +8,7 @@ jest.mock(
 );
 
 describe('moduled.spotify.utils.fetchSpotifyShows()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   const fetchSpotifyTokenMock = fetchSpotifyToken as jest.MockedFunction<typeof fetchSpotifyToken>;
 
   beforeAll(function () {

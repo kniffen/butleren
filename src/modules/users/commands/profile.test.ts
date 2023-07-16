@@ -1,31 +1,33 @@
-import * as command from './profile.js'
-import subCommandViewMock from './profile/view.js'
-import subCommandDeleteMock from './profile/delete.js'
-import subCommandSetlocationMock from './profile/setlocation.js'
+import { ChatInputCommandInteraction } from 'discord.js';
 
-jest.mock('./profile/view.js', () => ({__esModule: true, default: jest.fn()}))
-jest.mock('./profile/delete.js', () => ({__esModule: true, default: jest.fn()}))
-jest.mock('./profile/setlocation.js', () => ({__esModule: true, default: jest.fn()}))
+import { profileCommand } from './profile';
+import subCommandViewMock from './profile/view';
+import subCommandDeleteMock from './profile/delete';
+import subCommandSetlocationMock from './profile/setlocation';
+
+jest.mock('./profile/view', () => ({__esModule: true, default: jest.fn()}));
+jest.mock('./profile/delete', () => ({__esModule: true, default: jest.fn()}));
+jest.mock('./profile/setlocation', () => ({__esModule: true, default: jest.fn()}));
 
 describe('modules.users.commands.profile', function() {
   const interactions = [
     {id: 'interaction001', options: {getSubcommand: () => 'view'}},
     {id: 'interaction001', options: {getSubcommand: () => 'delete'}},
     {id: 'interaction001', options: {getSubcommand: () => 'setlocation'}},
-  ]
+  ] as unknown as ChatInputCommandInteraction[];
 
   beforeEach(function() {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   afterAll(function() {
-    jest.restoreAllMocks()
-  })
+    jest.restoreAllMocks();
+  });
 
   it('should contain certain properties', function() {
-    expect(command.isLocked)
+    expect(profileCommand.isLocked);
 
-    expect(command.data.toJSON()).toEqual({
+    expect(profileCommand.data.toJSON?.()).toEqual({
       name: 'profile',
       description: 'User profile information',
       options: [
@@ -55,14 +57,14 @@ describe('modules.users.commands.profile', function() {
           ],
         }
       ],
-    })
-  })
+    });
+  });
 
   it('should redirect to sub command executors', async function() {
-    await Promise.all(interactions.map(interaction => command.execute(interaction)))
-  
-    expect(subCommandViewMock).toHaveBeenCalledWith(interactions[0])
-    expect(subCommandDeleteMock).toHaveBeenCalledWith(interactions[1])
-    expect(subCommandSetlocationMock).toHaveBeenCalledWith(interactions[2])
-  })
-})
+    await Promise.all(interactions.map(interaction => profileCommand.execute(interaction)));
+
+    expect(subCommandViewMock).toHaveBeenCalledWith(interactions[0]);
+    expect(subCommandDeleteMock).toHaveBeenCalledWith(interactions[1]);
+    expect(subCommandSetlocationMock).toHaveBeenCalledWith(interactions[2]);
+  });
+});

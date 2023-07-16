@@ -1,54 +1,54 @@
-import express from 'express'
-import supertest from 'supertest'
+import express from 'express';
+import supertest from 'supertest';
 
-import database from '../../database'
-import discordClientMock from '../../discord/client'
-import guildsRouter from './'
+import database from '../../database';
+import discordClientMock from '../../discord/client';
+import guildsRouter from './';
 
 jest.mock('../../discord/client', () => ({
   __esModule: true,
   default: {
     guilds: {fetch: jest.fn()}
   }
-}))
+}));
 
 describe('/api/guilds', function() {
-  const URI = '/api/guilds'
-  const guilds = new Map()
-  const app = express()
-  let db: Awaited<typeof database>
+  const URI = '/api/guilds';
+  const guilds = new Map();
+  const app = express();
+  let db: Awaited<typeof database>;
 
   beforeAll(async function() {
-    db = await database
+    db = await database;
 
-    app.use(URI, guildsRouter)
+    app.use(URI, guildsRouter);
 
-    await db.migrate()
-    await db.run('INSERT INTO guilds (id) VALUES (?)', 'guild001')
-    await db.run('INSERT INTO guilds (id) VALUES (?)', 'guild002')
+    await db.migrate();
+    await db.run('INSERT INTO guilds (id) VALUES (?)', 'guild001');
+    await db.run('INSERT INTO guilds (id) VALUES (?)', 'guild002');
 
     guilds.set('guild001', {
       id: 'guild001',
       name: 'guildname001',
       iconURL: () => 'foo.bar',
-    })
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     discordClientMock.guilds.fetch.mockImplementation(async (id) => {
-      const guild = guilds.get(id)
-      if (guild) return Promise.resolve(guild)
-      return Promise.reject('Guild not found')
-    })
-  })
+      const guild = guilds.get(id);
+      if (guild) return Promise.resolve(guild);
+      return Promise.reject('Guild not found');
+    });
+  });
 
   beforeEach(function() {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   afterAll(function() {
-    db.close()
-  })
+    db.close();
+  });
 
   describe('GET', function() {
     it('should respond with the details and settings for all guilds', async function() {
@@ -67,13 +67,13 @@ describe('/api/guilds', function() {
           nickname: null,
           timezone: 'UTC',
         }
-      ]
+      ];
 
-      const res = await supertest(app).get(URI)
+      const res = await supertest(app).get(URI);
 
-      expect(res.status).toEqual(200)
-      expect(res.body).toEqual(expected)
-      expect(console.error).toHaveBeenCalledWith('GET', URI, 'Guild not found')
-    })
-  })
-})
+      expect(res.status).toEqual(200);
+      expect(res.body).toEqual(expected);
+      expect(console.error).toHaveBeenCalledWith('GET', URI, 'Guild not found');
+    });
+  });
+});

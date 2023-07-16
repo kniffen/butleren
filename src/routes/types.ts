@@ -1,5 +1,4 @@
 export interface APIBotCommand {
-  id: string;
   name: string;
   description: string;
   isEnabled: boolean;

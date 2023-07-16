@@ -1,10 +1,10 @@
 import database from '../../database'
 
 import fetchYouTubeActivitiesMock from './utils/fetchYouTubeActivities'
-import youtubeOnInterval from './onInterval.js'
+import youtubeOnInterval from './onInterval'
 
 jest.mock(
-  './utils/fetchYouTubeActivities.js',
+  './utils/fetchYouTubeActivities',
   () => ({__esModule: true, default: jest.fn()})
 )
 

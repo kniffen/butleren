@@ -1,10 +1,8 @@
-import { Request, Response } from 'express';
-
 import database from '../../../database';
 import router from './router';
 import fetchTwitchUsers from '../utils/fetchTwitchUsers';
 
-router.get('/:guild/channels', async function (req: Request, res: Response) {
+router.get('/:guild/channels', async function (req, res) {
   try {
     const db = await database;
     const entries = await db.all<{id: string, notificationChannelId: string, notificationRoleId: string}[]>(
@@ -31,7 +29,7 @@ router.get('/:guild/channels', async function (req: Request, res: Response) {
   }
 });
 
-router.post('/:guild/channels', async function (req: Request, res: Response) {
+router.post('/:guild/channels', async function (req, res) {
   try {
     const db = await database;
 
@@ -56,7 +54,7 @@ router.post('/:guild/channels', async function (req: Request, res: Response) {
   }
 });
 
-router.patch('/:guild/channels', async function (req: Request, res: Response) {
+router.patch('/:guild/channels', async function (req, res) {
   try {
     const db = await database;
     const entry = await db.get(
@@ -90,7 +88,7 @@ router.patch('/:guild/channels', async function (req: Request, res: Response) {
   }
 });
 
-router.delete('/:guild/channels', async function (req: Request, res: Response) {
+router.delete('/:guild/channels', async function (req, res) {
   try {
     const db = await database;
 

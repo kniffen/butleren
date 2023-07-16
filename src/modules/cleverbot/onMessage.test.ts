@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 
 import onMessage from './onMessage';
+import { Cleverbot } from './types';
 
 describe('modules.cleverbot.onMessage()', function () {
   const messages = [

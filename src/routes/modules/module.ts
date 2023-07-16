@@ -12,7 +12,7 @@ router.get('/:guild/:module', async function getModule(req: Request, res: Respon
     const guild = await client.guilds.fetch(req.params.guild).catch(handleError);
     if (!guild) return res.sendStatus(404);
 
-    const mod = Object.values(modules).find(mod => mod.id === req.params.module);
+    const mod = modules.find(mod => mod.id === req.params.module);
     if (!mod) return res.sendStatus(404);
 
     const db = await database;
@@ -56,11 +56,11 @@ router.put('/:guild/:module', async function putModule(req: Request, res: Respon
 
     // disable or enable all commands associated with the module
     if ('isEnabled' in req.body) {
-      const mod = Object.values(modules).find(mod => mod.id === req.params.module);
+      const mod = modules.find(mod => mod.id === req.params.module);
 
       if (!mod) return res.sendStatus(404);
 
-      const moduleCommands = mod.commands ? Object.values(mod.commands) : [];
+      const moduleCommands = mod.commands ? mod.commands : [];
       const guildCommands =
         await guild.commands.fetch()
           .then(gc => gc.filter(gc => moduleCommands.find(c => gc.name === c.data.name)))

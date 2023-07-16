@@ -1,3 +1,4 @@
+/* eslint-disable */
 jest.mock('../database', () => {
   const sqlite3 = jest.requireActual('sqlite3');
   const { open } = jest.requireActual('sqlite');
@@ -10,3 +11,4 @@ jest.mock('../database', () => {
     })
   };
 });
+/* eslint-enable */

@@ -6,22 +6,24 @@ import {
 
 import onInteractionCreate from './onInteractionCreate';
 
-import modulesMock from '../../modules';
+import { modules as modulesMock } from '../../modules';
 
 jest.mock('../../modules', () => {
-  return [
-    {
-      commands: [
-        { data: { name: 'command001' }, execute: jest.fn().mockResolvedValue(undefined) },
-        { data: { name: 'command002' }, execute: jest.fn().mockResolvedValue(undefined) },
-      ]
-    },
-    {
-      commands: [
-        { data: { name: 'command003' }, execute: jest.fn().mockResolvedValue(undefined) },
-      ]
-    }
-  ];
+  return {
+    modules: [
+      {
+        commands: [
+          { data: { name: 'command001' }, execute: jest.fn().mockResolvedValue(undefined) },
+          { data: { name: 'command002' }, execute: jest.fn().mockResolvedValue(undefined) },
+        ]
+      },
+      {
+        commands: [
+          { data: { name: 'command003' }, execute: jest.fn().mockResolvedValue(undefined) },
+        ]
+      }
+    ]
+  };
 });
 
 describe('discord.eventHandlers.onInteractionCreate()', function () {

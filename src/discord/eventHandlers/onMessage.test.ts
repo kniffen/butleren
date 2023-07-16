@@ -1,32 +1,34 @@
 import { ChannelType, Message } from 'discord.js';
 
 import database from '../../database';
-import modulesMock from '../../modules';
+import { modules as modulesMock } from '../../modules';
 import onMessage from './onMessage';
 
 jest.mock('../../modules', () => {
   const { ChannelType } = jest.requireActual('discord.js');
 
-  return [
-    {
-      id: 'static_module',
-      allowedChannelTypes: [ChannelType.GuildText],
-      onMessage: jest.fn(),
-      isLocked: true,
-    },
-    {
-      id: 'disabled_module',
-      onMessage: jest.fn(),
-      allowedChannelTypes: [ChannelType.GuildText, ChannelType.DM],
-      isLocked: false,
-    },
-    {
-      id: 'enabled_module',
-      onMessage: jest.fn(),
-      allowedChannelTypes: [ChannelType.GuildText, ChannelType.DM],
-      isLocked: false,
-    }
-  ];
+  return {
+    modules: [
+      {
+        id: 'static_module',
+        allowedChannelTypes: [ChannelType.GuildText],
+        onMessage: jest.fn(),
+        isLocked: true,
+      },
+      {
+        id: 'disabled_module',
+        onMessage: jest.fn(),
+        allowedChannelTypes: [ChannelType.GuildText, ChannelType.DM],
+        isLocked: false,
+      },
+      {
+        id: 'enabled_module',
+        onMessage: jest.fn(),
+        allowedChannelTypes: [ChannelType.GuildText, ChannelType.DM],
+        isLocked: false,
+      }
+    ]
+  };
 });
 
 describe('discord.eventHandlers.onMessage()', function () {

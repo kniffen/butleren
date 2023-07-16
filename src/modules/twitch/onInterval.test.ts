@@ -3,6 +3,7 @@ import DiscordJS, { Guild } from 'discord.js';
 import database from '../../database';
 import fetchTwitchStreams from './utils/fetchTwitchStreams';
 import twitchOnInterval from './onInterval';
+import { TwitchStreams } from './types';
 
 jest.mock(
   './utils/fetchTwitchStreams',

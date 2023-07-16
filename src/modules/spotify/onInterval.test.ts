@@ -6,6 +6,7 @@ import {
   fetchSpotifyShows,
   fetchSpotifyShowEpisodes
 } from './utils';
+import { SpotifyShow, SpotifyShowEpisodes } from './types';
 
 jest.mock(
   './utils/fetchSpotifyShows',

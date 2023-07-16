@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import { catCommand } from './cat';
 
 describe('fun: commands: cat', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
 
   const interaction = {
     deferReply: jest.fn(),

@@ -17,7 +17,7 @@ export default async function onGuildCreate(guild: Guild) {
 
       return [
         ...promises,
-        ...Object.values(mod.commands).reduce<CmdPromise[]>((cmdPromises, cmd) =>
+        ...mod.commands.reduce<CmdPromise[]>((cmdPromises, cmd) =>
           cmd.data.toJSON
             ? [...cmdPromises, guild.commands.create(cmd.data.toJSON())]
             : cmdPromises

@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import * as command from './twitch';
+import { twitchCommand} from './twitch';
 import streamSubCommand from './twitch/stream';
 import scheduleSubCommand from './twitch/schedule';
 
@@ -16,7 +16,7 @@ jest.mock(
 
 describe('modules.twitch.commands.twitch', function () {
   it('Should contain certain properties', function () {
-    expect(command.data.toJSON()).toEqual({
+    expect(twitchCommand.data.toJSON?.()).toEqual({
       name: 'twitch',
       description: 'Twitch integration',
       options: [
@@ -56,7 +56,7 @@ describe('modules.twitch.commands.twitch', function () {
       { options: { getSubcommand: () => 'schedule' } },
     ] as ChatInputCommandInteraction[];
 
-    await Promise.all(interactions.map(interaction => command.execute(interaction)));
+    await Promise.all(interactions.map(interaction => twitchCommand.execute(interaction)));
 
     expect(streamSubCommand).toHaveBeenCalledWith(interactions[0]);
     expect(scheduleSubCommand).toHaveBeenCalledWith(interactions[1]);

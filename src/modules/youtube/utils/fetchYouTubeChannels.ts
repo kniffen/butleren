@@ -1,13 +1,6 @@
-interface YouTubeChannel {
-  id: string;
-  snippet: {
-    title: string;
-    description: string;
-    customUrl: string;
-  }
-}
+import { YouTubeChannels } from '../types';
 
-export default async function fetchYouTubeChannels({ ids }: {ids: string[]}): Promise<YouTubeChannel[]> {
+export default async function fetchYouTubeChannels({ ids }: {ids: string[]}): Promise<YouTubeChannels['items']> {
   try {
     const uri = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet${ids.map(id => `&id=${id}`).join('')}&key=${process.env.GOOGLE_API_KEY}`;
     const init = {
@@ -17,7 +10,7 @@ export default async function fetchYouTubeChannels({ ids }: {ids: string[]}): Pr
     };
 
     const res  = await fetch(uri, init);
-    const data = await res.json();
+    const data = await res.json() as YouTubeChannels;
 
     return data.items || [];
 

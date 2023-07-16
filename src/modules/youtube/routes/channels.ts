@@ -37,6 +37,14 @@ router.post('/:guild/channels', async function(req, res) {
   try {
     const db = await database;
 
+    if (
+      !req.body.id ||
+      !req.body.notificationChannelId ||
+      !req.body.notificationRoleId
+    ) {
+      return res.sendStatus(400);
+    }
+
     const existingEntry = await db.get(
       'SELECT * FROM youtubeChannels WHERE guildId = ? AND id = ?',
       [req.params.guild, req.body.id]

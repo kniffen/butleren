@@ -1,8 +1,8 @@
-import * as command from './twitter.js'
-import latesttweetSubCommand from './twitter/latesttweet.js'
+import * as command from './twitter'
+import latesttweetSubCommand from './twitter/latesttweet'
 
 jest.mock(
-  './twitter/latesttweet.js',
+  './twitter/latesttweet',
   () => ({ __esModule: true, default: jest.fn()})
 )
 

@@ -1,7 +1,8 @@
 import { fetchSpotifyToken } from './fetchSpotifyToken';
+import { SpotifyTokenResponse } from '../types';
 
 describe('moduled.spotify.utils.fetchSpotifyToken()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   let access_token = 'spotifyToken';
 
   beforeAll(function () {

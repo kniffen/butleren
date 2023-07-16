@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import status from './status';
 
 describe('modules.truckersmp.commands.truckersmp.status()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   const interaction = {
     deferReply: jest.fn(),
     editReply: jest.fn()

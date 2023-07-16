@@ -11,7 +11,7 @@ export default async function onInteractionCreate(interaction: Interaction) {
   for (const mod of modules) {
     if (!mod.commands) continue;
 
-    const command = Object.values(mod.commands).find(cmd => cmd.data.name === interaction.commandName);
+    const command = mod.commands.find(cmd => cmd.data.name === interaction.commandName);
 
     if (command) {
       command.execute(interaction as ChatInputCommandInteraction).catch(console.error);

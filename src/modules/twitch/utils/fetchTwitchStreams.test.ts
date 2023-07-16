@@ -1,3 +1,4 @@
+import { TwitchStreams } from '../types';
 import fetchTwitchStreams from './fetchTwitchStreams';
 import fetchTwitchToken from './fetchTwitchToken';
 
@@ -7,7 +8,7 @@ jest.mock(
 );
 
 describe('modules.twitch.utils.fetchTwitchStreams()', function () {
-  const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
+  const fetchMock = jest.spyOn(global, 'fetch').mockImplementation();
   const fetchTwitchTokenMock = fetchTwitchToken as jest.MockedFunction<typeof fetchTwitchToken>;
 
   beforeAll(function () {
@@ -58,7 +59,7 @@ describe('modules.twitch.utils.fetchTwitchStreams()', function () {
   });
 
   it('Should handle there being no streams', async function () {
-    const results = [];
+    const results: TwitchStreams['data'][] = [];
 
     fetchMock.mockResolvedValue({ json: async () => ({ data: [] }) } as Response);
     results.push(await fetchTwitchStreams({ ids: ['channel001', 'channel002'], usernames: [] }));

@@ -2,27 +2,28 @@ import router from './router';
 import database from '../../database';
 import discordClient from '../../discord/client';
 import { modules } from '../../modules';
-import { Request, Response } from 'express';
 import { BotModule, BotCommand } from '../../types/butleren';
 
 interface BotCommandWithModule extends BotCommand {
   mod: BotModule;
 }
 
-router.put('/:guild/:module/:command', async function (req: Request, res: Response) {
+router.put('/:guild/:module/:command', async function (req, res) {
   const handleError = (err: Error) => console.error(req.method, req.originalUrl, err);
 
   try {
     if (!('isEnabled' in req.body)) return res.sendStatus(400);
 
     const guild = await discordClient.guilds.fetch(req.params.guild).catch(handleError);
+    if (!guild) return res.sendStatus(404);
+
     const commands = modules.reduce<BotCommandWithModule[]>((commands, mod) => {
       if (!mod.commands) return commands;
       return [...commands, ...mod.commands.map(cmd => ({ ...cmd, mod }))];
     }, []);
-    const command = commands.find(cmd => cmd.data.name === req.params.command);
 
-    if (!guild || !command) return res.sendStatus(404);
+    const command = commands.find(cmd => cmd.data.name === req.params.command);
+    if (!command) return res.sendStatus(404);
     if (!command.data.toJSON) return res.sendStatus(500);
 
     const guildCommands = await guild.commands.fetch();

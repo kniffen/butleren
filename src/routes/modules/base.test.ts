@@ -19,29 +19,31 @@ jest.mock('../../database', () => {
 
 jest.mock('../../modules', () => ({
   __esModule: true,
-  mod001: {
-    id: 'module001',
-    name: 'moduleName001',
-    description: 'moduleDescription001',
-    isLocked: false,
-    commands: {
-      cmd001: {
-        data: { name: 'command001' }
-      }
+  modules: [
+    {
+      id: 'module001',
+      name: 'moduleName001',
+      description: 'moduleDescription001',
+      isLocked: false,
+      commands: [
+        {
+          data: { name: 'command001' }
+        }
+      ]
+    },
+    {
+      id: 'module002',
+      name: 'moduleName002',
+      description: 'moduleDescription002',
+      isLocked: false
+    },
+    {
+      id: 'module003',
+      name: 'moduleName003',
+      description: 'moduleDescription003',
+      isLocked: true
     }
-  },
-  mod002: {
-    id: 'module002',
-    name: 'moduleName002',
-    description: 'moduleDescription002',
-    isLocked: false
-  },
-  mod003: {
-    id: 'module003',
-    name: 'moduleName003',
-    description: 'moduleDescription003',
-    isLocked: true
-  },
+  ]
 }));
 
 
@@ -74,14 +76,6 @@ describe('/api/modules/:guild', function () {
       const res = await supertest(app).get('/api/modules/guild001');
 
       expect(res.body).toEqual([
-        {
-          id: undefined,
-          name: undefined,
-          description: undefined,
-          commands: [],
-          isEnabled: true,
-          isLocked: undefined,
-        },
         {
           id: 'module001',
           name: 'moduleName001',

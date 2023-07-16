@@ -24,6 +24,14 @@ router.get('/:guild/users', async function(req, res) {
 
 router.post('/:guild/users', async function(req, res) {
   try {
+    if (
+      !req.body.id ||
+      !req.body.notificationChannelId ||
+      !req.body.notificationRoleId
+    )
+      return res.sendStatus(400);
+
+
     const db = await database;
 
     const existingEntry = await db.get(

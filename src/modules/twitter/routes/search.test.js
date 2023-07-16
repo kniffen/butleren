@@ -1,11 +1,11 @@
 import express from 'express'
 import supertest from 'supertest'
 
-import fetchTwitterUsersMock from '../utils/fetchTwitterUsers.js'
-import twitterRouter from  './index.js'
+import fetchTwitterUsersMock from '../utils/fetchTwitterUsers'
+import twitterRouter from  './'
 
 jest.mock(
-  '../utils/fetchTwitterUsers.js',
+  '../utils/fetchTwitterUsers',
   () => ({__esModule: true, default: jest.fn()})
 )
 

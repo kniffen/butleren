@@ -2,7 +2,7 @@ import { ChannelType } from 'discord.js';
 
 import { commands } from './commands';
 import router from './routes';
-import onInterval from './onInterval.js';
+import onInterval from './onInterval';
 import { BotModule } from '../../types/butleren';
 
 export const twitterModule: BotModule = {
