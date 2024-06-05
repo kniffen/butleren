@@ -1,5 +1,7 @@
 import fetch from  'node-fetch'
 
+import { logger } from '../../../logger/logger.js'
+
 export default async function fetchYouTubeVideos({ videoIds }) {
   try {
 
@@ -15,12 +17,16 @@ export default async function fetchYouTubeVideos({ videoIds }) {
       }
     }
 
+    logger.info('Youtube API: /videos request', {url});
     const res  = await fetch(url, init)
+    logger.info('Youtube API: /videos response', {status: res.status});
     const data = await res.json()
+    logger.info('Youtube API: /videos response body', {data});
 
     return data.items || []
 
   } catch(err) {
+    logger.error('Youtube API: /videos', err)
     console.error(err)
     return[]
   }
