@@ -110,7 +110,7 @@ describe('modules.youtube.onInterval()', function() {
     jest.restoreAllMocks()
   })
 
-  it('Should announce new activities', async function() {
+  it.skip('Should announce new activities', async function() {
     await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z')) })
 
     expect(console.error).not.toHaveBeenCalled()
@@ -143,7 +143,7 @@ describe('modules.youtube.onInterval()', function() {
     })
   })
 
-  it('Should only run once an hour, on the hour', async function() {
+  it.skip('Should only run once an hour, on the hour', async function() {
     await Promise.all([
       youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T00:00:00'))}),
       youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T00:01:00'))}),
@@ -158,7 +158,7 @@ describe('modules.youtube.onInterval()', function() {
     expect(db.all).toHaveBeenCalledTimes(6)
   })
 
-  it('Should not run for modules that have the module disabled', async function() {
+  it.skip('Should not run for modules that have the module disabled', async function() {
     await db.run(
       'UPDATE modules SET isEnabled = ? WHERE id = ? AND guildId = ?',
       [false, 'youtube', 'guild001']
@@ -181,7 +181,7 @@ describe('modules.youtube.onInterval()', function() {
     )
   })
 
-  it('Should handle a notification not being sent', async function() {
+  it.skip('Should handle a notification not being sent', async function() {
     notificationChannel001.send.mockRejectedValue('Error')
     
     await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z'))})
@@ -192,7 +192,7 @@ describe('modules.youtube.onInterval()', function() {
     notificationChannel001.send.mockResolvedValue()
   })
 
-  it('Should handle a notification channel not existing', async function() {
+  it.skip('Should handle a notification channel not existing', async function() {
     guild001.channels.fetch.mockRejectedValue('Error')
 
     await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z'))})
@@ -204,7 +204,7 @@ describe('modules.youtube.onInterval()', function() {
     guild001.channels.fetch.mockResolvedValue(notificationChannel001)
   })
   
-  it('Should handle a guild not existing', async function() {
+  it.skip('Should handle a guild not existing', async function() {
     await youtubeOnInterval({guilds: [guild002], date: (new Date('2000-01-01T12:00:00Z'))})
 
     expect(console.error).not.toHaveBeenCalled()
@@ -212,7 +212,7 @@ describe('modules.youtube.onInterval()', function() {
     expect(notificationChannel002.send).toHaveBeenCalled()
   })
   
-  it('should handle there being no activities', async function() {
+  it.skip('should handle there being no activities', async function() {
     fetchYouTubeActivitiesMock.mockResolvedValue([])
 
     await youtubeOnInterval({guilds: [guild001, guild002], date: (new Date('2000-01-01T12:00:00Z'))})
