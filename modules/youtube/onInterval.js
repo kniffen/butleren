@@ -1,11 +1,13 @@
 import database from '../../database/index.js'
 import fetchYouTubeActivities from './utils/fetchYouTubeActivities.js'
 import fetchYouTubeVideos from './utils/fetchYouTubeVideos.js'
+import { logger } from '../../logger/logger.js'
 
 export default async function youTubeOnInterval({ guilds, date }) {
   // This ensures that the logic will only run every hour on the hour
   // For example 11:00, 12:00, 13:00 etc...
   if (0 !== date.getMinutes() % 60) return
+  logger.info('Running YouTube interval', {date: date.toJSON()})
 
   try {
     const db = await database
@@ -26,12 +28,14 @@ export default async function youTubeOnInterval({ guilds, date }) {
     ].reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], []);
     const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({channelId, limit: 3})));
 
+    const thisHour = new Date(date)
+    thisHour.setSeconds(0);
     const videoIds = channelsActivities.reduce((videoIds, channelActivities) => {
       return [
         ...videoIds,
         ...channelActivities
           .filter((activity) =>
-            (3.6e+6 > date.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf()) &&
+            (3.6e+6 > thisHour.valueOf() - (new Date(activity.snippet.publishedAt)).valueOf()) &&
             activity.contentDetails?.upload
           )
           .map((activity) => activity.contentDetails.upload.videoId)
@@ -61,6 +65,7 @@ export default async function youTubeOnInterval({ guilds, date }) {
             ? `${stream.snippet.channelTitle} is live on YouTube`
             : 'A livestream just started on YouTube';
 
+        logger.info('Publishing youtube notification', {mention, text})
         notificationChannel.send({
           content: `${mention}${text}\nhttps://www.youtube.com/watch?v=${stream.id}`
         }).catch(console.error)
