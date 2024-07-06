@@ -7,7 +7,7 @@ export default async function youTubeOnInterval({ guilds, date }) {
   // This ensures that the logic will only run every hour on the hour
   // For example 11:00, 12:00, 13:00 etc...
   if (0 !== date.getMinutes() % 60) return
-  logger.info('Running YouTube interval', {date: date.toJSON()})
+  logger.info('Running YouTube interval');
 
   try {
     const db = await database
@@ -26,7 +26,7 @@ export default async function youTubeOnInterval({ guilds, date }) {
       ...youTubeChannelsEntries,
       ...youTubeLiveChannelsEntries
     ].reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], []);
-    const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({channelId, limit: 3})));
+    const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({channelId})));
 
     const thisHour = new Date(date)
     thisHour.setSeconds(0);
@@ -64,10 +64,11 @@ export default async function youTubeOnInterval({ guilds, date }) {
           stream.snippet.channelTitle
             ? `${stream.snippet.channelTitle} is live on YouTube`
             : 'A livestream just started on YouTube';
+        const link = `https://www.youtube.com/watch?v=${stream.id}`
 
-        logger.info('Publishing youtube notification', {mention, text})
+        logger.info('Publishing youtube notification', {mention, text, link})
         notificationChannel.send({
-          content: `${mention}${text}\nhttps://www.youtube.com/watch?v=${stream.id}`
+          content: `${mention}${text}\n${link}`
         }).catch(console.error)
       })
     })()))
@@ -95,10 +96,10 @@ export default async function youTubeOnInterval({ guilds, date }) {
           : uploadedVideos[0].snippet.channelTitle
             ? `${uploadedVideos[0].snippet.channelTitle} posted a new YouTube video`
             : 'A new YouTube video has been posted'
+      const links = uploadedVideos.map((video) => `https://www.youtube.com/watch?v=${video.id}`)
 
-      notificationChannel.send({
-        content: `${mention}${text}\n${uploadedVideos.map((video) => `https://www.youtube.com/watch?v=${video.id}`).join('\n')}`
-      }).catch(console.error)
+      logger.info('Publishing youtube notification', {mention, text, links})
+      notificationChannel.send({content: `${mention}${text}\n${links.join('\n')}`}).catch(console.error)
     })()))
 
   } catch(err) {
