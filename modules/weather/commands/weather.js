@@ -4,6 +4,7 @@ import fetch from 'node-fetch'
 import moment from 'moment-timezone'
 
 import database from '../../../database/index.js'
+import { logger } from '../../../logger/logger.js'
 
 export const isLocked = false
 
@@ -55,7 +56,10 @@ export async function execute(interaction) {
       ? `https://api.openweathermap.org/data/2.5/weather?zip=${encodeURIComponent(zip)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
       : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(query || location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
 
+    logger.info('Open Weather API: /weather request', {uri});
     const data = await fetch(uri).then(res => res.json())
+    logger.debug('Open Weather API: /weather response body', {data});
+
     const embed = new DiscordJS.EmbedBuilder()
 
     const date = moment.utc((data.dt + data.timezone) * 1000)
@@ -174,6 +178,7 @@ export async function execute(interaction) {
     })
       
   } catch(err) {
+    logger.error('Open Weather API', err);
     console.error(err)
     interaction.editReply({
       content: 'Sorry, I was unable to fetch a weather report for you',

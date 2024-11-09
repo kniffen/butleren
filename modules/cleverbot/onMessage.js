@@ -1,3 +1,5 @@
+import { logger } from '../../logger/logger.js'
+
 /**
  * @param {Object} param 
  * @param {Object} param.message   - Discord message object.
@@ -10,5 +12,16 @@ export default async function cleverbotOnMessage(message, cleverbot) {
 
   if (`<@${message.client.user.id}>` !== handle) return
 
-  cleverbot.write(args.join(' '), (answer) => message.reply(answer.message))
+  try {
+    const query = args.join(' ');
+    logger.info('Cleverbot message', {query});
+
+    cleverbot.write(query, (answer) => {
+      logger.info('Cleverbot reply', {answer: answer.message});
+      logger.debug('Cleverbot reply', {answer});
+      message.reply(answer.message)
+    })
+  } catch (err) {
+    logger.error('Cleverbot', err)
+  }
 }

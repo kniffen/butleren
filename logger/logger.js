@@ -1,12 +1,32 @@
-import winston from 'winston';
+import * as winston from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 export const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
+  level: 'debug',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message, service, ...rest }) => JSON.stringify({timestamp, level, message, ...rest}, null, 3)),
+  ),
   defaultMeta: { service: 'user-service' },
   transports: [
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/all.log' }),
+    new DailyRotateFile({
+      filename: 'logs/info-%DATE%.log',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '30d',
+      level: 'info'
+    }),
+    new DailyRotateFile({
+      filename: 'logs/error-%DATE%.log',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '30d',
+      level: 'error'
+    }),
+    new DailyRotateFile({
+      filename: 'logs/debug-%DATE%.log',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '30d',
+      level: 'debug'
+    }),
   ],
 });
 
