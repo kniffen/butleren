@@ -21,7 +21,7 @@ export default async function fetchYouTubeVideos({ videoIds }) {
     const res  = await fetch(url, init)
     logger.info('Youtube API: /videos response', {status: res.status});
     const data = await res.json()
-    logger.info('Youtube API: /videos response body', {data});
+    logger.debug('Youtube API: /videos response body', {data});
 
     return data.items || []
 

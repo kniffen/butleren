@@ -15,7 +15,7 @@ export default async function fetchYouTubeChannels({ ids }) {
     const res  = await fetch(uri, init)
     logger.info('Youtube API: /channels response', {status: res.status});
     const data = await res.json()
-    logger.info('Youtube API: /channels response body', {data});
+    logger.debug('Youtube API: /channels response body', {data});
 
     return data.items || []
 

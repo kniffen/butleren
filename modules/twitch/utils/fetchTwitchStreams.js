@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 
 import fetchTwitchToken from './fetchTwitchToken.js'
+import { logger } from '../../../logger/logger.js'
 
 export default async function fetchTwitchStreams({ ids = [], usernames = []}, isTokenExpired = false) {
   try {
@@ -18,16 +19,20 @@ export default async function fetchTwitchStreams({ ids = [], usernames = []}, is
       }
     }
 
+    logger.info('Twitch API: /streams request', {uri});
     const res = await fetch(uri, init)
+    logger.info('Twitch API: /streams response', {status: res.status});
 
     if (401 === res.status && !isTokenExpired)
       return fetchTwitchStreams({ids, usernames}, true)
 
     const data = await res.json()
+    logger.debug('Twitch API: /streams response body', {data});
 
     return data.data || []
 
   } catch (err) {
+    logger.error('Twitch API: /streams', err);
     console.error(err)
     return []
   }

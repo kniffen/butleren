@@ -15,7 +15,7 @@ export default async function fetchYouTubeActivities({ channelId, limit = 10 }) 
     const res  = await fetch(uri, init)
     logger.info('Youtube API: /activities response', {status: res.status});
     const data = await res.json()
-    logger.info('Youtube API: /activities response body', {data});
+    logger.debug('Youtube API: /activities response body', {data});
 
     return data.items || []
 

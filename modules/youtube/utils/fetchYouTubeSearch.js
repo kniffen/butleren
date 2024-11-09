@@ -15,7 +15,7 @@ export default async function fetchYouTubeSearch({query, type = 'channel', limit
     const res  = await fetch(uri, init)
     logger.info('Youtube API: /search response', {status: res.status});
     const data = await res.json()
-    logger.info('Youtube API: /search response body', {data});
+    logger.debug('Youtube API: /search response body', {data});
 
     return data.items || []
 
