@@ -1,0 +1,1 @@
+export const COLOR = '#19D8B4';
