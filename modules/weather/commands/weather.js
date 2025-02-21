@@ -5,6 +5,7 @@ import moment from 'moment-timezone'
 
 import database from '../../../database/index.js'
 import { logger } from '../../../logger/logger.js'
+import { getLocation } from '../utils/getLocation.js'
 
 export const isLocked = false
 
@@ -33,31 +34,26 @@ export async function execute(interaction) {
   try {
     await interaction.deferReply()
 
-    const db = await database
-    const settings = await db.get('SELECT color FROM guilds WHERE id = ?', [interaction.guild.id])
-    const user = interaction.options.get('user')?.user || interaction.user
-    let query = interaction.options.get('location')?.value
-
-    const location =
-      !query 
-        ? (await db.get('SELECT location FROM users WHERE id = ?', [user.id]))?.location
-        : null
-
-    if (!query && !location) {
+    const { location, isUserLocation } = await getLocation(interaction);
+    if (!location) {
       interaction.editReply({
         content: 'Missing location',
         ephemeral: true
-      })
-      return
+      });
+      return;
     }
 
-    const zip = parseInt(query || location) || null
+    const db       = await database;
+    const settings = await db.get('SELECT color FROM guilds WHERE id = ?', [interaction.guild.id]);
+    const user     = interaction.options.get('user')?.user || interaction.user;
+
+    const zip = parseInt(location) || null
     const uri = zip
       ? `https://api.openweathermap.org/data/2.5/weather?zip=${encodeURIComponent(zip)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
-      : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(query || location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
+      : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(location)}&units=metric&APPID=${process.env.OPEN_WEATHER_MAP_API_KEY}`
 
     logger.info('Open Weather API: /weather request', {uri});
-    const data = await fetch(uri).then(res => res.json())
+    const data = await fetch(uri).then(res => res.json());
     logger.debug('Open Weather API: /weather response body', {data});
 
     const embed = new DiscordJS.EmbedBuilder()
@@ -76,7 +72,7 @@ export async function execute(interaction) {
 
     embed.setColor(settings.color)
     embed.setAuthor({
-      name: `Weather report for ${location ? user.username : `${data.name} (${data.sys.country})`}`,
+      name: `Weather report for ${isUserLocation ? user.username : `${data.name} (${data.sys.country})`}`,
       iconURL:
         isAprilFools
           ? 'http://openweathermap.org/img/wn/02d.png'
