@@ -34,12 +34,17 @@ export async function execute(interaction) {
       return;
     }
 
+    const zip = parseInt(location) || null;
     const url = new URL(`${BASE_URL}${PATH}`);
-    url.searchParams.set('q', location);
+    if (zip) {
+      url.searchParams.set('zip', encodeURIComponent(zip));
+    } else {
+      url.searchParams.set('q', encodeURIComponent(location));
+    }
     url.searchParams.set('units', 'metric');
     url.searchParams.set('appid', process.env.OPEN_WEATHER_MAP_API_KEY);
 
-    logger.info(`Open Weather API: ${PATH} request`, {url: url.toString})
+    logger.info(`Open Weather API: ${PATH} request`, {url: url.toString()})
     const data = await fetch(url).then(res => res.json());
     logger.debug(`Open Weather API: ${PATH} response body`, {data});
 
