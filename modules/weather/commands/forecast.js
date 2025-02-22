@@ -37,9 +37,9 @@ export async function execute(interaction) {
     const zip = parseInt(location) || null;
     const url = new URL(`${BASE_URL}${PATH}`);
     if (zip) {
-      url.searchParams.set('zip', encodeURIComponent(zip));
+      url.searchParams.set('zip', zip);
     } else {
-      url.searchParams.set('q', encodeURIComponent(location));
+      url.searchParams.set('q', location);
     }
     url.searchParams.set('units', 'metric');
     url.searchParams.set('appid', process.env.OPEN_WEATHER_MAP_API_KEY);
@@ -51,19 +51,52 @@ export async function execute(interaction) {
     const db       = await database;
     const settings = await db.get('SELECT color FROM guilds WHERE id = ?', [interaction.guild.id]);
     const user     = interaction.options.get('user')?.user || interaction.user;
-
-    console.log(user)
+    const member   = interaction.guild.members.cache.get(user.id);
 
     const embed = new DiscordJS.EmbedBuilder();
     embed.setColor(settings.color);
     embed.setAuthor({
-      name: `Weather forecast for ${isUserLocation ? user.username : `${data.city.name} (${data.city.country})`}`,
+      name: `Weather forecast for ${isUserLocation ? member.displayName : `${data.city.name} (${data.city.country})`}`,
     });
 
-    const forecasts = data.list.filter(forecast => forecast.dt_txt.includes('12:00:00'));
-    embed.addFields(forecasts.map(forecast => ({
+    const forecasts = data.list.reduce((forecastsMap, forecast) => {
+      const [key, time] = forecast.dt_txt.split(' ');
+
+      if (forecastsMap.has(key)) {
+        const existing = forecastsMap.get(key);
+        existing.minTemp = Math.min(forecast.main.temp_min, existing.minTemp);
+        existing.maxTemp = Math.max(forecast.main.temp_max, existing.maxTemp);
+
+        if ('12:00:00' === time) {
+          existing.weather = forecast.weather[0].description;
+          existing.icon    = icons[forecast.weather[0].icon] || '❔';
+          existing.temp    = forecast.main.temp;
+          existing.dt      = forecast.dt;
+        }
+
+        return forecastsMap;
+      }
+
+      forecastsMap.set(key, {
+        weather: forecast.weather[0].description,
+        icon:    icons[forecast.weather[0].icon] || '❔',
+        dt:      forecast.dt,
+        temp:    forecast.main.temp,
+        minTemp: forecast.main.temp_min,
+        maxTemp: forecast.main.temp_max,
+      });
+
+      return forecastsMap;
+    }, new Map())
+
+    embed.addFields([...forecasts.values()].map(forecast => ({
       name: moment.unix(forecast.dt).format('LL'),
-      value: `${icons[forecast.weather[0].icon] || '❔'} ${forecast.weather[0].main} (${Math.round(forecast.main.temp)}°C | ${Math.round(forecast.main.temp * 1.8 + 32)}°F)`,
+      value: [
+        `${forecast.icon} ${forecast.weather}`,
+        `🌡️ High ${Math.round(forecast.maxTemp)}°C | ${Math.round(forecast.maxTemp * 1.8 + 32)}°F`,
+        `🌡️ Low ${Math.round(forecast.minTemp)}°C | ${Math.round(forecast.minTemp * 1.8 + 32)}°F`
+      ].join('\n'),
+      inline: true
     })));
 
     embed.setFooter({text: 'Weather forecast provided by OpenWeather'});
