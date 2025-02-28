@@ -1,0 +1,31 @@
+{
+  "name": "butleren",
+  "version": "1.0.0",
+  "description": "Yet another Discord bot",
+  "author": "Kniffen <kniffen@knifftech.org> (https://knifftech.org/)",
+  "homepage": "https://github.com/kniffen/butleren#readme",
+  "bugs": {
+    "url": "https://github.com/kniffen/butleren/issues"
+  },
+  "scripts": {
+    "build": "npm run build --workspace frontend",
+    "start": "npm run start --workspace backend",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "dev:backend": "npm run dev --workspace backend",
+    "test": "concurrently \"npm run test:frontend\" \"npm run test:backend\"",
+    "test:frontend": "npm run test --workspace frontend",
+    "test:backend": "npm run test --workspace backend"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv-flow": "^4.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
