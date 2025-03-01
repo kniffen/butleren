@@ -7,6 +7,7 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    ignorePatterns: ["node_modules", "jest.config.js"],
     rules: {
       "semi": ["error", "always"],
       "no-await-in-loop": "error",
