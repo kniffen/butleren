@@ -1,4 +1,4 @@
-const hexToRGB = (hex: string): [number, number, number] => {
+export const hexToRGB = (hex: string): [number, number, number] => {
   const bigint = parseInt(hex.slice(1), 16);
 
   const r = (bigint >> 16) & 255;
