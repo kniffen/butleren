@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'node:path';
 import { PORT } from './constants';
+import './discord/client';
 
 const app = express();
 
