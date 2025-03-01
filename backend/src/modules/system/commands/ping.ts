@@ -1,6 +1,6 @@
 import type { CommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import type { Command } from "@/types";
+import type { Command } from "../../../types";
 
 const slashCommandBuilder =
   new SlashCommandBuilder()

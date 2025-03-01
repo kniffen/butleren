@@ -1,3 +1,6 @@
-jest.spyOn(console, 'log').mockImplementation(jest.fn());
-jest.spyOn(console, 'error').mockImplementation(jest.fn());
-jest.spyOn(console, 'warn').mockImplementation(jest.fn());
+jest.mock('./src/logger/logger', () => ({
+  logInfo: jest.fn(),
+  logError: jest.fn(),
+  logWarn: jest.fn(),
+  logDebug: jest.fn(),
+}));

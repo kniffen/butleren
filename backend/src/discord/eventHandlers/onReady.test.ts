@@ -1,4 +1,5 @@
 import type { Client } from "discord.js";
+import * as logger from "../../logger/logger";
 import * as updateGuildCommands from '../utils/updateGuildCommands';
 import { onReady } from "./onReady";
 
@@ -12,7 +13,7 @@ describe('Discord: onReady', () => {
   test('It should update the guild commands for each guild', async () => {
     await onReady(client);
     expect(client.user?.setActivity).toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('Discord: Logged in as "bot"');
+    expect(logger.logInfo).toHaveBeenCalledWith('Discord', 'Logged in as "bot"');
     expect(updateGuildCommandsSpy).toHaveBeenCalledTimes(2);
     expect(updateGuildCommandsSpy).toHaveBeenNthCalledWith(1, { id: '1'});
     expect(updateGuildCommandsSpy).toHaveBeenNthCalledWith(2, { id: '2'});
@@ -23,7 +24,7 @@ describe('Discord: onReady', () => {
     updateGuildCommandsSpy.mockRejectedValueOnce(error);
 
     await onReady(client);
-    expect(console.error).toHaveBeenCalledWith("Discord: Error during onReady event", error);
+    expect(logger.logError).toHaveBeenCalledWith('Discord', 'Error during onReady event', error);
   });
 });
 

@@ -1,5 +1,5 @@
 import { ChannelType } from "discord.js";
-import type { Module } from "@/types";
+import type { Module } from "../../types";
 import { pingCommand } from "./commands/ping";
 
 const commands = new Map([

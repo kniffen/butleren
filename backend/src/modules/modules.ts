@@ -1,4 +1,4 @@
-import type { Module, Command } from "@/types";
+import type { Module, Command } from "../types";
 import { system } from "./system/system";
 
 export const modules = new Map<string, Module>([

@@ -1,3 +1,5 @@
+import { logError } from "../../logger/logger";
+
 export const onError = (err: Error): void => {
-  console.error(err);
+  logError('Discord', err.message, err);
 };

@@ -1,4 +1,5 @@
 import type { Guild } from "discord.js";
+import * as logger from "../../logger/logger";
 import { onGuildCreate } from "./onGuildCreate";
 import * as updateGuildCommands from "../utils/updateGuildCommands";
 
@@ -11,7 +12,7 @@ describe('Discord: onGuildCreate', () => {
 
   test('It should update guild commands', async () => {
     await onGuildCreate(guild);
-    expect(console.log).toHaveBeenCalledWith('Discord: Connected to new guild guild "foobar"');
+    expect(logger.logInfo).toHaveBeenCalledWith('Discord', 'Connected to new guild guild "foobar"');
     expect(updateGuildCommandsSpy).toHaveBeenCalledWith(guild);
   });
 
@@ -20,7 +21,7 @@ describe('Discord: onGuildCreate', () => {
     updateGuildCommandsSpy.mockRejectedValueOnce(error);
 
     await onGuildCreate(guild);
-    expect(console.error).toHaveBeenCalledWith("Discord: Error during onGuildCreate event", error);
+    expect(logger.logError).toHaveBeenCalledWith('Discord', 'Error during onGuildCreate event', error);
   });
 });
 

@@ -1,4 +1,5 @@
 import { type Interaction, InteractionType } from "discord.js";
+import * as logger from "../../logger/logger";
 import { pingCommand } from "../../modules/system/commands/ping";
 import { onInteractionCreate } from "./onInteractionCreate";
 
@@ -20,7 +21,7 @@ describe('Discord: onInteractionCreate', () => {
 
   test('It should handle a command not existing', async () => {
     await onInteractionCreate({ ...interaction, commandName: 'unknown' } as Interaction);
-    expect(console.warn).toHaveBeenCalledWith('Discord: Command "unknown" not found');
+    expect(logger.logWarn).toHaveBeenCalledWith('Discord', 'Command "unknown" not found');
     expect(commandExecuteSpy).not.toHaveBeenCalled();
   });
 
@@ -29,7 +30,7 @@ describe('Discord: onInteractionCreate', () => {
     commandExecuteSpy.mockRejectedValueOnce(error);
 
     await onInteractionCreate(interaction);
-    expect(console.error).toHaveBeenCalledWith("Discord: Error during onInteractionCreate event", error);
+    expect(logger.logError).toHaveBeenCalledWith('Discord', 'Error during onInteractionCreate event', error);
   });
 });
 

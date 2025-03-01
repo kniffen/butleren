@@ -1,4 +1,5 @@
 import type { Guild } from "discord.js";
+import { logInfo } from "../../logger/logger";
 import { commands } from '../../modules/modules';
 
 export const updateGuildCommands = async (guild: Guild) =>  {
@@ -8,10 +9,10 @@ export const updateGuildCommands = async (guild: Guild) =>  {
     const applicationCommand = applicationCommands.find((applicationCommand) => applicationCommand.name === command.slashCommandBuilder.name);
 
     if (!applicationCommand) {
-      console.log(`Discord: Adding command "${command.slashCommandBuilder.name}" to guild "${guild.name}"`);
+      logInfo('Discord', `Adding command "${command.slashCommandBuilder.name}" to guild "${guild.name}"`);
       await guild.commands.create(command.slashCommandBuilder);
     } else {
-      console.log(`Discord: Updating command "${command.slashCommandBuilder.name}" in guild "${guild.name}"`);
+      logInfo('Discord', `Updating command "${command.slashCommandBuilder.name}" in guild "${guild.name}"`);
       await guild.commands.edit(applicationCommand, command.slashCommandBuilder);
     }
   });
@@ -21,7 +22,7 @@ export const updateGuildCommands = async (guild: Guild) =>  {
     const command = commands.get(applicationCommand.name);
 
     if (!command) {
-      console.log(`Discord: Removing command "${applicationCommand.name}" from guild "${guild.name}"`);
+      logInfo('Discord', `Removing command "${applicationCommand.name}" from guild "${guild.name}"`);
       await guild.commands.delete(applicationCommand);
     }
   });

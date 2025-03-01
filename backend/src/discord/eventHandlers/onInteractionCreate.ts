@@ -1,4 +1,5 @@
 import { type Interaction, InteractionType } from "discord.js";
+import { logWarn, logError } from "../../logger/logger";
 import { commands } from "../../modules/modules";
 
 export const onInteractionCreate = async (interaction: Interaction): Promise<void> => {
@@ -8,7 +9,7 @@ export const onInteractionCreate = async (interaction: Interaction): Promise<voi
         const command = commands.get(interaction.commandName);
 
         if (!command) {
-          console.warn(`Discord: Command "${interaction.commandName}" not found`);
+          logWarn('Discord', `Command "${interaction.commandName}" not found`);
           return;
         }
 
@@ -17,6 +18,6 @@ export const onInteractionCreate = async (interaction: Interaction): Promise<voi
     }
 
   } catch (err) {
-    console.error("Discord: Error during onInteractionCreate event", err);
+    logError('Discord', 'Error during onInteractionCreate event', err);
   }
 };

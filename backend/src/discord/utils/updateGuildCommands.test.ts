@@ -1,4 +1,5 @@
 import { Collection, type Guild } from "discord.js";
+import * as logger from '../../logger/logger';
 import { updateGuildCommands } from "./updateGuildCommands";
 
 jest.mock('../../modules/modules', () => ({
@@ -18,19 +19,19 @@ describe('Discord: updateGuildCommands()', () => {
   });
 
   test('It should add commands to a guild', () => {
-    expect(console.log).toHaveBeenCalledWith('Discord: Adding command "command1" to guild "foobar"');
+    expect(logger.logInfo).toHaveBeenCalledWith('Discord', 'Adding command "command1" to guild "foobar"');
     expect(guild.commands.create).toHaveBeenCalledTimes(1);
     expect(guild.commands.create).toHaveBeenCalledWith({ name: 'command1' });
   });
 
   test('It should update commands in a guild', () => {
-    expect(console.log).toHaveBeenCalledWith('Discord: Updating command "command2" in guild "foobar"');
+    expect(logger.logInfo).toHaveBeenCalledWith('Discord', 'Updating command "command2" in guild "foobar"');
     expect(guild.commands.edit).toHaveBeenCalledTimes(1);
     expect(guild.commands.edit).toHaveBeenCalledWith({ name: 'command2' }, { name: 'command2' });
   });
 
   test('It should remove deprecated commands from a guild', () => {
-    expect(console.log).toHaveBeenCalledWith('Discord: Removing command "command3" from guild "foobar"');
+    expect(logger.logInfo).toHaveBeenCalledWith('Discord', 'Removing command "command3" from guild "foobar"');
     expect(guild.commands.delete).toHaveBeenCalledTimes(1);
     expect(guild.commands.delete).toHaveBeenCalledWith({ name: 'command3' });
   });

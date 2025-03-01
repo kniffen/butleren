@@ -10,9 +10,6 @@
     "module": "commonjs",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "outDir": "./dist"
   },
   "include": ["src/**/*.ts"],
