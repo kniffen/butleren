@@ -1,4 +1,4 @@
-import type { Client } from "discord.js";
+import { Collection, type Client } from "discord.js";
 import * as logger from "../../logger/logger";
 import * as updateGuildCommands from '../utils/updateGuildCommands';
 import { onReady } from "./onReady";
@@ -28,9 +28,15 @@ describe('Discord: onReady', () => {
   });
 });
 
+const guilds = new Collection([
+  ['1', { id: '1' }],
+  ['2', { id: '2' }],
+]);
+
 const client = {
   guilds: {
-    fetch: jest.fn(async (id?: string) => id ? guilds.get(id) : guilds)
+    fetch: jest.fn(async (id?: string) => id ? guilds.get(id) : guilds),
+    cache: guilds,
   },
   user: {
     tag: 'bot',
@@ -38,7 +44,3 @@ const client = {
   },
 } as unknown as Client;
 
-const guilds = new Map([
-  ['1', { id: '1' }],
-  ['2', { id: '2' }],
-]);

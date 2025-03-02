@@ -13,7 +13,8 @@ const rgbToAnsi = (r: number, g: number, b: number) => {
 };
 
 export const colors: Record<string, string> = {
-  reset:   '\x1b[0m',
-  yellow:  '\x1b[33m',
-  Discord: rgbToAnsi(...hexToRGB('#7289DA')), // Discord blue
+  reset:    '\x1b[0m',
+  yellow:   '\x1b[33m',
+  Discord:  rgbToAnsi(...hexToRGB('#7289DA')), // Discord blue
+  Database: rgbToAnsi(...hexToRGB('#FFFFC5'))  // Light yellow
 };

@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'node:path';
 import { logInfo } from "./logger/logger";
 import { PORT } from './constants';
+import './database/database';
 import './discord/client';
 
 const app = express();

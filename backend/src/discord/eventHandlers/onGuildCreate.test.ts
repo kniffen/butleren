@@ -2,18 +2,22 @@ import type { Guild } from "discord.js";
 import * as logger from "../../logger/logger";
 import { onGuildCreate } from "./onGuildCreate";
 import * as updateGuildCommands from "../utils/updateGuildCommands";
+import * as addGuildToDatabase from "../../database/utils/addGuildToDatabase";
 
 describe('Discord: onGuildCreate', () => {
   const updateGuildCommandsSpy = jest.spyOn(updateGuildCommands, 'updateGuildCommands').mockImplementation();
+  const addGuildToDatabaseSpy = jest.spyOn(addGuildToDatabase, 'addGuildToDatabase').mockImplementation();
 
   afterAll(() => {
     updateGuildCommandsSpy.mockRestore();
+    addGuildToDatabaseSpy.mockRestore();
   });
 
   test('It should update guild commands', async () => {
     await onGuildCreate(guild);
     expect(logger.logInfo).toHaveBeenCalledWith('Discord', 'Connected to new guild guild "foobar"');
     expect(updateGuildCommandsSpy).toHaveBeenCalledWith(guild);
+    expect(addGuildToDatabaseSpy).toHaveBeenCalledWith(guild);
   });
 
   test('It should catch errors and log them', async () => {
