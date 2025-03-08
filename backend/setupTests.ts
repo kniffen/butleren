@@ -1,6 +1,17 @@
 import { MIGRATIONS_PATH } from './src/database/constants';
 import { database } from './src/database/database';
 
+jest.mock('node-fetch', () => {
+  const fetch = jest.requireActual('node-fetch');
+  const fetchMock = jest.fn();
+  for (const key in fetch) {
+    // @ts-ignore
+    fetchMock[key] = fetch[key];
+  }
+
+  return fetchMock;
+});
+
 jest.mock('./src/logger/logger', () => ({
   logInfo: jest.fn(),
   logError: jest.fn(),

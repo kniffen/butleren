@@ -25,8 +25,9 @@ describe('addGuildToDatabase', () => {
   test('It should set module settings for the guild', async () => {
     await addGuildToDatabase(guild);
 
-    expect(setModuleSettingsSpy).toHaveBeenCalledTimes(1);
+    expect(setModuleSettingsSpy).toHaveBeenCalledTimes(2);
     expect(setModuleSettingsSpy).toHaveBeenCalledWith('system', guild, defaultModuleSettings);
+    expect(setModuleSettingsSpy).toHaveBeenCalledWith('fun',    guild, defaultModuleSettings);
   });
 
   test('It should not overwrite existing guild settings', async () => {
@@ -41,7 +42,7 @@ describe('addGuildToDatabase', () => {
   });
 
   test('It should not overwrite existing module settings', async () => {
-    getModuleSettingsSpy.mockResolvedValueOnce({
+    getModuleSettingsSpy.mockResolvedValue({
       isEnabled: true,
     });
 
