@@ -1,10 +1,10 @@
-import type { Guild } from "discord.js";
-import { logError, logInfo } from "../../logger/logger";
-import { database } from "../database";
-import type { GuildSettings } from "../types";
-import { getGuildSettings } from "./getGuildSettings";
+import type { Guild } from 'discord.js';
+import { logError, logInfo } from '../../logger/logger';
+import { database } from '../database';
+import type { GuildSettings } from '../types';
+import { getGuildSettings } from './getGuildSettings';
 
-export const setGuildSettings = async (guild: Guild, settings: GuildSettings) => {
+export const setGuildSettings = async (guild: Guild, settings: GuildSettings): Promise<void> => {
   try {
     logInfo('Database', `Setting settings for guild "${guild.name}"`);
 
@@ -31,4 +31,4 @@ export const setGuildSettings = async (guild: Guild, settings: GuildSettings) =>
   } catch (err) {
     logError('Database', 'Error updating guild settings', err);
   }
-}
+};

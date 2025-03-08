@@ -5,10 +5,10 @@ export const hexToRGB = (hex: string): [number, number, number] => {
   const g = (bigint >> 8) & 255;
   const b = bigint & 255;
 
-  return [ r, g, b ];
+  return [r, g, b];
 };
 
-const rgbToAnsi = (r: number, g: number, b: number) => {
+const rgbToAnsi = (r: number, g: number, b: number): string => {
   return `\x1b[38;2;${r};${g};${b}m`;
 };
 

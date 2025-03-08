@@ -12,6 +12,6 @@
     "isolatedModules": true,
     "outDir": "./dist"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.test.ts"],
   "exclude": ["node_modules", "jest.config.js"]
 }

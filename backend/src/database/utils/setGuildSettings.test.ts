@@ -1,8 +1,8 @@
-import { Guild } from "discord.js";
-import { database } from "../database";
-import type { GuildSettings } from "../types";
-import * as getGuildSettings from "./getGuildSettings";
-import { setGuildSettings } from "./setGuildSettings";
+import { Guild } from 'discord.js';
+import { database } from '../database';
+import type { GuildSettings } from '../types';
+import * as getGuildSettings from './getGuildSettings';
+import { setGuildSettings } from './setGuildSettings';
 
 describe('setGuildSettings()', () => {
   const getGuildSettingsSpy = jest.spyOn(getGuildSettings, 'getGuildSettings');
@@ -26,7 +26,7 @@ describe('setGuildSettings()', () => {
     const db  = await database;
     const row = await db.get('SELECT settings FROM guilds WHERE guildId = ?', guild.id);
     expect(JSON.parse(row.settings)).toEqual(settings);
-  })
+  });
 
   test('It should update existing guild settings', async () => {
     const guild    = { id: '123' } as Guild;
@@ -38,11 +38,11 @@ describe('setGuildSettings()', () => {
     const db  = await database;
     const row = await db.get('SELECT settings FROM guilds WHERE guildId = ?', guild.id);
     expect(JSON.parse(row.settings)).toEqual(settings);
-  })
+  });
 });
 
 const guildSettings: GuildSettings = {
   nickname: 'Foobar',
   timezone: 'UTC',
   color:    '#000000',
-}
+};

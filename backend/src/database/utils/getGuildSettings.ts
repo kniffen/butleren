@@ -1,7 +1,7 @@
-import type { Guild } from "discord.js";
-import { logInfo, logWarn } from "../../logger/logger";
-import { database } from "../database";
-import type { GuildSettings } from "../types";
+import type { Guild } from 'discord.js';
+import { logInfo, logWarn } from '../../logger/logger';
+import { database } from '../database';
+import type { GuildSettings } from '../types';
 
 export const getGuildSettings = async (guild: Guild): Promise<GuildSettings | null> => {
   logInfo('Database', `Reading settings for guild "${guild.name}"`);
@@ -17,4 +17,4 @@ export const getGuildSettings = async (guild: Guild): Promise<GuildSettings | nu
   }
 
   return JSON.parse(row.settings) as GuildSettings;
-}
+};

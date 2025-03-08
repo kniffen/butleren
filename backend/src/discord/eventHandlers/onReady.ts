@@ -1,10 +1,11 @@
 import type { Client } from 'discord.js';
-import { logInfo, logError } from "../../logger/logger";
+import { logInfo, logError } from '../../logger/logger';
 import { updateGuildCommands } from '../utils/updateGuildCommands';
 import { addGuildToDatabase } from '../../database/utils/addGuildToDatabase';
 
 export const onReady = async (client: Client): Promise<void> => {
   try {
+    // eslint-disable-next-line no-undef
     client.user?.setActivity(process.env.npm_package_version || '');
     logInfo('Discord', `Logged in as "${client.user?.tag}"`);
 

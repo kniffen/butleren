@@ -1,7 +1,7 @@
-import { Guild } from "discord.js";
-import { database } from "../database";
-import { ModuleSettings } from "../types";
-import { logInfo } from "../../logger/logger";
+import { Guild } from 'discord.js';
+import { database } from '../database';
+import { ModuleSettings } from '../types';
+import { logInfo } from '../../logger/logger';
 
 export const setModuleSettings = async (slug: string, guild: Guild, settings: ModuleSettings): Promise<void> => {
   logInfo('Database', `Setting settings for module "${slug}" in guild "${guild.name}"`);
@@ -15,4 +15,4 @@ export const setModuleSettings = async (slug: string, guild: Guild, settings: Mo
   );
 
   logInfo('Database', `Updated settings for module "${slug}" in guild "${guild.name}"`);
-}
+};

@@ -1,8 +1,8 @@
-import type { Guild } from "discord.js";
-import { logInfo } from "../../logger/logger";
+import type { Guild } from 'discord.js';
+import { logInfo } from '../../logger/logger';
 import { commands } from '../../modules/modules';
 
-export const updateGuildCommands = async (guild: Guild) =>  {
+export const updateGuildCommands = async (guild: Guild): Promise<void> => {
   const applicationCommands = await guild.commands.fetch();
 
   commands.forEach(async (command) => {
@@ -26,4 +26,4 @@ export const updateGuildCommands = async (guild: Guild) =>  {
       await guild.commands.delete(applicationCommand);
     }
   });
-}
+};

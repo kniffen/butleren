@@ -1,5 +1,5 @@
-import * as logger from "../../logger/logger";
-import { onError } from "./onError";
+import * as logger from '../../logger/logger';
+import { onError } from './onError';
 
 describe('Discord: onError', () => {
   test('It should log the error', () => {

@@ -1,5 +1,5 @@
-import type { ChannelType, CommandInteraction } from "discord.js";
-import type { SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "@discordjs/builders";
+import type { ChannelType, CommandInteraction } from 'discord.js';
+import type { SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from '@discordjs/builders';
 
 export interface Command {
   isLocked: boolean;

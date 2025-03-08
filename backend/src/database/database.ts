@@ -1,8 +1,8 @@
-import fs from 'node:fs'
-import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
-import { logInfo, logError } from '../logger/logger'
-import { DB_PATH, MIGRATIONS_PATH } from './constants'
+import fs from 'node:fs';
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite';
+import { logInfo, logError } from '../logger/logger';
+import { DB_PATH, MIGRATIONS_PATH } from './constants';
 
 
 // Ensures the database file exists
@@ -15,7 +15,7 @@ export const database = open({
   driver:   sqlite3.Database,
 });
 
-(async () => {
+(async (): Promise<void> => {
   try {
     const db = await database;
     await db.migrate({ migrationsPath: MIGRATIONS_PATH });

@@ -1,7 +1,7 @@
-import { type Interaction, InteractionType } from "discord.js";
-import * as logger from "../../logger/logger";
-import { pingCommand } from "../../modules/system/commands/ping";
-import { onInteractionCreate } from "./onInteractionCreate";
+import { type Interaction, InteractionType } from 'discord.js';
+import * as logger from '../../logger/logger';
+import { pingCommand } from '../../modules/system/commands/ping';
+import { onInteractionCreate } from './onInteractionCreate';
 
 describe('Discord: onInteractionCreate', () => {
   const commandExecuteSpy = jest.spyOn(pingCommand, 'execute').mockImplementation();
@@ -35,6 +35,6 @@ describe('Discord: onInteractionCreate', () => {
 });
 
 const interaction = {
-  type: InteractionType.ApplicationCommand,
+  type:        InteractionType.ApplicationCommand,
   commandName: 'ping'
 } as Interaction;

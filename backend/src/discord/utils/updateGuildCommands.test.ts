@@ -1,6 +1,6 @@
-import { Collection, type Guild } from "discord.js";
+import { Collection, type Guild } from 'discord.js';
 import * as logger from '../../logger/logger';
-import { updateGuildCommands } from "./updateGuildCommands";
+import { updateGuildCommands } from './updateGuildCommands';
 
 jest.mock('../../modules/modules', () => ({
   commands: new Map([
@@ -12,7 +12,7 @@ jest.mock('../../modules/modules', () => ({
 describe('Discord: updateGuildCommands()', () => {
   beforeAll(async () => {
     await updateGuildCommands(guild);
-  })
+  });
 
   afterAll(() => {
     jest.restoreAllMocks();
@@ -43,11 +43,11 @@ const applicationCommands = new Collection([
 ]);
 
 const guild = {
-  name: 'foobar',
+  name:     'foobar',
   commands: {
-    fetch: async () => applicationCommands,
+    fetch:  async () => applicationCommands,
     create: jest.fn(),
-    edit: jest.fn(),
+    edit:   jest.fn(),
     delete: jest.fn()
   }
 } as unknown as Guild;

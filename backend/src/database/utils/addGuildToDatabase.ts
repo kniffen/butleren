@@ -9,13 +9,13 @@ import type { GuildSettings, ModuleSettings } from '../types';
 export const defaultGuildSettings: GuildSettings = {
   color:    '#19D8B4',
   timezone: 'UTC',
-}
+};
 
 export const defaultModuleSettings: ModuleSettings = {
   isEnabled: false,
-}
+};
 
-export const addGuildToDatabase = async (guild: Guild) => {
+export const addGuildToDatabase = async (guild: Guild): Promise<void> => {
   const guildSettings = await getGuildSettings(guild);
   if (!guildSettings) {
     await setGuildSettings(guild, defaultGuildSettings);
@@ -27,6 +27,6 @@ export const addGuildToDatabase = async (guild: Guild) => {
       return;
     }
 
-    await setModuleSettings(mod.slug, guild, defaultModuleSettings)
+    await setModuleSettings(mod.slug, guild, defaultModuleSettings);
   }));
-}
+};

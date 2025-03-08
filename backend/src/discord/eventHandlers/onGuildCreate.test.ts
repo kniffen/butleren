@@ -1,8 +1,8 @@
-import type { Guild } from "discord.js";
-import * as logger from "../../logger/logger";
-import { onGuildCreate } from "./onGuildCreate";
-import * as updateGuildCommands from "../utils/updateGuildCommands";
-import * as addGuildToDatabase from "../../database/utils/addGuildToDatabase";
+import type { Guild } from 'discord.js';
+import * as logger from '../../logger/logger';
+import { onGuildCreate } from './onGuildCreate';
+import * as updateGuildCommands from '../utils/updateGuildCommands';
+import * as addGuildToDatabase from '../../database/utils/addGuildToDatabase';
 
 describe('Discord: onGuildCreate', () => {
   const updateGuildCommandsSpy = jest.spyOn(updateGuildCommands, 'updateGuildCommands').mockImplementation();

@@ -8,7 +8,7 @@ describe('ping command', () => {
 
   test('it should have a slash command builder', () => {
     expect(pingCommand.slashCommandBuilder.toJSON()).toEqual(expect.objectContaining({
-      name: 'ping',
+      name:        'ping',
       description: 'Latency check'
     }));
   });
@@ -20,5 +20,5 @@ describe('ping command', () => {
       await pingCommand.execute(commandInteraction);
       expect(reply).toHaveBeenCalledWith('Pong!');
     });
-  })
+  });
 });

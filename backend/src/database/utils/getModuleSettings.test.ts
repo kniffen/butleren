@@ -1,7 +1,7 @@
-import type { Guild } from "discord.js";
-import { database } from "../database";
-import type { ModuleSettings } from "../types";
-import { getModuleSettings } from "./getModuleSettings";
+import type { Guild } from 'discord.js';
+import { database } from '../database';
+import type { ModuleSettings } from '../types';
+import { getModuleSettings } from './getModuleSettings';
 
 describe('getModuleSettings()', () => {
   beforeEach(async () => {
@@ -12,7 +12,7 @@ describe('getModuleSettings()', () => {
       guild.id,
       JSON.stringify(moduleSettings),
     );
-  })
+  });
 
   test('should return the module settings', async () => {
     const settings = await getModuleSettings(slug, guild);
@@ -26,7 +26,7 @@ describe('getModuleSettings()', () => {
 });
 
 const slug = 'testModule';
-const guild = {id: '123'} as Guild;
+const guild = { id: '123' } as Guild;
 const moduleSettings: ModuleSettings = {
   isEnabled: true,
-}
+};

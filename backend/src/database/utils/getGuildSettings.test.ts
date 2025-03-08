@@ -1,7 +1,7 @@
-import type { Guild } from "discord.js";
-import { getGuildSettings } from "./getGuildSettings";
-import { database } from "../database";
-import type { GuildSettings } from "../types";
+import type { Guild } from 'discord.js';
+import { getGuildSettings } from './getGuildSettings';
+import { database } from '../database';
+import type { GuildSettings } from '../types';
 
 describe('getGuildSettings()', () => {
   beforeEach(async () => {
@@ -11,7 +11,7 @@ describe('getGuildSettings()', () => {
       '123',
       JSON.stringify(guildSettings),
     );
-  })
+  });
 
   test('It should get the settings for a guild', async () => {
     const guild    = { id: '123' } as Guild;
@@ -30,4 +30,4 @@ const guildSettings: GuildSettings = {
   nickname: 'Foobar',
   timezone: 'UTC',
   color:    '#000000',
-}
+};

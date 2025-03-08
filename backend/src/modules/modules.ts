@@ -1,6 +1,6 @@
-import type { Module, Command } from "../types";
-import { system } from "./system/system";
-import { fun } from "./fun/fun";
+import type { Module, Command } from '../types';
+import { system } from './system/system';
+import { fun } from './fun/fun';
 
 export const modules = new Map<string, Module>([
   [system.slug, system],

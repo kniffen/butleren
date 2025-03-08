@@ -1,5 +1,5 @@
-import { Guild } from "discord.js";
-import { addGuildToDatabase, defaultGuildSettings, defaultModuleSettings } from "./addGuildToDatabase";
+import { Guild } from 'discord.js';
+import { addGuildToDatabase, defaultGuildSettings, defaultModuleSettings } from './addGuildToDatabase';
 import * as getGuildSettings from './getGuildSettings';
 import * as setGuildSettings from './setGuildSettings';
 import * as getModuleSettings from './getModuleSettings';
@@ -54,4 +54,4 @@ describe('addGuildToDatabase', () => {
 
 const guild = {
   id: '1234'
-} as Guild
+} as Guild;
