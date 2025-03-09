@@ -1,0 +1,16 @@
+{
+  "name": "butleren-api-contract",
+  "private": true,
+  "version": "1.0.0",
+  "main": "schema.ts",
+  "scripts": {
+    "generate-schema": "openapi-typescript src/butleren-api-contract.yml --output schema.ts",
+    "postinstall": "npm run generate-schema",
+    "generate-api-docs": "node script/createSwaggerUI.js"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.6.1",
+    "swagger-cli": "^4.0.4",
+    "swagger-ui-dist": "^5.20.0"
+  }
+}

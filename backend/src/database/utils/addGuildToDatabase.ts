@@ -4,7 +4,7 @@ import { getGuildSettings } from './getGuildSettings';
 import { setGuildSettings } from './setGuildSettings';
 import { getModuleSettings } from './getModuleSettings';
 import { setModuleSettings } from './setModuleSettings';
-import type { GuildSettings, ModuleSettings } from '../types';
+import type { GuildSettings, ModuleSettings } from '../../types';
 
 export const defaultGuildSettings: GuildSettings = {
   color:    '#19D8B4',

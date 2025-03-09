@@ -1,6 +1,6 @@
 import type { Guild } from 'discord.js';
 import { database } from '../database';
-import type { ModuleSettings } from '../types';
+import type { ModuleSettings } from '../../types';
 import { getModuleSettings } from './getModuleSettings';
 
 describe('getModuleSettings()', () => {

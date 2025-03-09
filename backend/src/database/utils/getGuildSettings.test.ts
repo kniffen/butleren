@@ -1,7 +1,7 @@
 import type { Guild } from 'discord.js';
 import { getGuildSettings } from './getGuildSettings';
 import { database } from '../database';
-import type { GuildSettings } from '../types';
+import type { GuildSettings } from '../../types';
 
 describe('getGuildSettings()', () => {
   beforeEach(async () => {

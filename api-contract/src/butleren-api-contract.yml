@@ -1,0 +1,79 @@
+openapi: "3.0.2"
+info:
+  title: Butleren API
+  version: 1.0.0
+  description: |
+    Butleren API is a RESTful API that provides access to Butleren's services.
+
+paths:
+  /api/discord/guilds:
+    get:
+      summary: Get all guilds
+      responses:
+        '200':
+          description: A list of guilds
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Guild"
+        '500':
+          description: Internal server error
+  /api/discord/guilds/{guild-id}:
+    get:
+      summary: Get a guild by id
+      parameters:
+        - name: guild-id
+          example: "123456789012345678"
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The guild's discord id
+      responses:
+        '200':
+          description: A guild
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Guild"
+        '404':
+          description: Guild not found
+        '500':
+          description: Internal server error
+  /api/discord/guilds/{guild-id}/settings:
+    put:
+      summary: Update a guild's settings
+      parameters:
+        - name: guild-id
+          example: "123456789012345678"
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The guild's discord id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuildSettings"
+      responses:
+        '204':
+          description: Guild settings updated
+        '404':
+          description: Guild not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    UserSettings:
+      $ref: "./components/UserSettings.yml#/UserSettings"
+    ModuleSettings:
+      $ref: "./components/ModuleSettings.yml#/ModuleSettings"
+    GuildSettings:
+      $ref: "./components/GuildSettings.yml#/GuildSettings"
+    Guild:
+      $ref: "./components/Guild.yml#/Guild"

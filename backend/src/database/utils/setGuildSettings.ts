@@ -1,7 +1,7 @@
 import type { Guild } from 'discord.js';
 import { logError, logInfo } from '../../logger/logger';
 import { database } from '../database';
-import type { GuildSettings } from '../types';
+import type { GuildSettings } from '../../types';
 import { getGuildSettings } from './getGuildSettings';
 
 export const setGuildSettings = async (guild: Guild, settings: GuildSettings): Promise<void> => {

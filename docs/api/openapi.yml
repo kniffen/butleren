@@ -1,0 +1,231 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Butleren API",
+    "version": "1.0.0",
+    "description": "Butleren API is a RESTful API that provides access to Butleren's services.\n"
+  },
+  "paths": {
+    "/api/discord/guilds": {
+      "get": {
+        "summary": "Get all guilds",
+        "responses": {
+          "200": {
+            "description": "A list of guilds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Guild"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/discord/guilds/{guild-id}": {
+      "get": {
+        "summary": "Get a guild by id",
+        "parameters": [
+          {
+            "name": "guild-id",
+            "example": "123456789012345678",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The guild's discord id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A guild",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guild"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Guild not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/discord/guilds/{guild-id}/settings": {
+      "put": {
+        "summary": "Update a guild's settings",
+        "parameters": [
+          {
+            "name": "guild-id",
+            "example": "123456789012345678",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The guild's discord id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuildSettings"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Guild settings updated"
+          },
+          "404": {
+            "description": "Guild not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserSettings": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "The user's location",
+            "example": "Germany"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "ModuleSettings": {
+        "type": "object",
+        "properties": {
+          "isEnabled": {
+            "type": "boolean",
+            "description": "Whether the module is enabled",
+            "example": true
+          }
+        },
+        "required": [
+          "isEnabled"
+        ]
+      },
+      "GuildSettings": {
+        "type": "object",
+        "properties": {
+          "nickname": {
+            "type": "string",
+            "description": "The nickname of bot in the guild"
+          },
+          "color": {
+            "type": "string",
+            "description": "The color of the embeds",
+            "example": "#FF0000"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "The timezone of the guild",
+            "example": "UTC"
+          }
+        },
+        "required": [
+          "color",
+          "timezone"
+        ]
+      },
+      "Guild": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The guild's discord id",
+            "example": "123456789012345678"
+          },
+          "name": {
+            "type": "string",
+            "description": "The guild name"
+          },
+          "iconURL": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": null
+              }
+            ],
+            "description": "The guild icon URL"
+          },
+          "settings": {
+            "type": "object",
+            "description": "The guild settings",
+            "$ref": "#/components/schemas/GuildSettings"
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "enum",
+                  "enum": [
+                    "ANNOUNCEMENT",
+                    "TEXT",
+                    "VOICE",
+                    "CATEGORY"
+                  ]
+                }
+              }
+            }
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "iconURL"
+        ]
+      }
+    }
+  }
+}

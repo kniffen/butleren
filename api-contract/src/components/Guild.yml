@@ -1,0 +1,48 @@
+Guild:
+  type: object
+  properties:
+    id:
+      type: string
+      description: The guild's discord id
+      example: "123456789012345678"
+    name:
+      type: string
+      description: The guild name
+    iconURL:
+      oneOf:
+        - type: string
+        - type: null
+      description: The guild icon URL
+    settings:
+      type: object
+      description: The guild settings
+      $ref: "./GuildSettings.yml#/GuildSettings"
+    channels:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          type:
+            type: enum
+            enum:
+              - ANNOUNCEMENT
+              - TEXT
+              - VOICE
+              - CATEGORY
+    roles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+  required:
+    - id
+    - name
+    - iconURL

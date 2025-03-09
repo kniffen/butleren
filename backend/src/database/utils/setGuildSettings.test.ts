@@ -1,6 +1,6 @@
 import { Guild } from 'discord.js';
 import { database } from '../database';
-import type { GuildSettings } from '../types';
+import type { GuildSettings } from '../../types';
 import * as getGuildSettings from './getGuildSettings';
 import { setGuildSettings } from './setGuildSettings';
 
