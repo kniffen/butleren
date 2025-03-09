@@ -1,12 +1,12 @@
 -- Up
 
 CREATE TABLE IF NOT EXISTS guilds (
-  guildId SERIAL PRIMARY KEY,
+  guildId TEXT SERIAL PRIMARY KEY,
   settings JSON
 );
 
 CREATE TABLE IF NOT EXISTS users (
-  userId SERIAL PRIMARY KEY,
+  userId TEXT SERIAL PRIMARY KEY,
   settings JSON
 );
 

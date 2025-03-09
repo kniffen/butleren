@@ -18,4 +18,5 @@ export const colors: Record<string, string> = {
   Discord:  rgbToAnsi(...hexToRGB('#7289DA')), // Discord blue
   Database: rgbToAnsi(...hexToRGB('#FFFFC5')), // Light yellow
   Fun:      rgbToAnsi(...hexToRGB('#FFC0CB')), // Pink
+  API:      rgbToAnsi(...hexToRGB('#00FF00')), // Light green
 };

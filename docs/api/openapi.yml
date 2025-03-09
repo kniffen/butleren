@@ -29,12 +29,12 @@
         }
       }
     },
-    "/api/discord/guilds/{guild-id}": {
+    "/api/discord/guilds/{guild}": {
       "get": {
         "summary": "Get a guild by id",
         "parameters": [
           {
-            "name": "guild-id",
+            "name": "guild",
             "example": "123456789012345678",
             "in": "path",
             "required": true,
@@ -64,12 +64,12 @@
         }
       }
     },
-    "/api/discord/guilds/{guild-id}/settings": {
+    "/api/discord/guilds/{guild}/settings": {
       "put": {
         "summary": "Update a guild's settings",
         "parameters": [
           {
-            "name": "guild-id",
+            "name": "guild",
             "example": "123456789012345678",
             "in": "path",
             "required": true,
@@ -167,14 +167,8 @@
             "description": "The guild name"
           },
           "iconURL": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": null
-              }
-            ],
+            "type": "string",
+            "nullable": true,
             "description": "The guild icon URL"
           },
           "settings": {

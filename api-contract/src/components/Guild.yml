@@ -9,9 +9,8 @@ Guild:
       type: string
       description: The guild name
     iconURL:
-      oneOf:
-        - type: string
-        - type: null
+      type: string
+      nullable: true
       description: The guild icon URL
     settings:
       type: object
