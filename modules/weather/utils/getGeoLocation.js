@@ -1,21 +1,38 @@
 import { logger } from '../../../logger/logger.js'
 
 const BASE_URL = 'http://api.openweathermap.org';
-const PATH     = '/geo/1.0/direct';
 
 export const getGeoLocation = async (location) => {
   try {
-    const url = new URL(`${BASE_URL}${PATH}`);
-    url.searchParams.append('q', location);
-    url.searchParams.append('limit', '1');
-    url.searchParams.append('appid', process.env.OPEN_WEATHER_MAP_API_KEY);
+    const isNumber = /^\d+$/.test(location);
+    const path = isNumber ? '/geo/1.0/zip' : '/geo/1.0/direct';
+    const url = new URL(`${BASE_URL}${path}`);
 
-    logger.info(`Open Weather API: ${PATH} request`, {url: url.toString()});
+    if (isNumber) {
+      url.searchParams.set('zip', location);
+    } else {
+      url.searchParams.set('q', location);
+    }
+    url.searchParams.set('limit', '1');
+    url.searchParams.set('appid', process.env.OPEN_WEATHER_MAP_API_KEY);
+
+
+    logger.info(`Open Weather API: ${path} request`, {url: url.toString()});
     const data = await fetch(url).then(res => res.json());
-    logger.debug(`Open Weather API: ${PATH} response body`, {data});
+    logger.debug(`Open Weather API: ${path} response body`, {data});
 
-    if (data.length === 0) {
+    if (0 === data.length) {
       return null;
+    }
+
+    if (isNumber) {
+      return {
+        name: data.name,
+        country: data.country,
+        state: null,
+        lat: data.lat,
+        lon: data.lon,
+      }
     }
 
     const item = data[0];
@@ -28,7 +45,7 @@ export const getGeoLocation = async (location) => {
     };
 
   } catch (err) {
-    logger.error(`Open Weather API: ${PATH} error`, {err});
+    logger.error('Open Weather API error', {err});
     return null;
   }
 }
