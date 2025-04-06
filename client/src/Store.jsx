@@ -17,17 +17,17 @@ export default function Store({ children }) {
       case 'ADD_NOTIFICATION':
         const id = v4()
         return [...state, {id, ...action.payload}]
-      
+
       case 'REMOVE_NOTIFICATION':
         return state.filter(notification => notification.id !== action.id);
-      
+
       default:
         return state
     }
   }, [])
 
   useEffect(function() {
-    if (params.guild == guild?.id) return
+    if (!params.guild || params.guild == guild?.id) return
 
     fetch(`/api/guilds/${params.guild}`)
       .then(res => res.json())
@@ -46,7 +46,7 @@ export default function Store({ children }) {
   }, [params])
   
   return (
-    <Context.Provider value={{guild, discordChannels, discordRoles, notifications, notificationsDispatch}}>
+    <Context.Provider value={{guild, setGuild, discordChannels, discordRoles, notifications, notificationsDispatch}}>
       {children}
       <Notifications />
     </Context.Provider>

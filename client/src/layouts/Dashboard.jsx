@@ -13,7 +13,7 @@ export default function Dashboard({ children, title }) {
     <>
       <Sidebar />
       <StyledDashboard>
-        <PageHeader guild={guild} />
+        {guild ? <PageHeader guild={guild} /> : null}
         {title && <StyledHeading>{title}</StyledHeading>}
         {children}
       </StyledDashboard>

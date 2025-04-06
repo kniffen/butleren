@@ -51,7 +51,7 @@ const StyledNotification = styled.div.attrs(() => ({className: styledNotificatio
   animation: slideIn .5s;
   animation-fill-mode: forwards;
   transition: .5s ease-in-out;
-  
+
   > * {
     color: ${(props) => props.isError ? 'var(--color-gray--100)' : 'var(--color-gray--900)'};
   }
