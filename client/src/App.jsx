@@ -4,6 +4,7 @@ import Store from './Store'
 
 import NotFound from './pages/NotFound'
 import Home from './pages/Home'
+import Users from './pages/Users'
 import Guild from './pages/Guild'
 import Modules from './pages/Modules'
 import Commands from './pages/Commands'
@@ -18,7 +19,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="*" element={<NotFound />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Store><Home /></Store>} />
+        <Route path="/users" element={<Store><Users /></Store>}/>
         <Route path="/guild/:guild" element={<Store><Guild /></Store>} />
         <Route path="/modules/:guild" element={<Store><Modules /></Store>} />
         <Route path="/modules/:guild/spotify" element={<Store><Spotify /></Store>} />

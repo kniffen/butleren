@@ -1,26 +1,11 @@
-import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faShieldAlt, faListAlt, faCommentAlt } from '@fortawesome/free-solid-svg-icons'
-
-import { Context } from '../Store.jsx'
+import { faShieldAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 
 import logo from '../assets/images/logo.png'
 
 export default function Sidebar() {
-  const { guild } = useContext(Context)
-
-  if (!guild) return (
-    <StyledSidebar>
-      <StyledSidebarHeader>
-        <StyledLogo src={logo} alt="bot logo"/>
-        <StyledTitle>Butleren</StyledTitle>
-      </StyledSidebarHeader>
-
-    </StyledSidebar>
-  )
-
   return (
     <StyledSidebar>
       <StyledSidebarHeader>
@@ -30,23 +15,13 @@ export default function Sidebar() {
 
       <StyledSidebarNav>
         <StyledSidebarLink to="/">
-          <FontAwesomeIcon className="icon" icon={faHome} />
-          <span>Home</span>
-        </StyledSidebarLink>
-
-        <StyledSidebarLink to={`/guild/${guild.id}`}>
           <FontAwesomeIcon className="icon" icon={faShieldAlt} />
-          <span>Guild</span>
+          <span>Guilds</span>
         </StyledSidebarLink>
 
-        <StyledSidebarLink to={`/modules/${guild.id}`}>
-          <FontAwesomeIcon className="icon" icon={faListAlt} />
-          <span>Modules</span>
-        </StyledSidebarLink>
-
-        <StyledSidebarLink to={`/commands/${guild.id}`}>
-          <FontAwesomeIcon className="icon" icon={faCommentAlt} />
-          <span>Commands</span>
+        <StyledSidebarLink to="/users">
+          <FontAwesomeIcon className="icon" icon={faUser} />
+          <span>Users</span>
         </StyledSidebarLink>
       </StyledSidebarNav>
     </StyledSidebar>
@@ -72,7 +47,7 @@ const StyledSidebar = styled.div`
 
 const StyledSidebarHeader = styled.header`
   margin-block: 1em 2em;
-  
+
   @media (min-width: 64em) {
     display: flex;
     flex-direction: column;
@@ -82,7 +57,7 @@ const StyledSidebarHeader = styled.header`
 
 const StyledLogo = styled.img`
   border-radius: .5rem;
-    
+
   @media (min-width: 64em) {
     max-width: 6em;
   }
@@ -131,7 +106,7 @@ const StyledSidebarLink = styled(NavLink)`
 
   &.active {
     color: var(--color-gray--100);
-    
+
     .icon {
       color: var(--color-turquoise--400);
     }

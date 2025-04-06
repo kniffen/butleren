@@ -1,79 +1,38 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
-import logo from '../assets/images/logo.png'
+import { Context } from '../Store.jsx'
+import DashboardLayout from '../layouts/Dashboard'
 import placeholderImage from '../assets/images/placeholder.png'
 
 export default function Home() {
   const [ guilds, setGuilds ] = useState([])
+  const { setGuild } = useContext(Context)
 
   useEffect(function() {
+    setGuild(null);
+
     fetch('/api/guilds')
       .then(res => res.json())
       .then(setGuilds)
-      .catch(console.error)
-  }, [])
+      .catch(console.error);
+  }, []);
 
-  return (
-    <StyledMain>
-      <StyledHeader>
-        <StyledLogo src={logo} />
-        <h1>Butleren</h1>
-      </StyledHeader>
-
-      <StyledGuildsSection>
-        <h2>Guilds</h2>
-        <p>The bot is connected to {guilds.length} guilds.</p>
-        <StyledGuildsContainer>
-          {guilds.map(guild => <StyledGuildLink key={guild.id} to={`/guild/${guild.id}`}>
-            <img src={guild.iconURL || placeholderImage}></img>
-            <p>{guild.name}</p>
-          </StyledGuildLink>)}
-        </StyledGuildsContainer>
-      </StyledGuildsSection>
-    </StyledMain>
-  )
+  return (<DashboardLayout title={"Guilds"}>
+    <StyledGuildsSection>
+      <p>The bot is connected to {guilds.length} guilds.</p>
+      <StyledGuildsContainer>
+        {guilds.map(guild => <StyledGuildLink key={guild.id} to={`/guild/${guild.id}`}>
+          <img src={guild.iconURL || placeholderImage}></img>
+          <p>{guild.name}</p>
+        </StyledGuildLink>)}
+      </StyledGuildsContainer>
+    </StyledGuildsSection>
+  </DashboardLayout>);
 }
 
-const StyledMain = styled.main`
-  min-height: 100vh;
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  
-  > * {
-    max-width: 64rem;
-    padding: 1em;
-  }
-`
-
-const StyledHeader = styled.header`
-  text-transform: uppercase;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
-  margin-block-end: 1em;
-
-  @media (min-width: 48em) {
-    flex-direction: row;
-    padding-inline: 2rem;
-  }
-
-  h1 {
-    font-weight: 800;
-    font-size: 2.2rem;
-  }
-`
-
-const StyledLogo = styled.img`
-  width: 8rem;
-  height: auto;
-  border-radius: 1rem;
-`
-
 const StyledGuildsSection = styled.section`
+  grid-column: span 12;
   background-color: var(--color-gray--700);
   border-radius: 1em;
   padding: 1em;
@@ -109,7 +68,7 @@ const StyledGuildsContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 1em;
   margin-top: 2rem;
-  
+
   @media (min-width: 26em) {
     grid-template-columns: repeat(3, 1fr);
   }

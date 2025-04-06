@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 
+import usersRouter from './users/index.js'
 import guildsRouter from './guilds/index.js'
 import modulesRouter from './modules/index.js'
 import commandsRouter from './commands/index.js'
@@ -17,6 +18,7 @@ if ('development' !== process.env.NODE_ENV)
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+app.use('/api/users', usersRouter)
 app.use('/api/guilds', guildsRouter)
 app.use('/api/modules', modulesRouter)
 app.use('/api/commands', commandsRouter)
