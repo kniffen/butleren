@@ -1,0 +1,30 @@
+.guilds {
+  display: grid;
+  gap: 1rem;
+
+  @media screen and (min-width: 425px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.guild-card {
+  background-color: var(--color-gray--800);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-align: center;
+
+  &__logo {
+    width: 6rem;
+    border-radius: 4px;
+  }
+}

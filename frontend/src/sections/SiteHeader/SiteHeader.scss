@@ -1,0 +1,22 @@
+.site-header {
+  padding-block: 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+
+  &__text {
+    text-transform: uppercase;
+    color: var(--color-white--400);
+    font-weight: 700;
+  }
+}
+
+.logo img {
+  vertical-align: middle;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 4px;
+}
