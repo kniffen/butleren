@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useAPI } from "../../provider/hooks/useAPI"
-import type { Guild } from "../../types";
-import { GuildInformation } from "../../components/GuildInformation/GuildInformation";
-import './Guild.scss'
-import { GuildSettings } from "../../components/GuildSettings/GuildSettings";
+import { useEffect, type JSX } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useAPI } from '../../provider/hooks/useAPI';
+import type { Guild } from '../../types';
+import { GuildInformation } from '../../components/GuildInformation/GuildInformation';
+import './Guild.scss';
+import { GuildSettings } from '../../components/GuildSettings/GuildSettings';
 
-export function Guild() {
+export function Guild(): JSX.Element {
   const params = useParams();
   const { guild } = useAPI();
 
@@ -16,7 +16,7 @@ export function Guild() {
     }
 
     guild.set(params.id);
-  }, [])
+  }, []);
 
   return <>
     <GuildHeader />
@@ -24,10 +24,10 @@ export function Guild() {
       <GuildSettings />
       <GuildInformation />
     </div>
-  </>
+  </>;
 }
 
-export const GuildHeader = () => {
+export function GuildHeader(): JSX.Element {
   const { guild } = useAPI();
 
   return (
@@ -38,4 +38,4 @@ export const GuildHeader = () => {
       </h1>
     </header>
   );
- }
+};

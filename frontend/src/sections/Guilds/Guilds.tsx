@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { useAPI } from "../../provider/hooks/useAPI";
-import placeholderImage from "../../assets/images/placeholder.png";
-import type { Guild } from "../../types";
+import type { JSX } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAPI } from '../../provider/hooks/useAPI';
+import placeholderImage from '../../assets/images/placeholder.png';
+import type { Guild } from '../../types';
 import './Guilds.scss';
 
-export const Guilds = function() {
+export const Guilds = function():JSX.Element {
   const { guilds } = useAPI();
 
   return (
@@ -15,9 +16,9 @@ export const Guilds = function() {
       </div>
     </>
   );
-}
+};
 
-const GuildCard = ({guild}: {guild: Guild}) => {
+function GuildCard({ guild }: {guild: Guild}): JSX.Element {
   const navigate = useNavigate();
 
   return (
@@ -28,4 +29,4 @@ const GuildCard = ({guild}: {guild: Guild}) => {
       <span className="guild-card__name">{guild.name}</span>
     </div>
   );
-}
+};

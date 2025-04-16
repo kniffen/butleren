@@ -4,7 +4,7 @@ import tsParser from "@typescript-eslint/parser";
 import jest from "eslint-plugin-jest";
 
 // Formatting/spacing rules
-const stylingRules = {
+export const stylingRules = {
   "quotes":                ["error", "single"],                           // enforce the consistent use of single quotes
   "object-curly-spacing":  ["error", "always"],                           // enforce consistent spacing inside braces
   "indent":                ["error", 2, { "SwitchCase": 1 }],             // enforce consistent indentation

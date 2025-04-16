@@ -1,10 +1,10 @@
-import { useCallback, useRef } from "react";
-import { Card } from "../Card/Card";
-import { useAPI } from "../../provider/hooks/useAPI";
-import type { GuildSettings } from "../../types";
+import { useCallback, useRef, type JSX } from 'react';
+import { Card } from '../Card/Card';
+import { useAPI } from '../../provider/hooks/useAPI';
+import type { GuildSettings } from '../../types';
 import'./GuildSettings.scss';
 
-export function GuildSettings() {
+export function GuildSettings(): JSX.Element {
   return (
     <Card title="Guild settings">
       <GuildSettingsForm />
@@ -12,24 +12,24 @@ export function GuildSettings() {
   );
 }
 
-function GuildSettingsForm() {
+function GuildSettingsForm(): JSX.Element | null {
   const { updateGuilds, guild } = useAPI();
   const throttleTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const onChangeHandler = useCallback((e: React.FormEvent<HTMLElement>) => {
-    if (throttleTimeout.current) return;
-    if (!guild) return;
-    if (!(e.target instanceof HTMLInputElement)) return;
+    if (throttleTimeout.current) {return;}
+    if (!guild) {return;}
+    if (!(e.target instanceof HTMLInputElement)) {return;}
 
     const form = e.target.parentElement;
-    if (!(form instanceof HTMLFormElement)) return;
+    if (!(form instanceof HTMLFormElement)) {return;}
 
     throttleTimeout.current = setTimeout(async () => {
       const formData = new FormData(form);
       const settings: GuildSettings = {
         color:    formData.get('color')?.toString() || '#19D8B4',
         nickname: formData.get('nickname')?.toString(),
-      }
+      };
 
       await guild.updateSettings(settings);
       await updateGuilds();

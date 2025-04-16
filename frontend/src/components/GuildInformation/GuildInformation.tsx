@@ -1,8 +1,9 @@
-import { Card } from "../Card/Card";
-import { useAPI } from "../../provider/hooks/useAPI";
+import type { JSX } from 'react';
+import { Card } from '../Card/Card';
+import { useAPI } from '../../provider/hooks/useAPI';
 import'./GuildInformation.scss';
 
-export const GuildInformation = function() {
+export const GuildInformation = function(): JSX.Element {
   const { guild } = useAPI();
 
   const counts =
@@ -23,7 +24,7 @@ export const GuildInformation = function() {
           }
         }
         return counts;
-      }, {categories: 0, textChannels: 0, voiceChannels: 0});
+      }, { categories: 0, textChannels: 0, voiceChannels: 0 });
 
 
   return (
@@ -36,4 +37,4 @@ export const GuildInformation = function() {
       </ul>
     </Card>
   );
-}
+};

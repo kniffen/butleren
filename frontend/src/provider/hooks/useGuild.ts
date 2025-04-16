@@ -1,9 +1,16 @@
-import { useCallback, useMemo, useState } from "react";
-import { Guild, GuildSettings } from "../../types";
+import { useCallback, useMemo, useState } from 'react';
+import { Guild, GuildSettings } from '../../types';
 
 // TODO: handle errors, set error state
 
-export const useGuild = () => {
+export interface GuildHook {
+  data: Guild | null;
+  isLoading: boolean;
+  set: (id: string) => Promise<void>;
+  updateSettings: (settings: GuildSettings) => Promise<boolean>;
+}
+
+export const useGuild = (): GuildHook => {
   const [data, setData] = useState<Guild | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,35 +29,35 @@ export const useGuild = () => {
   }, []);
 
   const updateGuildSettings = useCallback(async (settings: GuildSettings): Promise<boolean> => {
-    if (!data) return false;
+    if (!data) {return false;}
 
     setIsLoading(true);
     const success = await putGuildSettings(data.id, settings);
     if (!success) {
       setIsLoading(false);
-      return success
+      return success;
     }
 
     await setGuild(data.id);
     setIsLoading(false);
     return true;
-  }, [])
+  }, []);
 
   return useMemo(() => ({
     data,
     isLoading,
-    set: setGuild,
+    set:            setGuild,
     updateSettings: updateGuildSettings,
   }), [data, isLoading, setGuild, updateGuildSettings]);
-}
+};
 
 export async function putGuildSettings(id: string, settings: GuildSettings): Promise<boolean> {
   const res = await fetch(
     `/api/discord/guilds/${id}/settings`,
     {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(settings)
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(settings)
     }
   );
 

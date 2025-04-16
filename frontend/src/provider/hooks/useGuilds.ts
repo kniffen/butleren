@@ -1,7 +1,12 @@
-import { useCallback, useState } from "react";
-import { Guild } from "../../types";
+import { useCallback, useState } from 'react';
+import { Guild } from '../../types';
 
-export const useGuilds = () => {
+export interface GuildsHook {
+  guilds: Guild[];
+  updateGuilds: () => Promise<void>;
+}
+
+export const useGuilds = (): GuildsHook => {
   const [guilds, setGuilds] = useState<Guild[]>([]);
 
   const updateGuilds = useCallback(async () => {
@@ -13,10 +18,10 @@ export const useGuilds = () => {
 
     const data = await res.json() as Guild[];
     setGuilds(data);
-  }, [])
+  }, []);
 
   return {
     guilds,
     updateGuilds
   };
-}
+};

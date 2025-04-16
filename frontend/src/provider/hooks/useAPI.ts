@@ -1,11 +1,11 @@
-import { useContext } from "react";
-import { APIProviderContext } from "../APIProvider";
+import { useContext } from 'react';
+import { APIProviderContext, type APIProviderState } from '../APIProvider';
 
-export const useAPI = () => {
+export const useAPI = (): APIProviderState => {
   const context = useContext(APIProviderContext);
   if (!context) {
-    throw new Error("useAPI must be used within an APIProvider");
+    throw new Error('useAPI must be used within an APIProvider');
   }
 
   return context;
-}
+};

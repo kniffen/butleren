@@ -1,10 +1,11 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Layout } from './Layout/Layout'
-import { APIProvider } from './provider/APIProvider'
-import { Guilds } from './sections/Guilds/Guilds'
-import { Guild } from './sections/Guild/Guild'
+import type { JSX } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Layout } from './Layout/Layout';
+import { APIProvider } from './provider/APIProvider';
+import { Guilds } from './sections/Guilds/Guilds';
+import { Guild } from './sections/Guild/Guild';
 
-export const App = function App() {
+export const App = function App(): JSX.Element {
   return (
     <APIProvider>
       <Layout>
@@ -16,5 +17,5 @@ export const App = function App() {
         </BrowserRouter>
       </Layout>
     </APIProvider>
-  )
-}
+  );
+};

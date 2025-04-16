@@ -142,16 +142,10 @@
             "type": "string",
             "description": "The color of the embeds",
             "example": "#FF0000"
-          },
-          "timezone": {
-            "type": "string",
-            "description": "The timezone of the guild",
-            "example": "UTC"
           }
         },
         "required": [
-          "color",
-          "timezone"
+          "color"
         ]
       },
       "Guild": {

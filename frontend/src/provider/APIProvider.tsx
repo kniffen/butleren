@@ -1,9 +1,9 @@
-import { createContext } from "react";
-import { Guild } from "../types";
-import { useGuilds } from "./hooks/useGuilds";
-import { useGuild } from "./hooks/useGuild";
+import { createContext, type JSX } from 'react';
+import { Guild } from '../types';
+import { useGuilds } from './hooks/useGuilds';
+import { useGuild } from './hooks/useGuild';
 
-interface APIProviderState {
+export interface APIProviderState {
   guilds: Guild[];
   updateGuilds: () => Promise<void>;
   guild: ReturnType<typeof useGuild>;
@@ -11,7 +11,7 @@ interface APIProviderState {
 
 export const APIProviderContext = createContext<APIProviderState | null>(null);
 
-export const APIProvider = ({children}: {children: React.ReactNode}) => {
+export function APIProvider({ children }: {children: React.ReactNode}): JSX.Element {
   const guildsHook = useGuilds();
   const guild = useGuild();
 
@@ -23,4 +23,4 @@ export const APIProvider = ({children}: {children: React.ReactNode}) => {
       {children}
     </APIProviderContext.Provider>
   );
-}
+};
