@@ -1,0 +1,11 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+label {
+  color: var(--color-gray--300);
+  margin-block-end: .25rem;
+  font-size: .9rem;
+}

@@ -13,25 +13,6 @@
   gap: 1rem;
 
   @media screen and (min-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.guild-stats {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-
-  &__list-item {
-    display: flex;
-    gap: .5rem;
-    font-size: .9rem;
-
-    b {
-      font-weight: 500;
-      color: var(--color-gray--300);
-    }
+    grid-template-columns: repeat(2, 1fr);
   }
 }

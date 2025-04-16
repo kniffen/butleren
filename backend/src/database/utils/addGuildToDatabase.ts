@@ -7,8 +7,7 @@ import { setModuleSettings } from './setModuleSettings';
 import type { GuildSettings, ModuleSettings } from '../../types';
 
 export const defaultGuildSettings: GuildSettings = {
-  color:    '#19D8B4',
-  timezone: 'UTC',
+  color: '#19D8B4',
 };
 
 export const defaultModuleSettings: ModuleSettings = {

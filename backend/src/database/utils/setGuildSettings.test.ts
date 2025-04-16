@@ -18,7 +18,7 @@ describe('setGuildSettings()', () => {
 
   test('It should insert new guild settings', async () => {
     const guild    = { id: '456' } as Guild;
-    const settings = { timezone: 'UTC' } as GuildSettings;
+    const settings = { } as GuildSettings;
     getGuildSettingsSpy.mockResolvedValue(null);
 
     await setGuildSettings(guild, settings);
@@ -30,7 +30,7 @@ describe('setGuildSettings()', () => {
 
   test('It should update existing guild settings', async () => {
     const guild    = { id: '123' } as Guild;
-    const settings = { timezone: 'PST', color: '#111111' } satisfies GuildSettings;
+    const settings = { color: '#111111' } satisfies GuildSettings;
     getGuildSettingsSpy.mockResolvedValue(guildSettings);
 
     await setGuildSettings(guild, settings);
@@ -43,6 +43,5 @@ describe('setGuildSettings()', () => {
 
 const guildSettings: GuildSettings = {
   nickname: 'Foobar',
-  timezone: 'UTC',
   color:    '#000000',
 };

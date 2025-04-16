@@ -11,8 +11,7 @@ export const putGuildSettings = async function(req: Request, res: Response): Pro
     const settings = req.body as GuildSettings;
     logDebug('API', 'Request body', settings);
     if (
-      (!settings.color    || 'string' !== typeof settings.color) ||
-      (!settings.timezone || 'string' !== typeof settings.timezone)
+      (!settings.color || 'string' !== typeof settings.color)
     ) {
       res.status(400).send('Invalid request body');
       return;
@@ -24,6 +23,11 @@ export const putGuildSettings = async function(req: Request, res: Response): Pro
       logWarn('Discord', `Guild not found with id: ${guildId}`);
       res.sendStatus(404);
       return;
+    }
+
+    if (settings.nickname !== undefined && discordClient.user) {
+      const member = await guild.members.fetch(discordClient.user.id);
+      member.setNickname(settings.nickname || null);
     }
 
     const db = await database;

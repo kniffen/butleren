@@ -28,6 +28,5 @@ describe('getGuildSettings()', () => {
 
 const guildSettings: GuildSettings = {
   nickname: 'Foobar',
-  timezone: 'UTC',
   color:    '#000000',
 };

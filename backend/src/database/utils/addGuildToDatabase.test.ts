@@ -32,8 +32,7 @@ describe('addGuildToDatabase', () => {
 
   test('It should not overwrite existing guild settings', async () => {
     getGuildSettingsSpy.mockResolvedValueOnce({
-      color:    '#000000',
-      timezone: 'UTC',
+      color: '#000000',
     });
 
     await addGuildToDatabase(guild);

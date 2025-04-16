@@ -1,26 +1,24 @@
 import { createContext } from "react";
-import { Guild, GuildSettings } from "../types";
+import { Guild } from "../types";
 import { useGuilds } from "./hooks/useGuilds";
 import { useGuild } from "./hooks/useGuild";
 
 interface APIProviderState {
   guilds: Guild[];
   updateGuilds: () => Promise<void>;
-  guild: Guild | null;
-  setGuild: (id: string) => Promise<void>;
-  putGuildSettings: (id: string, settings: GuildSettings) => Promise<boolean>;
+  guild: ReturnType<typeof useGuild>;
 }
 
 export const APIProviderContext = createContext<APIProviderState | null>(null);
 
 export const APIProvider = ({children}: {children: React.ReactNode}) => {
   const guildsHook = useGuilds();
-  const guildHook = useGuild();
+  const guild = useGuild();
 
   return (
     <APIProviderContext.Provider value={{
       ...guildsHook,
-      ...guildHook
+      guild
     }}>
       {children}
     </APIProviderContext.Provider>

@@ -1,12 +1,12 @@
-import { Card } from "../../components/Card";
+import { Card } from "../Card/Card";
 import { useAPI } from "../../provider/hooks/useAPI";
-import'./Guild.scss';
+import'./GuildInformation.scss';
 
 export const GuildInformation = function() {
   const { guild } = useAPI();
 
   const counts =
-    (guild?.channels || [])
+    (guild.data?.channels || [])
       .reduce<{categories: number, textChannels: number, voiceChannels: number}>((counts, channel) => {
         switch (channel.type) {
           case 'CATEGORY': {
@@ -29,7 +29,7 @@ export const GuildInformation = function() {
   return (
     <Card className="guild-information" title="Guild information">
       <ul className="guild-stats">
-        <li className="guild-stats__list-item"><b>Roles:</b><span>{guild?.roles?.length || 0}</span></li>
+        <li className="guild-stats__list-item"><b>Roles:</b><span>{guild.data?.roles?.length || 0}</span></li>
         <li className="guild-stats__list-item"><b>Categories:</b><span>{counts.categories}</span></li>
         <li className="guild-stats__list-item"><b>Text channels:</b><span>{counts.textChannels}</span></li>
         <li className="guild-stats__list-item"><b>VoiceChannels:</b><span>{counts.voiceChannels}</span></li>

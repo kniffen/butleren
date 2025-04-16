@@ -49,3 +49,28 @@ a {
   text-decoration: none;
   color: var(--color-turquoise--400);
 }
+
+input {
+  background-color: var(--color-gray--300);
+  border: none;
+  border-radius: 2px;
+  padding: .25rem .5rem;
+}
+
+input[type="color"] {
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border: none;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+}

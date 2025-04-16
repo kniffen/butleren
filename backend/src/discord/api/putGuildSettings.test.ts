@@ -19,14 +19,14 @@ describe('putGuildSettings()', () => {
     await db.run(
       'INSERT INTO guilds (guildId, settings) VALUES (?, ?)',
       guildId,
-      JSON.stringify({ color: 'red', timezone: 'UTC' })
+      JSON.stringify({ color: 'red' })
     );
   });
 
   test('It should update guild settings', async () => {
     const request = {
       params: { 'guild': guildId },
-      body:   { color: 'blue', timezone: 'PST' },
+      body:   { color: 'blue' },
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -43,7 +43,7 @@ describe('putGuildSettings()', () => {
   test('It should respond with 400 if the request body is invalid', async () => {
     const request = {
       params: { 'guild': guildId },
-      body:   { color: 'blue' },
+      body:   { color: 55 },
     } as unknown as Request;
 
     await putGuildSettings(request, response);
@@ -55,7 +55,7 @@ describe('putGuildSettings()', () => {
   test('It should respond with 404 if the guild is not found', async () => {
     const request = {
       params: { 'guild': guildId },
-      body:   { color: 'blue', timezone: 'PST' },
+      body:   { color: 'blue' },
     } as unknown as Request;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -69,7 +69,7 @@ describe('putGuildSettings()', () => {
   test('It should respond with 500 if an error occurs while updating the guild settings', async () => {
     const request = {
       params: { 'guild': guildId },
-      body:   { color: 'blue', timezone: 'PST' },
+      body:   { color: 'blue' },
     } as unknown as Request;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
