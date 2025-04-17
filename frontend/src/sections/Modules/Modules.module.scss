@@ -1,0 +1,21 @@
+.modules {
+  display: grid;
+  gap: 1rem;
+
+  @media screen and (min-width: 425px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.module {
+  position: relative;
+
+  .toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+}

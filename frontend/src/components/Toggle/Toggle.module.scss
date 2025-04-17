@@ -1,0 +1,47 @@
+.locked {
+  opacity: 0.5;
+
+  .toggleLabel {
+    cursor: not-allowed;
+  }
+}
+
+.checking .toggleLabel {
+  cursor: wait;
+}
+
+.toggleLabel,
+.toggleLabel::before {
+  border-radius: 2px;
+}
+
+.toggleLabel {
+  position: relative;
+  display: block;
+  background-color: var(--color-gray--500);
+  width: 2em;
+  height: 1em;
+  cursor: pointer;
+}
+
+.toggleLabel::before {
+  position: absolute;
+  display: block;
+  background-color: var(--color-gray--400);
+  content: '';
+  width: 50%;
+  height: calc(100% - 4px);
+  inset-block: 2px;
+  left: 2px;
+  transition: all 0.2s ease-in-out;
+  transform: translateX(0);
+}
+
+.toggle {
+  display: none;
+}
+
+.toggle:checked + .toggleLabel::before {
+  background-color: var(--color-turquoise--400);
+  transform: translateX(calc(100% - 5px));
+}

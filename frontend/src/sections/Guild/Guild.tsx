@@ -5,10 +5,11 @@ import type { Guild } from '../../types';
 import { GuildInformation } from '../../components/GuildInformation/GuildInformation';
 import './Guild.scss';
 import { GuildSettings } from '../../components/GuildSettings/GuildSettings';
+import { Modules } from '../Modules/Modules';
 
 export function Guild(): JSX.Element {
   const params = useParams();
-  const { guild } = useAPI();
+  const { guild, modules } = useAPI();
 
   useEffect(() => {
     if (!params.id || guild.data?.id === params.id) {
@@ -18,13 +19,16 @@ export function Guild(): JSX.Element {
     guild.set(params.id);
   }, []);
 
-  return <>
-    <GuildHeader />
-    <div className="sections">
-      <GuildSettings />
-      <GuildInformation />
-    </div>
-  </>;
+  return (
+    <>
+      <GuildHeader />
+      <div className="sections">
+        <GuildSettings />
+        <GuildInformation />
+      </div>
+      <Modules />
+    </>
+  );
 }
 
 export function GuildHeader(): JSX.Element {
