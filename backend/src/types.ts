@@ -6,6 +6,7 @@ import type { components } from '../../api-contract';
 export type GuildSettings      = components['schemas']['GuildSettings'];
 export type GuildsResponseBody = components['schemas']['Guild'][];
 export type GuildResponseBody  = components['schemas']['Guild'];
+export type ModuleResponseBody = components['schemas']['Module'];
 export type ModuleSettings     = components['schemas']['ModuleSettings'];
 
 export interface Command {
