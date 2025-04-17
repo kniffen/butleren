@@ -66,11 +66,65 @@ paths:
           description: Guild not found
         '500':
           description: Internal server error
-
+  /api/modules/{guild}:
+    get:
+      summary: Get all modules
+      parameters:
+        - name: guild
+          example: "123456789012345678"
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The guild's discord id
+      responses:
+        '200':
+          description: A list of modules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Module"
+        '500':
+          description: Internal server error
+  /api/modules/{guild}/{slug}/settings:
+    put:
+      summary: Update a module's settings
+      parameters:
+        - name: guild
+          example: "123456789012345678"
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The guild's discord id
+        - name: slug
+          example: "foo"
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The module slug
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModuleSettings"
+      responses:
+        '204':
+          description: Module settings updated
+        '404':
+          description: Module not found
+        '500':
+          description: Internal server error
 components:
   schemas:
     UserSettings:
       $ref: "./components/UserSettings.yml#/UserSettings"
+    Module:
+      $ref: "./components/Module.yml#/Module"
     ModuleSettings:
       $ref: "./components/ModuleSettings.yml#/ModuleSettings"
     GuildSettings:

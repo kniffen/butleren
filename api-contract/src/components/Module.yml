@@ -1,0 +1,29 @@
+Module:
+  type: object
+  properties:
+    slug:
+      type: string
+      description: The module slug
+      example: "foo"
+    name:
+      type: string
+      description: The module name
+      example: "Foo"
+    description:
+      type: string
+      description: The module description
+      example: "This is a foo module"
+    isLocked:
+      type: boolean
+      description: Whether the module is locked
+      example: false
+    settings:
+      type: object
+      description: The module settings
+      $ref: "./ModuleSettings.yml#/ModuleSettings"
+  required:
+    - slug
+    - name
+    - description
+    - isLocked
+    - settings
