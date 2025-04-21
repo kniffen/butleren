@@ -8,6 +8,7 @@ export type GuildsResponseBody = components['schemas']['Guild'][];
 export type GuildResponseBody  = components['schemas']['Guild'];
 export type ModuleResponseBody = components['schemas']['Module'];
 export type ModuleSettings     = components['schemas']['ModuleSettings'];
+export type LogEntry           = components['schemas']['LogEntry'];
 
 export interface Command {
   isLocked: boolean;

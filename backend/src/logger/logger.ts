@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import * as winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import { colors } from './colors';
@@ -6,7 +7,8 @@ export const logger = winston.createLogger({
   level:  'debug',
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.printf(({ timestamp, level, message, service, ...rest }) => JSON.stringify({ timestamp, level, message, ...rest }, null, 3)),
+    winston.format((info) => ({ ...info, id: crypto.randomUUID() }))(),
+    winston.format.printf(({ id, timestamp, level, message, service, ...rest }) => JSON.stringify({ id, timestamp, level, message, ...rest }, null, 3)),
   ),
   defaultMeta: { service: 'unknown' },
   transports:  [
