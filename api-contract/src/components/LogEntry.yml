@@ -1,0 +1,31 @@
+LogEntry:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Unique identifier for the log entry.
+    timestamp:
+      type: string
+      format: date-time
+      description: The time when the log entry was created.
+    level:
+      type: string
+      enum:
+        - info
+        - warn
+        - error
+        - debug
+      description: The severity level of the log entry.
+    message:
+      type: string
+      description: The message associated with the log entry.
+    rest:
+      type: array
+      description: Additional data related to the log entry.
+      items:
+        type: string
+  required:
+    - id
+    - timestamp
+    - level
+    - message
