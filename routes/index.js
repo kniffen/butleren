@@ -27,6 +27,7 @@ app.use('/api/spotify', modules.spotify.router)
 app.use('/api/twitter', modules.twitter.router)
 app.use('/api/twitch', modules.twitch.router)
 app.use('/api/youtube', modules.youtube.router)
+app.use('/api/kick', modules.kick.router)
 
 // Proxy other request in order to use the webpack dev server for the client.
 if ('development' === process.env.NODE_ENV)
