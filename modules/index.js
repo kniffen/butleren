@@ -1,6 +1,7 @@
 export * as cleverbot  from './cleverbot/index.js'
 export * as fun        from './fun/index.js'
 export * as info       from './info/index.js'
+export * as kick       from './kick/index.js'
 export * as spotify    from './spotify/index.js'
 export * as truckersmp from './truckersmp/index.js'
 export * as twitch     from './twitch/index.js'
