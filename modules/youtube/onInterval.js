@@ -24,7 +24,7 @@ export default async function youTubeOnInterval({ guilds, date }) {
       ...youTubeChannelsEntries,
       ...youTubeLiveChannelsEntries
     ].reduce((ids, entry) => ids.includes(entry.id) ? ids : [...ids, entry.id], []);
-    const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({channelId, limit: 3})));
+    const channelsActivities = await Promise.all(ids.map(channelId => fetchYouTubeActivities({channelId, limit: 20})));
 
     const videoIds = channelsActivities.reduce((videoIds, channelActivities) => {
       return [
