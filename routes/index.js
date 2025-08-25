@@ -6,6 +6,7 @@ import usersRouter from './users/index.js'
 import guildsRouter from './guilds/index.js'
 import modulesRouter from './modules/index.js'
 import commandsRouter from './commands/index.js'
+import chatRouter from './chat/index.js'
 
 import * as modules from '../modules/index.js'
 
@@ -22,6 +23,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/guilds', guildsRouter)
 app.use('/api/modules', modulesRouter)
 app.use('/api/commands', commandsRouter)
+app.use('/api/chat', chatRouter)
 
 app.use('/api/spotify', modules.spotify.router)
 app.use('/api/twitter', modules.twitter.router)

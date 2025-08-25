@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog, faListAlt, faCommentAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faListAlt, faComment, faCommentAlt } from '@fortawesome/free-solid-svg-icons'
 import LoadingBox  from './LoadingBox'
 import placeholderImg from '../assets/images/placeholder.png'
 
@@ -42,6 +42,11 @@ function GuildNav({ guild }) {
       <StyledLink to={`/commands/${guild.id}`}>
         <FontAwesomeIcon className="icon" icon={faCommentAlt} />
         <span>Commands</span>
+      </StyledLink>
+
+      <StyledLink to={`/chat/${guild.id}`}>
+        <FontAwesomeIcon className="icon" icon={faComment} />
+        <span>Chat</span>
       </StyledLink>
     </StyledNav>
   )
