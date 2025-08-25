@@ -8,6 +8,7 @@ import Users from './pages/Users'
 import Guild from './pages/Guild'
 import Modules from './pages/Modules'
 import Commands from './pages/Commands'
+import Chat from './pages/Chat'
 
 import Spotify from './pages/Modules/Spotify'
 import Twitter from './pages/Modules/Twitter'
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/modules/:guild/twitch" element={<Store><Twitch /></Store>} />
         <Route path="/modules/:guild/kick" element={<Store><Kick /></Store>} />
         <Route path="/commands/:guild" element={<Store><Commands /></Store>} />
+        <Route path="/chat/:guild" element={<Store><Chat /></Store>} />
       </Routes>
     </BrowserRouter>
   )
