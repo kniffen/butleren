@@ -11,6 +11,7 @@ describe('modules.spotify.commands.spotify', function() {
     expect(command.data.toJSON()).toEqual({
       name: 'spotify',
       description: 'Spotify integration',
+      type: 1,
       options: [
         {
           name: 'latestepisode',

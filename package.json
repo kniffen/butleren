@@ -1,6 +1,6 @@
 {
   "name": "butleren",
-  "version": "1.9.0-beta",
+  "version": "1.9.1-beta",
   "private": true,
   "type": "module",
   "description": "Yet another Discord bot",
@@ -54,6 +54,7 @@
     "dotenv-flow": "^3.2.0",
     "express": "^4.18.2",
     "moment-timezone": "^0.5.43",
+    "node-fetch": "^2.7.0",
     "sqlite": "^4.1.2",
     "sqlite3": "^5.1.6",
     "winston": "^3.16.0",

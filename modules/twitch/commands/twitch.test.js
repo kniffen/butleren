@@ -17,6 +17,7 @@ describe('modules.twitch.commands.twitch', function() {
     expect(command.data.toJSON()).toEqual({
       name: 'twitch',
       description: 'Twitch integration',
+      type: 1,
       options: [
         {
           name: 'stream',

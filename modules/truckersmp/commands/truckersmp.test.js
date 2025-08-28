@@ -12,6 +12,7 @@ describe('modules.truckersmp.commands.truckersmp', function() {
     expect(command.data.toJSON()).toEqual({
       name: 'truckersmp',
       description: 'TruckersMP integration',
+      type: 1,
       options: [
         {
           name: 'status',
