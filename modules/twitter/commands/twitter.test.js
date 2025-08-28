@@ -11,6 +11,7 @@ describe('modules.twitter.commands.twitter', function() {
     expect(command.data.toJSON()).toEqual({
       name: 'twitter',
       description: 'Twitter integration',
+      type: 1,
       options: [
         {
           name: 'latesttweet',

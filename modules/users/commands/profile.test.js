@@ -28,6 +28,7 @@ describe('modules.users.commands.profile', function() {
     expect(command.data.toJSON()).toEqual({
       name: 'profile',
       description: 'User profile information',
+      type: 1,
       options: [
         {
           name: 'view',
