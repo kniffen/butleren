@@ -6,6 +6,8 @@ import { UserDBEntry } from '../../../../../types';
 import { USERS_TABLE_NAME } from '../../../constants';
 
 export const locationSetCommand = async function(commandInteraction: ChatInputCommandInteraction): Promise<void> {
+  await commandInteraction.deferReply({ ephemeral: true });
+
   const userId = commandInteraction.user.id;
   const name = commandInteraction.options.get('name')?.value;
   const zip = commandInteraction.options.get('zip')?.value;
@@ -18,7 +20,7 @@ export const locationSetCommand = async function(commandInteraction: ChatInputCo
   }
 
   if (!geoLocation) {
-    await commandInteraction.reply({ content: 'Invalid location, please try again', ephemeral: true });
+    await commandInteraction.editReply('Invalid location, please try again');
     return;
   }
 
@@ -26,9 +28,8 @@ export const locationSetCommand = async function(commandInteraction: ChatInputCo
   const attachment = new AttachmentBuilder(mapBuffer, { name: 'map.png' });
   await insertOrReplaceDBEntry<UserDBEntry>(USERS_TABLE_NAME, { id: userId, lat: geoLocation.lat, lon: geoLocation.lon });
 
-  await commandInteraction.reply({
-    content:   `Your location is now set to ${geoLocation.name} (${geoLocation.country})`,
-    files:     [attachment],
-    ephemeral: true
+  await commandInteraction.editReply({
+    content: `Your location is now set to ${geoLocation.name} (${geoLocation.country})`,
+    files:   [attachment]
   });
 };

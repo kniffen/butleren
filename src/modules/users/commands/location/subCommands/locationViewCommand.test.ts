@@ -10,10 +10,13 @@ describe('locationViewCommand()', () => {
   const getMapBufferSpy   = jest.spyOn(getMapBuffer, 'getMapBuffer').mockResolvedValue(Buffer.from('test-map-buffer'));
   const getDBEntrySpy     = jest.spyOn(getDBEntry, 'getDBEntry').mockResolvedValue({ id: '1234', lat: 12.34, lon: 56.78 });
 
-  const replySpy = jest.fn();
+  const deferReplySpy = jest.fn();
+  const editReplySpy = jest.fn();
   const commandInteraction = {
-    user:  { id: 'user123' },
-    reply: replySpy,
+    user:       { id: 'user123' },
+    deferReply: deferReplySpy,
+    editReply:  editReplySpy,
+    // Simulate other necessary properties/methods if needed
   } as unknown as ChatInputCommandInteraction;
 
   beforeEach(() => {
@@ -27,10 +30,10 @@ describe('locationViewCommand()', () => {
     expect(getDBEntrySpy).toHaveBeenCalledWith('users', { id: 'user123' });
     expect(getGeoLocationSpy).toHaveBeenCalledWith({ lat: 12.34, lon: 56.78 });
     expect(getMapBufferSpy).toHaveBeenCalledWith(12.34, 56.78);
-    expect(replySpy).toHaveBeenCalledWith({
-      content:   'Your location is set to Test City (TC)',
-      files:     [expect.objectContaining({ name: 'map.png' })],
-      ephemeral: true
+    expect(deferReplySpy).toHaveBeenCalledWith({ ephemeral: true });
+    expect(editReplySpy).toHaveBeenCalledWith({
+      content: 'Your location is set to Test City (TC)',
+      files:   [expect.objectContaining({ name: 'map.png' })],
     });
   });
 
@@ -41,15 +44,9 @@ describe('locationViewCommand()', () => {
     await locationViewCommand(commandInteraction);
 
     expect(getDBEntrySpy).toHaveBeenCalledWith('users', { id: 'user123' });
-    expect(replySpy).toHaveBeenCalledTimes(2);
-    expect(replySpy).toHaveBeenNthCalledWith(1, {
-      content:   'You currently do not have a location set',
-      ephemeral: true
-    });
-    expect(replySpy).toHaveBeenNthCalledWith(2, {
-      content:   'You currently do not have a location set',
-      ephemeral: true
-    });
+    expect(editReplySpy).toHaveBeenCalledTimes(2);
+    expect(editReplySpy).toHaveBeenNthCalledWith(1, 'You currently do not have a location set');
+    expect(editReplySpy).toHaveBeenNthCalledWith(2, 'You currently do not have a location set');
   });
 
   test('It should handle no geo location found gracefully', async () => {
@@ -59,9 +56,6 @@ describe('locationViewCommand()', () => {
 
     expect(getDBEntrySpy).toHaveBeenCalledWith('users', { id: 'user123' });
     expect(getGeoLocationSpy).toHaveBeenCalledWith({ lat: 12.34, lon: 56.78 });
-    expect(replySpy).toHaveBeenCalledWith({
-      content:   'Your location is set to 12.34,56.78',
-      ephemeral: true
-    });
+    expect(editReplySpy).toHaveBeenCalledWith('Your location is set to 12.34,56.78');
   });
 });

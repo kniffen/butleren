@@ -1,4 +1,5 @@
-import { createCanvas } from 'canvas';
+import { PassThrough } from 'node:stream';
+import { make, encodePNGToStream } from 'pureimage';
 import { latLonToTile } from './latLonToTile';
 import { getOpenStreetMapTile } from './getOpenStreetMapTile';
 
@@ -11,8 +12,8 @@ export const getMapBuffer = async function(lat: number, lon: number, zoom = 10, 
   const startX = x - Math.floor(tilesX / 2);
   const startY = y - Math.floor(tilesY / 2);
 
-  const canvas = createCanvas(tilesX * tileSize, tilesY * tileSize);
-  const ctx = canvas.getContext('2d');
+  const bitmap = make(tilesX * tileSize, tilesY * tileSize);
+  const ctx = bitmap.getContext('2d');
 
   for (let dx = 0; dx < tilesX; dx++) {
     for (let dy = 0; dy < tilesY; dy++) {
@@ -35,9 +36,23 @@ export const getMapBuffer = async function(lat: number, lon: number, zoom = 10, 
   const cropX = Math.round(pixelX - width / 2);
   const cropY = Math.round(pixelY - height / 2);
 
-  const outCanvas = createCanvas(width, height);
-  const outCtx = outCanvas.getContext('2d');
-  outCtx.drawImage(canvas, -cropX, -cropY);
+  const outBitmap = make(width, height);
+  const outCtx = outBitmap.getContext('2d');
+  outCtx.drawImage(bitmap, -cropX, -cropY);
 
-  return outCanvas.toBuffer('image/png');
+  const passThroughStream = new PassThrough();
+  const pngData = [];
+  passThroughStream.on('data', (chunk) => pngData.push(chunk));
+  passThroughStream.on('end', () => {});
+
+  return new Promise<Buffer>((resolve, reject) => {
+    const passThroughStream = new PassThrough();
+    const pngData: Buffer[] = [];
+
+    passThroughStream.on('data', (chunk: Buffer) => pngData.push(chunk));
+    passThroughStream.on('end', () => { resolve(Buffer.concat(pngData)); });
+    passThroughStream.on('error', reject);
+
+    encodePNGToStream(outBitmap, passThroughStream).catch(reject);
+  });
 };

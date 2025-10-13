@@ -19,6 +19,7 @@ Butleren is a small Discord bot built for automating social media announcement a
 ```shell
 git clone https://github.com/kniffen/butleren.git
 cd butleren
+git submodule update --init --recursive
 ```
 
 ### Step 2: Configure environment variables
