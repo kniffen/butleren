@@ -6,18 +6,17 @@ describe('locationClearCommand()', () => {
   const insertOrReplaceDBEntrySpy = jest.spyOn(insertOrReplaceDBEntry, 'insertOrReplaceDBEntry').mockResolvedValue();
 
   test('It should clear the user location and reply with a confirmation message', async () => {
-    const replySpy = jest.fn();
+    const editReplySpy = jest.fn();
     const commandInteraction = {
-      user:  { id: 'user123' },
-      reply: replySpy,
+      user:       { id: 'user123' },
+      deferReply: jest.fn(),
+      editReply:  editReplySpy,
     } as unknown as ChatInputCommandInteraction;
 
     await locationClearCommand(commandInteraction);
 
+    expect(commandInteraction.deferReply).toHaveBeenCalledWith({ ephemeral: true });
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('users', { id: 'user123', lat: null, lon: null });
-    expect(replySpy).toHaveBeenCalledWith({
-      content:   'Your location has been cleared',
-      ephemeral: true,
-    });
+    expect(editReplySpy).toHaveBeenCalledWith('Your location has been cleared');
   });
 });

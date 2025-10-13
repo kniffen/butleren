@@ -1,8 +1,9 @@
+import { Readable } from 'node:stream';
 import fetch from 'node-fetch';
-import { Image, loadImage } from 'canvas';
+import { Bitmap, decodePNGFromStream } from 'pureimage';
 import { logError } from '../modules/logs/logger';
 
-export const getOpenStreetMapTile = async function(x: number, y: number, zoom: number): Promise<Image | null> {
+export const getOpenStreetMapTile = async function(x: number, y: number, zoom: number): Promise<Bitmap | null> {
   const tileUrl = `https://tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
 
   try {
@@ -12,7 +13,8 @@ export const getOpenStreetMapTile = async function(x: number, y: number, zoom: n
     }
 
     const buffer = Buffer.from(await res.arrayBuffer());
-    const img = await loadImage(buffer);
+    const stream = Readable.from(buffer);
+    const img = await decodePNGFromStream(stream);
     return img;
 
   } catch (err) {

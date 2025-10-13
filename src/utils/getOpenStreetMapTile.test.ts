@@ -1,34 +1,35 @@
+import { Readable } from 'node:stream';
 import fetch, { Response } from 'node-fetch';
 import { getOpenStreetMapTile } from './getOpenStreetMapTile';
-import { loadImage } from 'canvas';
+import { decodePNGFromStream } from 'pureimage';
 
-jest.mock('canvas', ()=> {
-  const originalModule = jest.requireActual('canvas');
+jest.mock('pureimage', ()=> {
+  const originalModule = jest.requireActual('pureimage');
   return {
     ...originalModule,
-    loadImage: jest.fn(async () => 'foo'),
+    decodePNGFromStream: jest.fn(async () => 'foo'),
   };
 });
 
 describe('getOpenStreetMapTile()', () => {
   const fetchMock = fetch as jest.MockedFunction<typeof fetch>;
-  const loadImageMock = loadImage as jest.MockedFunction<typeof loadImage>;
+  const decodePNGFromStreamMock = decodePNGFromStream as jest.MockedFunction<typeof decodePNGFromStream>;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('It should return a map tile image for valid coordinates', async () => {
-    const imageArrayBuffer = Buffer.from([137, 80, 78, 71]); // PNG file signature
+    const imageBuffer = Buffer.from([137, 80, 78, 71]); // PNG file signature
     fetchMock.mockResolvedValue({
       ok:          true,
-      arrayBuffer: async () => imageArrayBuffer,
+      arrayBuffer: async () => imageBuffer.buffer.slice(imageBuffer.byteOffset, imageBuffer.byteOffset + imageBuffer.byteLength),
     } as unknown as Response);
 
     const tile = await getOpenStreetMapTile(100, 200, 1);
 
     expect(fetchMock).toHaveBeenCalledWith('https://tile.openstreetmap.org/1/100/200.png');
-    expect(loadImageMock).toHaveBeenCalledWith(Buffer.from(imageArrayBuffer));
+    expect(decodePNGFromStreamMock).toHaveBeenCalledWith(expect.any(Readable));
     expect(tile).toEqual('foo');
   });
 
@@ -36,7 +37,7 @@ describe('getOpenStreetMapTile()', () => {
     fetchMock.mockResolvedValue({ ok: false } as unknown as Response);
 
     const tile = await getOpenStreetMapTile(100, 200, 1);
-    expect(loadImageMock).not.toHaveBeenCalled();
+    expect(decodePNGFromStreamMock).not.toHaveBeenCalled();
     expect(tile).toBeNull();
   });
 });

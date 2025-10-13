@@ -9,7 +9,8 @@ describe('locationSetCommand()', () => {
   const getGeoLocationSpy = jest.spyOn(getGeoLocation, 'getGeoLocation').mockResolvedValue({ name: 'Test City', country: 'TC', lat: 12.34, lon: 56.78 } as getGeoLocation.OpenWeatherGeoLocation);
   const getMapBufferSpy = jest.spyOn(getMapBuffer, 'getMapBuffer').mockResolvedValue(Buffer.from('test-map-buffer'));
 
-  const replySpy = jest.fn();
+  const deferReplySpy = jest.fn();
+  const editReplySpy = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -21,7 +22,8 @@ describe('locationSetCommand()', () => {
       options: {
         get: (key: string) => ('name' === key) ? { value: 'Test City' } : null
       },
-      reply: replySpy,
+      deferReply: deferReplySpy,
+      editReply:  editReplySpy,
     } as unknown as ChatInputCommandInteraction;
 
     await locationSetCommand(commandInteraction);
@@ -29,10 +31,10 @@ describe('locationSetCommand()', () => {
     expect(getGeoLocationSpy).toHaveBeenCalledWith({ name: 'Test City' });
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('users', { id: 'user123', lat: 12.34, lon: 56.78 });
     expect(getMapBufferSpy).toHaveBeenCalledWith(12.34, 56.78);
-    expect(replySpy).toHaveBeenCalledWith({
-      content:   'Your location is now set to Test City (TC)',
-      files:     [expect.objectContaining({ name: 'map.png' })],
-      ephemeral: true
+    expect(deferReplySpy).toHaveBeenCalledWith({ ephemeral: true });
+    expect(editReplySpy).toHaveBeenCalledWith({
+      content: 'Your location is now set to Test City (TC)',
+      files:   [expect.objectContaining({ name: 'map.png' })],
     });
   });
 
@@ -42,7 +44,8 @@ describe('locationSetCommand()', () => {
       options: {
         get: (key: string) => ('zip' === key) ? { value: '12345' } : null
       },
-      reply: replySpy,
+      deferReply: deferReplySpy,
+      editReply:  editReplySpy,
     } as unknown as ChatInputCommandInteraction;
 
     await locationSetCommand(commandInteraction);
@@ -50,10 +53,10 @@ describe('locationSetCommand()', () => {
     expect(getGeoLocationSpy).toHaveBeenCalledWith({ zip: '12345' });
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('users', { id: 'user123', lat: 12.34, lon: 56.78 });
     expect(getMapBufferSpy).toHaveBeenCalledWith(12.34, 56.78);
-    expect(replySpy).toHaveBeenCalledWith({
-      content:   'Your location is now set to Test City (TC)',
-      files:     [expect.objectContaining({ name: 'map.png' })],
-      ephemeral: true
+    expect(deferReplySpy).toHaveBeenCalledWith({ ephemeral: true });
+    expect(editReplySpy).toHaveBeenCalledWith({
+      content: 'Your location is now set to Test City (TC)',
+      files:   [expect.objectContaining({ name: 'map.png' })],
     });
   });
 
@@ -65,7 +68,8 @@ describe('locationSetCommand()', () => {
       options: {
         get: (key: string) => ('name' === key) ? { value: 'Invalid City' } : null
       },
-      reply: replySpy,
+      deferReply: deferReplySpy,
+      editReply:  editReplySpy,
     } as unknown as ChatInputCommandInteraction;
 
     await locationSetCommand(commandInteraction);
@@ -73,9 +77,7 @@ describe('locationSetCommand()', () => {
     expect(getGeoLocationSpy).toHaveBeenCalledWith({ name: 'Invalid City' });
     expect(insertOrReplaceDBEntrySpy).not.toHaveBeenCalled();
     expect(getMapBufferSpy).not.toHaveBeenCalled();
-    expect(replySpy).toHaveBeenCalledWith({
-      content:   'Invalid location, please try again',
-      ephemeral: true
-    });
+    expect(deferReplySpy).toHaveBeenCalledWith({ ephemeral: true });
+    expect(editReplySpy).toHaveBeenCalledWith('Invalid location, please try again');
   });
 });
