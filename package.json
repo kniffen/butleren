@@ -1,0 +1,57 @@
+{
+  "name": "butleren",
+  "private": true,
+  "description": "Yet another Discord bot",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Kniffen <kniffen@knifftech.org> (https://knifftech.org/)",
+  "homepage": "https://github.com/kniffen/butleren#readme",
+  "bugs": {
+    "url": "https://github.com/kniffen/butleren/issues"
+  },
+  "main": "main.ts",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "update:submodules": "git submodule update --remote",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "start": "tsx --env-file=./.env -r dotenv/config src/main.ts",
+    "dev": "tsx --env-file=./.env -r dotenv/config --watch src/main.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint . --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "code-quality": "npm run typecheck && npm run lint && npm run test",
+    "postinstall": "node -e \"if (process.env.CI !== 'true') require('child_process').execSync('npm run build:frontend', {stdio: 'inherit'})\""
+  },
+  "dependencies": {
+    "@kniffen/butleren-api-specification": "git+https://github.com/kniffen/butleren-api-specification.git",
+    "body-parser": "^2.2.0",
+    "canvas": "^3.2.0",
+    "date-fns": "^4.1.0",
+    "discord.js": "^14.22.1",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "tsx": "^4.19.3",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.13.8",
+    "@types/node-fetch": "^2.6.12",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
+    "eslint": "^9.22.0",
+    "eslint-plugin-jest": "^29.0.1",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.4",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.25.0"
+  }
+}

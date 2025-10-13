@@ -1,0 +1,1 @@
+export const COMMANDS_TABLE_NAME = 'commands';
