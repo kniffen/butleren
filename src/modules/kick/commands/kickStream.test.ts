@@ -1,14 +1,18 @@
 import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import type { KickAPIChannel } from '../requests/getKickChannels';
+import type { KickAPILiveStream } from '../requests/getKickLiveStreams';
 import * as getKickChannels from '../requests/getKickChannels';
+import * as getKickLiveStreams from '../requests/getKickLiveStreams';
 import { kickStreamCommand } from './kickStream';
 import { KICK_GREEN } from '../constants';
-import { KickAPIChannel } from '../requests/getKickChannels';
 
 describe('kickStreamCommand', () => {
-  const getKickChannelsSpy = jest.spyOn(getKickChannels, 'getKickChannels');
+  const getKickChannelsSpy    = jest.spyOn(getKickChannels, 'getKickChannels');
+  const getKickLiveStreamsSpy = jest.spyOn(getKickLiveStreams, 'getKickLiveStreams');
 
   beforeAll(() => {
     getKickChannelsSpy.mockResolvedValue([liveKickChannel]);
+    getKickLiveStreamsSpy.mockResolvedValue([liveStream]);
   });
 
   beforeEach(() => {
@@ -26,6 +30,8 @@ describe('kickStreamCommand', () => {
     expect(commandInteraction.deferReply).toHaveBeenCalledTimes(1);
     expect(getKickChannelsSpy).toHaveBeenCalledTimes(1);
     expect(getKickChannelsSpy).toHaveBeenCalledWith({ slugs: ['channel1'] });
+    expect(getKickLiveStreamsSpy).toHaveBeenCalledTimes(1);
+    expect(getKickLiveStreamsSpy).toHaveBeenCalledWith([12345]);
 
     const expectedEmbed = new EmbedBuilder();
     expectedEmbed.setColor(KICK_GREEN);
@@ -93,6 +99,23 @@ describe('kickStreamCommand', () => {
     expect(commandInteraction.followUp).toHaveBeenNthCalledWith(1, { content: 'Sorry, I was unable to find that channel for you.', ephemeral: true });
     expect(commandInteraction.followUp).toHaveBeenNthCalledWith(2, { content: 'Sorry, I was unable to find that channel for you.', ephemeral: true });
   });
+
+  test('It should handle live streams that are not found', async () => {
+    getKickLiveStreamsSpy.mockResolvedValueOnce([]);
+    await kickStreamCommand.execute(commandInteraction);
+
+    getKickLiveStreamsSpy.mockResolvedValueOnce(null);
+    await kickStreamCommand.execute(commandInteraction);
+
+    expect(commandInteraction.reply).not.toHaveBeenCalled();
+    expect(commandInteraction.deferReply).toHaveBeenCalledTimes(2);
+    expect(commandInteraction.deleteReply).toHaveBeenCalledTimes(2);
+    expect(commandInteraction.editReply).not.toHaveBeenCalled();
+
+    expect(commandInteraction.followUp).toHaveBeenCalledTimes(2);
+    expect(commandInteraction.followUp).toHaveBeenNthCalledWith(1, { content: 'Sorry, I was unable to find that stream for you.', ephemeral: true });
+    expect(commandInteraction.followUp).toHaveBeenNthCalledWith(2, { content: 'Sorry, I was unable to find that stream for you.', ephemeral: true });
+  });
 });
 
 const commandInteraction = {
@@ -116,14 +139,16 @@ const offlineKickChannel = {
 
 const liveKickChannel = {
   ...offlineKickChannel,
-  category: {
-    name: 'Category name',
-  },
-  stream_title: 'Stream title',
-  stream:       {
-    is_live:      true,
-    thumbnail:    'https://example.com/stream-thumbnail.jpg',
-    viewer_count: 1234,
-    start_time:   '2024-01-01T12:00:00Z',
-  }
+  broadcaster_user_id: 12345,
+  stream:              { is_live: true }
 } as unknown as KickAPIChannel;
+
+const liveStream = {
+  broadcaster_user_id: 12345,
+  slug:                'channel-slug',
+  stream_title:        'Stream title',
+  category:            { name: 'Category name' },
+  thumbnail:           'https://example.com/stream-thumbnail.jpg',
+  viewer_count:        1234,
+  started_at:          '2024-01-01T12:00:00Z',
+} as unknown as KickAPILiveStream;

@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import type { BotCommand } from '../../../types';
 import { getKickChannels } from '../requests/getKickChannels';
 import { createKickStreamEmbed } from '../utils/createKickStreamEmbed';
+import { getKickLiveStreams } from '../requests/getKickLiveStreams';
 
 const slashCommandBuilder =
   new SlashCommandBuilder()
@@ -24,7 +25,8 @@ const execute = async (commandInteraction: ChatInputCommandInteraction): Promise
 
   await commandInteraction.deferReply();
   const kickChannels  = await getKickChannels({ slugs: [slug] });
-  if (!kickChannels || 0 >= kickChannels.length)  {
+  const kickChannel = kickChannels?.at(0);
+  if (!kickChannel)  {
     await commandInteraction.deleteReply();
     await commandInteraction.followUp({
       content:   'Sorry, I was unable to find that channel for you.',
@@ -33,10 +35,26 @@ const execute = async (commandInteraction: ChatInputCommandInteraction): Promise
     return;
   }
 
-  const [kickChannel] = kickChannels;
-  const embed = createKickStreamEmbed(kickChannel, true);
+  if (!kickChannel.stream.is_live) {
+    const embed = createKickStreamEmbed(kickChannel, true);
+    commandInteraction.editReply({ embeds: [embed] });
+    return;
+  }
 
+  const liveStreams = await getKickLiveStreams([kickChannel.broadcaster_user_id]);
+  const liveStream = liveStreams?.at(0);
+  if (!liveStream)  {
+    await commandInteraction.deleteReply();
+    await commandInteraction.followUp({
+      content:   'Sorry, I was unable to find that stream for you.',
+      ephemeral: true,
+    });
+    return;
+  }
+
+  const embed = createKickStreamEmbed(liveStream, true);
   commandInteraction.editReply({ embeds: [embed] });
+
 };
 
 export const kickStreamCommand: BotCommand = {

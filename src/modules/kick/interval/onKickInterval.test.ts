@@ -1,17 +1,20 @@
 import { Collection, Guild } from 'discord.js';
-import { onKickInterval } from './onKickInterval';
-import * as getEnabledGuilds from '../../../utils/getEnabledGuilds';
-import * as getKickChannels from '../requests/getKickChannels';
-import * as kickLiveNotifications from './kickLiveNotifications';
-import * as getDBEntries  from '../../../database/utils/getDBEntries';
 import type { KickChannelDBEntry } from '../../../types';
 import type { KickAPIChannel } from '../requests/getKickChannels';
+import type { KickAPILiveStream } from '../requests/getKickLiveStreams';
+import * as getEnabledGuilds from '../../../utils/getEnabledGuilds';
+import * as getDBEntries  from '../../../database/utils/getDBEntries';
+import * as getKickChannels from '../requests/getKickChannels';
+import * as getKickLiveStreams from '../requests/getKickLiveStreams';
+import * as kickLiveNotifications from './kickLiveNotifications';
+import { onKickInterval } from './onKickInterval';
 
 describe('Kick: onKickInterval()', () => {
-  const getEnabledGuildsMock      = jest.spyOn(getEnabledGuilds, 'getEnabledGuilds').mockImplementation();
-  const getDBEntriesMock          = jest.spyOn(getDBEntries, 'getDBEntries').mockImplementation();
-  const getKickChannelsMock       = jest.spyOn(getKickChannels, 'getKickChannels').mockImplementation();
-  const kickLiveNotificationsMock = jest.spyOn(kickLiveNotifications, 'kickLiveNotifications').mockImplementation();
+  const getEnabledGuildsMock      = jest.spyOn( getEnabledGuilds,      'getEnabledGuilds'      ).mockImplementation();
+  const getDBEntriesMock          = jest.spyOn( getDBEntries,          'getDBEntries'          ).mockImplementation();
+  const getKickChannelsMock       = jest.spyOn( getKickChannels,       'getKickChannels'       ).mockImplementation();
+  const getKickLiveStreamsMock    = jest.spyOn( getKickLiveStreams,    'getKickLiveStreams'    ).mockImplementation();
+  const kickLiveNotificationsMock = jest.spyOn( kickLiveNotifications, 'kickLiveNotifications' ).mockImplementation();
 
   beforeAll(() => {
     getEnabledGuildsMock.mockResolvedValue(enabledGuilds);
@@ -25,17 +28,22 @@ describe('Kick: onKickInterval()', () => {
     getDBEntriesMock.mockResolvedValueOnce([kickChannelDBEntries[0], kickChannelDBEntries[1]]);
     getDBEntriesMock.mockResolvedValueOnce([kickChannelDBEntries[2]]);
 
-    getKickChannelsMock.mockResolvedValueOnce(['channel-1', 'channel-2'] as unknown as KickAPIChannel[]);
+    const channel1 = { broadcaster_user_id: 123, stream: { is_live: true,  start_time: '1985-10-26T11:59:00Z' } } as KickAPIChannel;
+    const channel2 = { broadcaster_user_id: 456, stream: { is_live: true,  start_time: '1985-10-26T11:59:00Z' } } as KickAPIChannel;
+    const streams  =  ['stream-1', 'stream-2'] as unknown as KickAPILiveStream[];
+
+    getKickChannelsMock.mockResolvedValueOnce([channel1, channel2]);
+    getKickLiveStreamsMock.mockResolvedValueOnce(streams);
 
     const date = new Date('1985-10-26T12:00:00Z');
     await onKickInterval(date, guilds);
 
     expect(getEnabledGuildsMock).toHaveBeenCalledWith('kick', guilds);
     expect(getKickChannelsMock).toHaveBeenCalledWith({ broadcasterUserIds: [8150, 8151] });
+    expect(getKickLiveStreamsMock).toHaveBeenCalledWith([123, 456]);
     expect(kickLiveNotificationsMock).toHaveBeenCalledWith(
-      date,
       kickChannelDBEntries,
-      ['channel-1', 'channel-2'],
+      ['stream-1', 'stream-2'],
       enabledGuilds
     );
   });
@@ -58,6 +66,43 @@ describe('Kick: onKickInterval()', () => {
 
     expect(getEnabledGuildsMock).toHaveBeenCalledWith('kick', guilds);
     expect(getKickChannelsMock).not.toHaveBeenCalled();
+    expect(kickLiveNotificationsMock).not.toHaveBeenCalled();
+  });
+
+  test('It should ignore channels that are offline or have been live for more than 5 minutes', async () => {
+    getDBEntriesMock.mockResolvedValueOnce([kickChannelDBEntries[0], kickChannelDBEntries[1]]);
+    getDBEntriesMock.mockResolvedValueOnce([kickChannelDBEntries[2]]);
+
+    const channel1 = { broadcaster_user_id: 123, stream: { is_live: true,  start_time: '1985-10-26T11:50:00Z' } } as KickAPIChannel;
+    const channel2 = { broadcaster_user_id: 456, stream: { is_live: false, start_time: '1985-10-26T11:59:00Z' } } as KickAPIChannel;
+
+    getKickChannelsMock.mockResolvedValueOnce([channel1, channel2]);
+
+    const date = new Date('1985-10-26T12:00:00Z');
+    await onKickInterval(date, guilds);
+
+    expect(getEnabledGuildsMock).toHaveBeenCalledWith('kick', guilds);
+    expect(getKickChannelsMock).toHaveBeenCalledWith({ broadcasterUserIds: [8150, 8151] });
+    expect(getKickLiveStreamsMock).not.toHaveBeenCalled();
+    expect(kickLiveNotificationsMock).not.toHaveBeenCalled();
+  });
+
+  test('It should so nothing if there are no live streams', async () => {
+    getDBEntriesMock.mockResolvedValueOnce([kickChannelDBEntries[0], kickChannelDBEntries[1]]);
+    getDBEntriesMock.mockResolvedValueOnce([kickChannelDBEntries[2]]);
+
+    const channel1 = { broadcaster_user_id: 123, stream: { is_live: true, start_time: '1985-10-26T11:59:00Z' } } as KickAPIChannel;
+    const channel2 = { broadcaster_user_id: 456, stream: { is_live: true, start_time: '1985-10-26T11:59:00Z' } } as KickAPIChannel;
+
+    getKickChannelsMock.mockResolvedValueOnce([channel1, channel2]);
+    getKickLiveStreamsMock.mockResolvedValueOnce([]);
+
+    const date = new Date('1985-10-26T12:00:00Z');
+    await onKickInterval(date, guilds);
+
+    expect(getEnabledGuildsMock).toHaveBeenCalledWith('kick', guilds);
+    expect(getKickChannelsMock).toHaveBeenCalledWith({ broadcasterUserIds: [8150, 8151] });
+    expect(getKickLiveStreamsMock).toHaveBeenCalledWith([123, 456]);
     expect(kickLiveNotificationsMock).not.toHaveBeenCalled();
   });
 });

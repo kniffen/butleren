@@ -1,6 +1,7 @@
 import { Guild } from 'discord.js';
 import { logError, logInfo, logDebug } from '../../logs/logger';
 import { getKickChannels } from '../requests/getKickChannels';
+import { getKickLiveStreams } from '../requests/getKickLiveStreams';
 import { getEnabledGuilds } from '../../../utils/getEnabledGuilds';
 import { kickLiveNotifications } from './kickLiveNotifications';
 import { getDBEntries } from '../../../database/utils/getDBEntries';
@@ -29,9 +30,33 @@ export const onKickInterval = async (date: Date, guilds: Guild[]): Promise<void>
     }
 
     const broadcasterUserIds = [...new Set(channelEntries.map(entry => entry.broadcasterUserId))];
-    const kickChannels = await getKickChannels({ broadcasterUserIds }).then(data => data || []);
+    const kickChannels = await getKickChannels({ broadcasterUserIds });
+    if (null === kickChannels) {
+      logError('Kick', 'Failed to get kick channels, skipping...');
+      return;
+    }
 
-    await kickLiveNotifications(date, channelEntries, kickChannels, enabledGuilds);
+    const liveChannels = kickChannels
+      .filter(channel => {
+        if (!channel.stream.is_live) {
+          return false;
+        }
+
+        const timeSinceLive = date.valueOf() - (new Date(channel.stream.start_time)).valueOf();
+        return 300_000 > timeSinceLive;
+      });
+    if (0 === liveChannels.length) {
+      logInfo('Kick', 'No new live kick channels found, skipping...');
+      return;
+    }
+
+    const liveStreams = await getKickLiveStreams(liveChannels.map(channel => channel.broadcaster_user_id));
+    if (null === liveStreams || 0 === liveStreams.length) {
+      logError('Kick', 'Failed to get kick live streams, skipping...');
+      return;
+    }
+
+    await kickLiveNotifications(channelEntries, liveStreams, enabledGuilds);
 
   } catch (err) {
     logError('Kick', 'Error during onInterval event', err);

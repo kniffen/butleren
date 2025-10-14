@@ -1,36 +1,39 @@
 import { EmbedBuilder } from 'discord.js';
 import { KICK_GREEN, KICK_URL } from '../constants';
 import type { KickAPIChannel } from '../requests/getKickChannels';
+import type { KickAPILiveStream } from '../requests/getKickLiveStreams';
 
-export const createKickStreamEmbed = function(kickChannel: KickAPIChannel, includeViewerCount = false): EmbedBuilder {
+export const createKickStreamEmbed = function(data: KickAPIChannel | KickAPILiveStream, includeViewerCount = false): EmbedBuilder {
   const embed = new EmbedBuilder();
   embed.setColor(KICK_GREEN);
-  embed.setURL(`${KICK_URL}/${kickChannel.slug}`);
+  embed.setURL(`${KICK_URL}/${data.slug}`);
 
-  if (kickChannel.stream.is_live) {
-    embed.setTitle(`${kickChannel.slug} is streaming on Kick`);
-    embed.setDescription(`**${kickChannel.stream_title}**`);
-    embed.setImage(kickChannel.stream.thumbnail);
-    embed.setImage(`${kickChannel.stream.thumbnail}?t=${Date.now()}`);
+  if (isLiveStream(data)) {
+    embed.setTitle(`${data.slug} is streaming on Kick`);
+    embed.setDescription(`**${data.stream_title}**`);
+    embed.setImage(data.thumbnail);
+    embed.setImage(`${data.thumbnail}?t=${Date.now()}`);
 
     embed.addFields(
-      { name: 'Category', value: kickChannel.category.name || 'Unknown' },
-      { name: 'Started',  value: `<t:${Math.round(new Date(kickChannel.stream.start_time).valueOf() / 1000)}:R>` }
+      { name: 'Category', value: data.category.name || 'Unknown' },
+      { name: 'Started',  value: `<t:${Math.round(new Date(data.started_at).valueOf() / 1000)}:R>` }
     );
 
     if (includeViewerCount) {
       embed.addFields(
-        { name: 'Viewers',  value: kickChannel.stream.viewer_count.toLocaleString() },
+        { name: 'Viewers',  value: data.viewer_count.toLocaleString() },
       );
     }
 
-    embed.setTimestamp(new Date(kickChannel.stream.start_time));
+    embed.setTimestamp(new Date(data.started_at));
 
   } else {
-    embed.setTitle(`${kickChannel.slug} is offline`);
-    embed.setDescription(`**${kickChannel.channel_description}**`);
-    embed.setImage(kickChannel.banner_picture);
+    embed.setTitle(`${data.slug} is offline`);
+    embed.setDescription(`**${data.channel_description}**`);
+    embed.setImage(data.banner_picture);
   }
 
   return embed;
 };
+
+const isLiveStream = (data: KickAPIChannel | KickAPILiveStream): data is KickAPILiveStream => 'started_at' in data;

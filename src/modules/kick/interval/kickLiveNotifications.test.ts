@@ -1,7 +1,7 @@
 import { Collection, EmbedBuilder, type Guild } from 'discord.js';
 import { kickLiveNotifications } from './kickLiveNotifications';
 import type { KickChannelDBEntry } from '../../../types';
-import type { KickAPIChannel } from '../requests/getKickChannels';
+import type { KickAPILiveStream } from '../requests/getKickLiveStreams';
 import * as sendDiscordMessage from '../../../discord/utils/sendDiscordMessage';
 import { KICK_GREEN } from '../constants';
 
@@ -34,8 +34,8 @@ describe('Kick: kickLiveNotifications()', () => {
     jest.useRealTimers();
   });
 
-  test('It should send notifications for live channels', async () => {
-    await kickLiveNotifications(date, channelEntries, [kickChannel], guilds);
+  test('It should send notifications for live streams', async () => {
+    await kickLiveNotifications(channelEntries, [liveStream], guilds);
 
     expect(sendDiscordMessageSpy).toHaveBeenCalledTimes(1);
     expect(sendDiscordMessageSpy).toHaveBeenCalledWith(
@@ -48,25 +48,13 @@ describe('Kick: kickLiveNotifications()', () => {
   test('It should include role mention if configured', async () => {
     channelEntries[0].notificationRoleId = 'r-33333';
 
-    await kickLiveNotifications(date, channelEntries, [kickChannel], guilds);
+    await kickLiveNotifications(channelEntries, [liveStream], guilds);
     expect(sendDiscordMessageSpy).toHaveBeenCalledTimes(1);
     expect(sendDiscordMessageSpy).toHaveBeenCalledWith(
       'c-22222',
       guild,
       { content: '<@&r-33333> foobar is live on Kick!', embeds: [expectedEmbed] }
     );
-  });
-
-  test('It should ignore channels that have been live for more than 5 minutes', async () => {
-    const oldDate = new Date('1985-10-26T01:30:00Z');
-    await kickLiveNotifications(oldDate, channelEntries, [kickChannel], guilds);
-    expect(sendDiscordMessageSpy).not.toHaveBeenCalled();
-  });
-
-  test('It should ignore offline channels', async () => {
-    const offlineChannel = { ...kickChannel, stream: { ...kickChannel.stream, is_live: false } };
-    await kickLiveNotifications(date, channelEntries, [offlineChannel], guilds);
-    expect(sendDiscordMessageSpy).not.toHaveBeenCalled();
   });
 });
 
@@ -87,17 +75,14 @@ const channelEntries: KickChannelDBEntry[] = [
   }
 ];
 
-const kickChannel = {
+const liveStream = {
   broadcaster_user_id: 55555,
   slug:                'foobar',
   stream_title:        'My awesome stream',
   category:            { name: 'Just chillin\'' },
-  stream:              {
-    is_live:    true,
-    start_time: '1985-10-26T01:17:00Z',
-    thumbnail:  'https://example.com/thumbnail.jpg'
-  }
-} as KickAPIChannel;
+  started_at:          '1985-10-26T01:17:00Z',
+  thumbnail:           'https://example.com/thumbnail.jpg'
+} as KickAPILiveStream;
 
 const guild = { name: 'Guild one' } as Guild;
 const guilds = new Collection<string, Guild>([
