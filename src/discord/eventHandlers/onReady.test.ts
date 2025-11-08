@@ -25,7 +25,7 @@ describe('Discord: onReady', () => {
   test('It should update commands for each guild', async () => {
     await onReady(discordClient);
 
-    expect(discordClient.user?.setActivity).toHaveBeenCalledWith('1.0.1');
+    expect(discordClient.user?.setActivity).toHaveBeenCalledWith('1.0.2');
     expect(logger.logInfo).toHaveBeenCalledWith('Discord', 'Logged in as "bot"');
     expect(updateGuildCommandsSpy).toHaveBeenCalledTimes(2);
     expect(updateGuildCommandsSpy).toHaveBeenNthCalledWith(1, { id: '1' });
