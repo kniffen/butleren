@@ -8,8 +8,8 @@ import { createTwitchLiveNotificationEmbed } from '../utils/createTwitchLiveNoti
 export const twitchLiveNotifications = function(date: Date, channelEntries: TwitchChannelDBEntry[], twitchStreams: TwitchStream[], guilds: Collection<string, Guild>): void {
   for (const twitchStream of twitchStreams) {
     const startDate = new Date(twitchStream.started_at);
-    const minutesSinceStart = Math.floor((date.getTime() - startDate.getTime()) / 60000);
-    if (5 < minutesSinceStart) {
+    const timeSinceLive = date.valueOf() - startDate.valueOf();
+    if (300_000 < timeSinceLive) {
       logDebug('Twitch', `Stream ${twitchStream.user_login} has been live for more than 5 minutes, skipping notification`);
       continue;
     }

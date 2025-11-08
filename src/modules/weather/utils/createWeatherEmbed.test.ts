@@ -13,13 +13,13 @@ describe('createWeatherEmbed()', () => {
       },
       color:  16711680,
       fields: [
-        { name: 'Friday, April 4th, 17788 at 10:00 AM', value: 'Main (Description)' },
-        { name: '💨 Wind',                              value: '8.0m/s\n17.9mph\nNorth',  inline: true },
-        { name: '🌧️ Rain (1h)',                         value: '99mm\n3.90"',          inline: true },
-        { name: '🌡️ Temp | Feels like',                 value: '1°C | 2°C\n34°F | 36°F', inline: true },
-        { name: '🌅 Sunrise',                           value: '10:00 AM',               inline: true },
-        { name: '🌇 Sunset',                            value: '2:00 AM',                inline: true },
-        { name: '💦 Humidity',                          value: '6%',                     inline: true }
+        { name: 'Saturday, October 26th, 1985 at 10:00 PM', value: 'Main (Description)' },
+        { name: '💨 Wind',                                  value: '8.0m/s\n17.9mph\nNorth', inline: true },
+        { name: '🌧️ Rain (1h)',                             value: '99mm\n3.90"',            inline: true },
+        { name: '🌡️ Temp | Feels like',                     value: '1°C | 2°C\n34°F | 36°F', inline: true },
+        { name: '🌅 Sunrise',                               value: '4:00 PM',               inline: true },
+        { name: '🌇 Sunset',                                value: '8:00 AM',                inline: true },
+        { name: '💦 Humidity',                              value: '6%',                     inline: true }
       ],
       footer: {
         text: 'Weather report provided by OpenWeather'
@@ -53,13 +53,13 @@ const openWeatherData = {
   clouds: {
     all: 10
   },
-  dt:  (new Date('1985-10-26T12:00:00Z')).valueOf(),
+  dt:  Math.floor((new Date('1985-10-26T12:00:00Z')).valueOf() / 1000),
   sys: {
     type:    0,
     id:      0,
     country: '',
-    sunrise: (new Date('1985-10-26T06:00:00Z')).valueOf(),
-    sunset:  (new Date('1985-10-26T22:00:00Z')).valueOf()
+    sunrise: Math.floor((new Date('1985-10-26T06:00:00Z')).valueOf() / 1000),
+    sunset:  Math.floor((new Date('1985-10-26T22:00:00Z')).valueOf() / 1000),
   },
   rain: {
     '1h': 99,
