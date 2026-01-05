@@ -29,7 +29,7 @@
     "@kniffen/butleren-api-specification": "git+https://github.com/kniffen/butleren-api-specification.git",
     "body-parser": "^2.2.0",
     "date-fns": "^4.1.0",
-    "discord.js": "^14.22.1",
+    "discord.js": "^14.25.1",
     "dotenv": "^17.2.2",
     "express": "^5.2.1",
     "node-fetch": "^2.7.0",
