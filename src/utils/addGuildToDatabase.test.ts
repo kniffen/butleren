@@ -25,7 +25,7 @@ describe('addGuildToDatabase', () => {
   test('It should set module and command settings for the guild', async () => {
     await addGuildToDatabase(guild);
 
-    expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledTimes(18);
+    expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledTimes(17);
 
     // Modules
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('modules', { slug: 'core',     guildId: guild.id, isEnabled: 1 });
@@ -36,7 +36,6 @@ describe('addGuildToDatabase', () => {
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('modules', { slug: 'commands', guildId: guild.id, isEnabled: 1 });
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('modules', { slug: 'weather',  guildId: guild.id, isEnabled: 0 });
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('modules', { slug: 'twitch',   guildId: guild.id, isEnabled: 0 });
-    expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('modules', { slug: 'spotify',  guildId: guild.id, isEnabled: 0 });
     expect(insertOrReplaceDBEntrySpy).toHaveBeenCalledWith('modules', { slug: 'youtube',  guildId: guild.id, isEnabled: 0 });
 
     // Commands

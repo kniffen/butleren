@@ -51,11 +51,6 @@ export type YouTubeChannel            = RemoveIndexSignature<z.infer<typeof sche
 export type YouTubeChannelDBEntry     = RemoveIndexSignature<z.infer<typeof schemas.YouTubeChannelDBEntry>>;
 export type YouTubeNotificationConfig = RemoveIndexSignature<z.infer<typeof schemas.YouTubeNotificationConfig>>;
 
-// Spotify
-export type SpotifyShow               = RemoveIndexSignature<z.infer<typeof schemas.SpotifyShow>>;
-export type SpotifyShowDBEntry        = RemoveIndexSignature<z.infer<typeof schemas.SpotifyShowDBEntry>>;
-export type SpotifyNotificationConfig = RemoveIndexSignature<z.infer<typeof schemas.SpotifyNotificationConfig>>;
-
 export interface BotCommand {
   isLocked: boolean;
   slashCommandBuilder: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder | SlashCommandSubcommandsOnlyBuilder;
