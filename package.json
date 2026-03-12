@@ -35,7 +35,7 @@
     "node-fetch": "^2.7.0",
     "pureimage": "^0.4.18",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^6.0.1",
     "tsx": "^4.21.0",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"
