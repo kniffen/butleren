@@ -7,7 +7,6 @@ import { logs } from './logs/logs';
 import { commands as commandsModule } from './commands/commands';
 import { weather } from './weather/weather';
 import { twitch } from './twitch/twitch';
-import { spotify } from './spotify/spotify';
 import { youTube } from './youtube/youtube';
 
 export const modules = new Map<string, BotModule>([
@@ -19,7 +18,6 @@ export const modules = new Map<string, BotModule>([
   [commandsModule.slug, commandsModule],
   [weather.slug,        weather],
   [twitch.slug,         twitch],
-  [spotify.slug,        spotify],
   [youTube.slug,        youTube],
 ]);
 

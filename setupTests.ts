@@ -7,8 +7,6 @@ process.env.OPEN_WEATHER_MAP_API_KEY = 'open-weather-map-api-key';
 process.env.GOOGLE_API_KEY = 'GOOGLE_API_KEY';
 process.env.TWITCH_CLIENT_ID = 'TWITCH_CLIENT_ID';
 process.env.TWITCH_CLIENT_SECRET = 'TWITCH_CLIENT_SECRET';
-process.env.SPOTIFY_CLIENT_ID = 'SPOTIFY_CLIENT_ID';
-process.env.SPOTIFY_CLIENT_SECRET = 'SPOTIFY_CLIENT_SECRET';
 
 jest.mock('node-fetch', () => {
   const fetch = jest.requireActual('node-fetch');

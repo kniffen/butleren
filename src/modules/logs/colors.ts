@@ -1,5 +1,4 @@
 import { KICK_GREEN } from '../kick/constants';
-import { SPOTIFY_GREEN } from '../spotify/constants';
 import { TWITCH_PURPLE } from '../twitch/constants';
 import { YOUTUBE_COLOR } from '../youtube/constants';
 
@@ -26,6 +25,5 @@ export const colors: Record<string, string> = {
   Modules:  rgbToAnsi(...hexToRGB('#19D8B4')), // Butleren turquoise
   Kick:     rgbToAnsi(...hexToRGB(KICK_GREEN)),
   Twitch:   rgbToAnsi(...hexToRGB(TWITCH_PURPLE)),
-  Spotify:  rgbToAnsi(...hexToRGB(SPOTIFY_GREEN)),
   YouTube:  rgbToAnsi(...hexToRGB(YOUTUBE_COLOR)),
 };
