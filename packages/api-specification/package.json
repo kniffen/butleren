@@ -1,0 +1,21 @@
+{
+  "name": "@repo/api-specification",
+  "private": true,
+  "version": "4.0.0",
+  "main": "schema.ts",
+  "scripts": {
+    "validate-spec": "swagger-cli validate src/butleren-api-specification.yml",
+    "build-schema": "openapi-zod-client src/butleren-api-specification.yml --output schema.ts --export-schemas --strict-objects",
+    "postinstall": "npm run build-schema",
+    "generate-api-docs": "node script/createSwaggerUI.js",
+    "build": "npm run build-schema && npm run generate-api-docs"
+  },
+  "devDependencies": {
+    "swagger-cli": "^4.0.4",
+    "swagger-ui-dist": "^5.31.0"
+  },
+  "dependencies": {
+    "@zodios/core": "^10.9.6",
+    "openapi-zod-client": "^1.18.3"
+  }
+}

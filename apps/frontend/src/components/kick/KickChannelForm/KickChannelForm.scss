@@ -1,0 +1,23 @@
+.kick-channel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__items,
+  &__buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__button {
+    &--loading {
+      cursor: wait;
+    }
+  }
+}

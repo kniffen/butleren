@@ -1,0 +1,45 @@
+.modal-background {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-button {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.modal {
+  background-color: var(--color-gray--700);
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 40rem;
+  width: 50rem;
+  min-height: 30rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__close {
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  &__title{
+    margin: 0;
+    font-size: 1.125rem;
+  }
+}

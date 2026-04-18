@@ -1,0 +1,20 @@
+.guild-settings-form {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: start;
+  justify-items: start;
+  gap: 2rem;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+

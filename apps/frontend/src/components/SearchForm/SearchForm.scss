@@ -1,0 +1,14 @@
+.search-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+
+  &__query {
+    flex: 1;
+  }
+}

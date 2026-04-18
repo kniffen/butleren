@@ -1,0 +1,17 @@
+User:
+  type: object
+  properties:
+    id:
+      type: string
+      description: The unique id of the user
+      example: "67890"
+    displayName:
+      type: string
+      description: The user's display name
+      example: "JohnDoe"
+    settings:
+      $ref: './UserSettings.yml#/UserSettings'
+  required:
+    - id
+    - displayName
+    - settings

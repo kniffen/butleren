@@ -1,0 +1,16 @@
+.layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  height: 100vh;
+}
+
+.main {
+  background-color: var(--color-gray--700);
+  padding: 2rem 1.5rem;
+  padding-inline: max(1.5rem, calc((100% - 75rem) / 2));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 40rem;
+}

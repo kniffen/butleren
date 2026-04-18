@@ -1,0 +1,11 @@
+UserDBEntry:
+  allOf:
+    - $ref: './UserSettings.yml#/UserSettings'
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The unique id of the user
+          example: "67890"
+      required:
+        - id

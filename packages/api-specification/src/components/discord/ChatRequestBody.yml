@@ -1,0 +1,9 @@
+ChatRequestBody:
+  type: object
+  properties:
+    message:
+      type: string
+      description: The message to send to the chat
+      example: "Hello, how are you?"
+  required:
+    - message

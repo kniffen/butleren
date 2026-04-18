@@ -1,0 +1,33 @@
+{
+  "name": "butleren",
+  "description": "Yet another Discord bot",
+  "version": "2.0.1",
+  "private": true,
+  "license": "MIT",
+  "author": "Kniffen <kniffen@knifftech.org> (https://knifftech.org/)",
+  "homepage": "https://github.com/kniffen/butleren#readme",
+  "bugs": {
+    "url": "https://github.com/kniffen/butleren/issues"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "turbo": "^2.9.6",
+    "typescript": "^5.9.2",
+    "eslint": "^9.39.2",
+    "typescript-eslint": "^8.55.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "npm@11.6.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

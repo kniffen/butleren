@@ -1,0 +1,19 @@
+SearchResult:
+  type: object
+  properties:
+    id:
+      type: string
+      description: The unique id for the search result
+      example: 123e4567-e89b-12d3-a456-426614174000
+    name:
+      type: string
+      description: The name associated with the search result
+      example: "Foobar"
+    imageURL:
+      type: string
+      description: The URL for the image associated with the search result
+      example: "https://example.com/image.jpg"
+  required:
+    - id
+    - name
+    - imageURL

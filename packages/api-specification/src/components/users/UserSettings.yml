@@ -1,0 +1,16 @@
+UserSettings:
+  type: object
+  properties:
+    lat:
+      type: number
+      nullable: true
+      description: The latitude of the user's location
+      example: 37.7749
+    lon:
+      type: number
+      nullable: true
+      description: The longitude of the user's location
+      example: -122.4194
+  required:
+    - lat
+    - lon

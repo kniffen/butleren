@@ -1,0 +1,9 @@
+ModuleSettings:
+  type: object
+  properties:
+    isEnabled:
+      type: boolean
+      description: Whether the module is enabled
+      example: true
+  required:
+    - isEnabled

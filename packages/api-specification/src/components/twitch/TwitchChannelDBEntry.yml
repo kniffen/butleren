@@ -1,0 +1,9 @@
+TwitchChannelDBEntry:
+  allOf:
+    - $ref: "./TwitchNotificationConfig.yml#/TwitchNotificationConfig"
+    - type: object
+      properties:
+        guildId:
+          $ref: '../singles/GuildId.yml'
+      required:
+        - guildId

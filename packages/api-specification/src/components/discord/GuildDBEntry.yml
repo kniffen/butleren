@@ -1,0 +1,11 @@
+GuildDBEntry:
+  allOf:
+    - $ref: "./GuildSettings.yml#/GuildSettings"
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The unique id of the guild
+          example: "123456789012345678"
+      required:
+        - id

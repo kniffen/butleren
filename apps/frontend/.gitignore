@@ -1,0 +1,4 @@
+# Build
+dist
+dist-ssr
+*.local

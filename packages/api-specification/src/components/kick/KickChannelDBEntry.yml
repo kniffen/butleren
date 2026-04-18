@@ -1,0 +1,10 @@
+KickChannelDBEntry:
+  allOf:
+    - $ref: './KickNotificationConfig.yml#/KickNotificationConfig'
+    - type: object
+      properties:
+        guildId:
+          type: string
+          $ref: '../singles/GuildId.yml'
+      required:
+        - guildId

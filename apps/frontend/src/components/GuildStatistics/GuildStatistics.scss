@@ -1,0 +1,23 @@
+.guild-stats {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+
+  &__list-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+
+    b {
+      font-weight: 500;
+      color: var(--color-white--400)
+    }
+
+    span {
+      color: var(--color-gray--200);
+    }
+  }
+}

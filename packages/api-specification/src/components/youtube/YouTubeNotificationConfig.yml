@@ -1,0 +1,33 @@
+YouTubeNotificationConfig:
+  type: object
+  properties:
+    channelId:
+      type: string
+      minLength: 1
+      description: The unique id for the YouTube channel
+      example: UC_x5XG1OV2P6uZZ5FSM9Ttw
+    includeLiveStreams:
+      type: boolean
+      description: Whether to include live streams in the notifications
+      example: false
+      default: false
+    notificationChannelId:
+      type: string
+      description: The discord channel id for notifications
+      example: "123456789012345678"
+    notificationRoleId:
+      type: string
+      nullable: true
+      description: The discord role id for notifications
+      example: "987654321098765432"
+    liveNotificationRoleId:
+      type: string
+      nullable: true
+      description: The discord role id for live stream notifications
+      example: "987654321098765432"
+  required:
+    - channelId
+    - includeLiveStreams
+    - notificationChannelId
+    - notificationRoleId
+    - liveNotificationRoleId

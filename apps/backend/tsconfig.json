@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts", "src/**/*.test.ts", "setupTests.ts"],
+  "exclude": ["node_modules", "jest.config.js"]
+}
