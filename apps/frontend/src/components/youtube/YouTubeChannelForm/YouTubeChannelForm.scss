@@ -1,0 +1,32 @@
+.youtube-channel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__items {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: start;
+  }
+
+  &__buttons {
+    display: flex;
+  }
+
+  &__items,
+  &__buttons {
+    gap: 1rem;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__button {
+    &--loading {
+      cursor: wait;
+    }
+  }
+}

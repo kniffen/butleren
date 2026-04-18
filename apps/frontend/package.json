@@ -1,0 +1,37 @@
+{
+  "name": "butleren-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "check-types": "tsc -b --noEmit",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "echo \"No test specified yet\" && exit 0",
+    "code-quality": "npm run typecheck && npm run lint"
+  },
+  "dependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.12.0",
+    "sass": "^1.86.3"
+  },
+  "devDependencies": {
+    "@repo/api-specification": "*",
+    "@repo/eslint-rules": "*",
+    "@eslint/js": "^9.38.0",
+    "@types/node": "^24.6.2",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.1.2",
+    "eslint": "*",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "globals": "^16.4.0",
+    "typescript": "*",
+    "typescript-eslint": "*",
+    "vite": "^7.1.12"
+  }
+}

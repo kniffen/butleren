@@ -1,0 +1,29 @@
+.users {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.user-details {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__list-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+
+    b {
+      font-weight: 500;
+      color: var(--color-white--400)
+    }
+
+    span {
+      color: var(--color-gray--200);
+    }
+  }
+}

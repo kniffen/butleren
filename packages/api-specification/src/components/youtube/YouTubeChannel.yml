@@ -1,0 +1,17 @@
+YouTubeChannel:
+  type: object
+  properties:
+    channelId:
+      type: string
+      description: The unique id for the YouTube channel
+      example: UC_x5XG1OV2P6uZZ5FSM9Ttw
+    name:
+      type: string
+      description: The name of the YouTube channel
+      example: "Foobar"
+    notificationConfig:
+      $ref: "./YouTubeNotificationConfig.yml#/YouTubeNotificationConfig"
+  required:
+    - channelId
+    - name
+    - notificationConfig

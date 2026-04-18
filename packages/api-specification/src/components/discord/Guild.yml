@@ -1,0 +1,44 @@
+Guild:
+  type: object
+  properties:
+    id:
+      $ref: "../singles/GuildId.yml"
+    name:
+      type: string
+      description: The guild name
+    iconURL:
+      type: string
+      nullable: true
+      description: The guild icon URL
+    settings:
+      $ref: "./GuildSettings.yml#/GuildSettings"
+    channels:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          type:
+            type: string
+            enum:
+              - ANNOUNCEMENT
+              - TEXT
+              - VOICE
+              - CATEGORY
+    roles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+  required:
+    - id
+    - name
+    - iconURL
+    - settings

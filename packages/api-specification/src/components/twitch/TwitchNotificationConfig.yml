@@ -1,0 +1,21 @@
+TwitchNotificationConfig:
+  type: object
+  properties:
+    id:
+      type: string
+      minLength: 1
+      description: The unique id of the channel
+      example: "67890"
+    notificationChannelId:
+      type: string
+      description: The discord channel id for notifications
+      example: "123456789012345678"
+    notificationRoleId:
+      type: string
+      nullable: true
+      description: The discord role id for notifications
+      example: "987654321098765432"
+  required:
+    - id
+    - notificationChannelId
+    - notificationRoleId

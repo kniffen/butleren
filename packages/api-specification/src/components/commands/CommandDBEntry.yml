@@ -1,0 +1,22 @@
+CommandDBEntry:
+  type: object
+  properties:
+    guildId:
+      type: string
+      description: The guild ID
+      example: "123456789012345678"
+    slug:
+      type: string
+      description: The command's name
+      example: "foo"
+    isEnabled:
+      type: integer
+      description: Whether the command is enabled (1) or disabled (0)
+      example: 1
+      enum:
+        - 0
+        - 1
+  required:
+    - guildId
+    - slug
+    - isEnabled

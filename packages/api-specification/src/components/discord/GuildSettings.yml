@@ -1,0 +1,14 @@
+GuildSettings:
+  type: object
+  properties:
+    nickname:
+      type: string
+      nullable: true
+      description: The nickname of bot in the guild
+    color:
+      type: string
+      description: The color of the embeds
+      example: "#FF0000"
+  required:
+    - nickname
+    - color

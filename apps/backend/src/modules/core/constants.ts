@@ -1,0 +1,1 @@
+export const MODULES_TABLE_NAME = 'modules';

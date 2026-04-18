@@ -1,0 +1,28 @@
+.command-card {
+  position: relative;
+
+  &__controls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__restore {
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--color-gray--300);
+
+    &:hover {
+      color: var(--color-red--400);
+    }
+  }
+
+  &__description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-gray--200);
+  }
+}

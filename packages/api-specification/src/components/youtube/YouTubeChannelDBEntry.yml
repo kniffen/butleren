@@ -1,0 +1,38 @@
+YouTubeChannelDBEntry:
+  type: object
+  properties:
+    channelId:
+      type: string
+      description: The unique id for the YouTube channel
+      example: UC_x5XG1OV2P6uZZ5FSM9Ttw
+    guildId:
+      type: string
+      $ref: '../singles/GuildId.yml'
+    includeLiveStreams:
+      type: integer
+      description: Whether to include live stream notifications (database representation)
+      example: 1
+      enum:
+        - 0
+        - 1
+    notificationChannelId:
+      type: string
+      description: The discord channel id for notifications
+      example: "123456789012345678"
+    notificationRoleId:
+      type: string
+      nullable: true
+      description: The discord role id for notifications
+      example: "987654321098765432"
+    liveNotificationRoleId:
+      type: string
+      nullable: true
+      description: The discord role id for live stream notifications
+      example: "987654321098765432"
+  required:
+    - channelId
+    - guildId
+    - includeLiveStreams
+    - notificationChannelId
+    - notificationRoleId
+    - liveNotificationRoleId

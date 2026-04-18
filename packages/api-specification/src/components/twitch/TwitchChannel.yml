@@ -1,0 +1,26 @@
+TwitchChannel:
+  type: object
+  properties:
+    id:
+      type: string
+      description: The unique id of the channel
+      example: "67890"
+    name:
+      type: string
+      description: The name of the channel
+      example: "Foobar"
+    description:
+      type: string
+      description: The description of the channel
+      example: "Just a cool streamer"
+    url:
+      type: string
+      description: The URL of the channel
+      example: "https://twitch.tv/foobar"
+    notificationConfig:
+      $ref: "./TwitchNotificationConfig.yml#/TwitchNotificationConfig"
+  required:
+    - id
+    - name
+    - url
+    - notificationConfig

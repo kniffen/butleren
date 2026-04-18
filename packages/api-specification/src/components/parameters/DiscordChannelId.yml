@@ -1,0 +1,7 @@
+name: channelId
+example: "123456789012345678"
+in: path
+required: true
+schema:
+  type: string
+description: The channel's discord id
