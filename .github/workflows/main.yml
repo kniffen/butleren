@@ -1,12 +1,9 @@
 on:
+  workflow_dispatch:
   push:
-    branches: [
-      "feature/**",
-      "feat/**",
-      "fix/**",
-      "refactor/**",
-      "dependabot/**"
-    ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   code-quality:
