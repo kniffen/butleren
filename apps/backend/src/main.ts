@@ -1,8 +1,7 @@
-import path from 'node:path';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { logInfo } from './modules/logs/logger';
-import { PORT } from './constants';
+import { PORT, STATIC_PATH } from './constants';
 import { database, initDatabase } from './database/database';
 import { discordClient } from './discord/client';
 import { discordRouter } from './discord/api/router';
@@ -12,7 +11,7 @@ import { modules } from './modules/modules';
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+app.use(express.static(STATIC_PATH));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

@@ -10,7 +10,7 @@
     "module": "commonjs",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "outDir": "./dist"
+    "outDir": "../../dist"
   },
   "include": ["src/**/*.ts", "src/**/*.test.ts", "setupTests.ts"],
   "exclude": ["node_modules", "jest.config.js"]

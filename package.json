@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "start": "turbo run start",
+    "start": "node --env-file=./.env ./dist/main.js",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",

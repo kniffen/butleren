@@ -5,12 +5,7 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", "!dist/cache/**"]
-    },
-    "start": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "persistent": true
+      "outputs": ["../../dist/**", "!../../dist/cache/**"]
     },
     "test": {
       "dependsOn": ["^test"]
