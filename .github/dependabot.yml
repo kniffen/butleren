@@ -5,11 +5,33 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
+  # Actions
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of package manifests
+    target-branch: "master"
+    schedule:
+      interval: "weekly"
+    groups:
+      "GitHub Actions":
+        patterns:
+          - "*" # All actions
+
+  # Dependencies
+  - package-ecosystem: "npm" # pnpm uses npm ecosystem in dependabot
     directory:
       - "/"
       - "apps/backend"
       - "apps/frontend"
       - "packages/api-specification"
+    target-branch: "master"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
+    groups:
+      "Features and patches":
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
