@@ -6,9 +6,9 @@
   "scripts": {
     "validate-spec": "swagger-cli validate src/butleren-api-specification.yml",
     "build-schema": "openapi-zod-client src/butleren-api-specification.yml --output schema.ts --export-schemas --strict-objects",
-    "postinstall": "npm run build-schema",
+    "postinstall": "pnpm build-schema",
     "generate-api-docs": "node script/createSwaggerUI.js",
-    "build": "npm run build-schema && npm run generate-api-docs"
+    "build": "pnpm build-schema && pnpm generate-api-docs"
   },
   "devDependencies": {
     "swagger-cli": "^4.0.4",

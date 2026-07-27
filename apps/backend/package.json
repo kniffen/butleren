@@ -9,7 +9,7 @@
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .ts",
     "check-types": "tsc --noEmit",
-    "code-quality": "npm run check-types && npm run lint && npm run test"
+    "code-quality": "pnpm check-types && pnpm lint && pnpm test"
   },
   "dependencies": {
     "body-parser": "^2.2.2",
@@ -26,8 +26,8 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "@repo/api-specification": "*",
-    "@repo/eslint-rules": "*",
+    "@repo/api-specification": "workspace:*",
+    "@repo/eslint-rules": "workspace:*",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.13.8",

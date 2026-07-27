@@ -52,17 +52,17 @@ LOGS_PATH=./logs
 
 ### Step 3: Install dependencies
 ```shell
-npm install
+pnpm install
 ```
 
 ### Step 4: Build
 ```shell
-npm run build
+pnpm build
 ```
 
 ### Step 4: Start the bot
 ```shell
-npm start
+pnpm start
 ```
 
 The web UI will be available at `http://localhost:3000` (or your configured PORT)

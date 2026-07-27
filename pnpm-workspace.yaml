@@ -1,0 +1,9 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+allowBuilds:
+  '@parcel/watcher': true
+  '@scarf/scarf': true
+  esbuild: true
+  sqlite3: true
+  unrs-resolver: true

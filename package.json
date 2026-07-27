@@ -18,17 +18,14 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "eslint": "^9.39.2",
     "turbo": "^2.9.6",
     "typescript": "^5.9.2",
-    "eslint": "^9.39.2",
     "typescript-eslint": "^8.55.0"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "pnpm": ">=11"
   },
-  "packageManager": "npm@11.6.2",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "pnpm@11.17.0"
 }
