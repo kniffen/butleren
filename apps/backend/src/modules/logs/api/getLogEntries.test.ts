@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import type { Request, Response } from 'express';
 import { getLogEntries } from './getLogEntries';
 
+jest.mock('node:path', () => ({
+  join: jest.fn((...args) => args.join('/')),
+}));
+
 jest.mock('node:fs', () => ({
   existsSync:   (): void => {},
   readFileSync: (): void => {},

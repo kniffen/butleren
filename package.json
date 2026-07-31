@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "start": "node --env-file=./.env ./dist/main.js",
+    "start": "pnpm --filter butleren-backend start",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -27,5 +27,9 @@
     "node": ">=22",
     "pnpm": ">=11"
   },
-  "packageManager": "pnpm@11.17.0"
+  "packageManager": "pnpm@11.17.0",
+  "dependencies": {
+    "@eslint/js": "^9.39.5",
+    "zod": "^3.25.76"
+  }
 }
